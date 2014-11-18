@@ -26,6 +26,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import siosio.doma.DomaBundle;
 
 /**
  * Daoメソッドの検査を行うインタフェース。
@@ -77,9 +78,11 @@ abstract class DaoMethodInspection {
         GlobalSearchScope scope = GlobalSearchScope.moduleRuntimeScope(module, false);
         VirtualFile virtualFile = ResourceFileUtil.findResourceFileInScope(sqlFileName, method.getProject(), scope);
         if (virtualFile == null) {
-            holder.registerProblem(method.getNameIdentifier(), "SQL file is not found", ProblemHighlightType.ERROR,
-                    new CreateSqlFileFix(
-                            module, sqlFileName));
+            holder.registerProblem(
+                    method.getNameIdentifier(),
+                    DomaBundle.message("inspection.dao.sql-not-found"),
+                    ProblemHighlightType.ERROR,
+                    new CreateSqlFileFix(module, sqlFileName));
         }
     }
 
@@ -102,13 +105,13 @@ abstract class DaoMethodInspection {
         @NotNull
         @Override
         public String getName() {
-            return "Create SQL file.";
+            return DomaBundle.message("quick-fix.create-sql-file");
         }
 
         @NotNull
         @Override
         public String getFamilyName() {
-            return "Create SQL File.";
+            return DomaBundle.message("quick-fix.create-sql-file");
         }
 
         @Override
@@ -140,8 +143,8 @@ abstract class DaoMethodInspection {
             } catch (IOException e) {
                 throw new IncorrectOperationException(e.getMessage());
             }
-            VirtualFile sqlDir = VfsUtil.findRelativeFile(rootVirtualFileDir, ArrayUtil.toStringArray(StringUtil.split(
-                    path, "/")));
+            VirtualFile sqlDir = VfsUtil.findRelativeFile(rootVirtualFileDir,
+                    ArrayUtil.toStringArray(StringUtil.split( path, "/")));
             new PsiDirectoryImpl((PsiManagerImpl) psiManager, sqlDir).createFile(fileName);
         }
     }

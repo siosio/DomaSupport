@@ -1,27 +1,15 @@
 package siosio.doma.inspection;
 
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
-import com.intellij.codeInspection.InspectionsBundle;
-import com.intellij.codeInspection.LocalQuickFix;
-import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.JavaTokenType;
 import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiBinaryExpression;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElementFactory;
 import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.PsiExpression;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiMethodCallExpression;
 import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiPrefixExpression;
-import com.intellij.psi.tree.IElementType;
-import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
+import siosio.doma.DomaBundle;
 
 /**
  * DomaのDAOのチェックを行うクラス。
@@ -36,7 +24,7 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
 
     @NotNull
     public String getDisplayName() {
-        return "Check Doma SQL File.";
+        return DomaBundle.message("inspection.dao-inspection");
     }
 
     public boolean isEnabledByDefault() {
@@ -50,7 +38,7 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
 
     @NotNull
     public String getShortName() {
-        return "DomaSupport";
+        return "DaoInspection";
     }
 
     /**

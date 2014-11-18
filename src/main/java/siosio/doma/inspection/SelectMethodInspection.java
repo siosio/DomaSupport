@@ -13,6 +13,7 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
 import com.intellij.psi.util.PsiTreeUtil;
+import siosio.doma.DomaBundle;
 
 /**
  * SQLメソッドの検索を行う。
@@ -66,9 +67,9 @@ public class SelectMethodInspection extends DaoMethodInspection {
         for (PsiParameter errorParameter : selectOptionsParameters) {
             problemsHolder.registerProblem(
                     errorParameter,
-                    "SelectOptions parameter is duplicated.",
+                    DomaBundle.message("inspection.dao.multi-SelectOptions"),
                     ProblemHighlightType.ERROR,
-                    new RemoveElementQuickFix("remove " + errorParameter.getName())
+                    new RemoveElementQuickFix(DomaBundle.message("quick-fix.remove", errorParameter.getName()))
             );
         }
     }
