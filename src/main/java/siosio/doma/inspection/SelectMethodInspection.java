@@ -1,8 +1,18 @@
 package siosio.doma.inspection;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
+import com.intellij.codeInspection.compiler.RemoveElementQuickFix;
+import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiParameter;
+import com.intellij.psi.PsiParameterList;
+import com.intellij.psi.util.PsiTreeUtil;
 
 /**
  * SQLメソッドの検索を行う。
@@ -12,11 +22,15 @@ import com.intellij.psi.PsiMethod;
  */
 public class SelectMethodInspection extends DaoMethodInspection {
 
+    /** SelectOptionsの完全修飾名 */
+    private static final String SELECT_OPTIONS_CLASS_NAME = "org.seasar.doma.jdbc.SelectOptions";
+
     /**
      * 以下の検査を行う。
      *
      * <ul>
      *     <li>SQLの存在チェック</li>
+     *     <li>パラメータチェック</li>
      * </ul>
      * @param problemsHolder 検査結果の詳細（検査エラーが格納される）
      * @param psiClass 検査対象クラス
@@ -25,5 +39,38 @@ public class SelectMethodInspection extends DaoMethodInspection {
     @Override
     public void inspect(ProblemsHolder problemsHolder, PsiClass psiClass, PsiMethod method) {
         validateRequiredSqlFile(problemsHolder, psiClass, method);
+
+        PsiParameterList parameterList = method.getParameterList();
+        validateSelectOptionsParameter(problemsHolder, parameterList);
+    }
+
+    /**
+     * {@link #SELECT_OPTIONS_CLASS_NAME}型の引数が最大で1つであることをチェックする。
+     *
+     * @param problemsHolder 検査結果の詳細（検査エラーが格納される）
+     * @param psiParameterList 引数リスト
+     */
+    private static void validateSelectOptionsParameter(
+            ProblemsHolder problemsHolder, PsiParameterList psiParameterList) {
+
+        List<PsiParameter> selectOptionsParameters = new ArrayList<PsiParameter>();
+        for (PsiParameter parameter : psiParameterList.getParameters()) {
+            if (SELECT_OPTIONS_CLASS_NAME.equals(parameter.getType().getCanonicalText())) {
+                selectOptionsParameters.add(parameter);
+            }
+        }
+
+        if (selectOptionsParameters.size() <= 0) {
+            return;
+        }
+        for (PsiParameter errorParameter : selectOptionsParameters) {
+            problemsHolder.registerProblem(
+                    errorParameter,
+                    "SelectOptions parameter is duplicated.",
+                    ProblemHighlightType.ERROR,
+                    new RemoveElementQuickFix("remove " + errorParameter.getName())
+            );
+        }
     }
 }
+
