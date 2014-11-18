@@ -1,18 +1,15 @@
 package siosio.doma.inspection;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.compiler.RemoveElementQuickFix;
-import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
-import com.intellij.psi.util.PsiTreeUtil;
 import siosio.doma.DomaBundle;
 
 /**
