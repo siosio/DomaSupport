@@ -91,7 +91,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
     }
 
     /**
-     * DAOメソッドでSQLファイルが
+     * DAOメソッドでSQLファイルが存在している場合のケース
      * <p/>
      * アノテーションが設定されていないメソッドなので、SQLファイルがなくてもエラーとならないこと
      */
