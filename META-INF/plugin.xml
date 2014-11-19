@@ -21,19 +21,20 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
+    <psi.fileReferenceHelper implementation="siosio.doma.references.SqlFileReference" />
+    <psi.referenceProvider language="JAVA" providerClass="siosio.doma.references.Hoge" />
     <inspectionToolProvider implementation="siosio.doma.inspection.DaoInspectionToolProvider" />
+    <codeInsight.lineMarkerProvider language="JAVA"
+        implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
   </extensions>
 
   <application-components>
-    <!-- Add your application components here -->
   </application-components>
 
   <project-components>
-    <!-- Add your project components here -->
   </project-components>
 
   <actions>
-    <!-- Add your actions here -->
   </actions>
 
 </idea-plugin>

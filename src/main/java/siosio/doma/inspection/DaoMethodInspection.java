@@ -9,7 +9,6 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.ide.util.DirectoryChooserUtil;
 import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ResourceFileUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.ProjectRootManager;
@@ -20,13 +19,11 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.impl.PsiManagerImpl;
-import com.intellij.psi.impl.file.PsiDirectoryImpl;
-import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.jetbrains.annotations.NotNull;
 import siosio.doma.DomaBundle;
+import siosio.doma.DomaUtils;
 
 /**
  * Daoメソッドの検査を行うインタフェース。
@@ -75,8 +72,7 @@ abstract class DaoMethodInspection {
             return;
         }
 
-        GlobalSearchScope scope = GlobalSearchScope.moduleRuntimeScope(module, false);
-        VirtualFile virtualFile = ResourceFileUtil.findResourceFileInScope(sqlFileName, method.getProject(), scope);
+        VirtualFile virtualFile = DomaUtils.findSqlFile(method, sqlFileName);
         if (virtualFile == null) {
             holder.registerProblem(
                     method.getNameIdentifier(),
@@ -143,9 +139,12 @@ abstract class DaoMethodInspection {
             } catch (IOException e) {
                 throw new IncorrectOperationException(e.getMessage());
             }
-            VirtualFile sqlDir = VfsUtil.findRelativeFile(rootVirtualFileDir,
-                    ArrayUtil.toStringArray(StringUtil.split( path, "/")));
-            new PsiDirectoryImpl((PsiManagerImpl) psiManager, sqlDir).createFile(fileName);
+
+
+            PsiDirectory sqlOutputDir = PsiManager.getInstance(project)
+                    .findDirectory(VfsUtil.findRelativeFile(rootVirtualFileDir,
+                            ArrayUtil.toStringArray(StringUtil.split(path, "/"))));
+            sqlOutputDir.createFile(fileName);
         }
     }
 }

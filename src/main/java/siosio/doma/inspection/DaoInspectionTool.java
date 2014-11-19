@@ -3,24 +3,18 @@ package siosio.doma.inspection;
 import com.intellij.codeInspection.BaseJavaLocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
-import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
 import org.jetbrains.annotations.NotNull;
+import siosio.doma.DaoType;
 import siosio.doma.DomaBundle;
+import siosio.doma.DomaUtils;
 
 /**
  * DomaのDAOのチェックを行うクラス。
  */
 public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
-
-    /** DAOクラスを表すアノテーションクラス名 */
-    private static final String DAO_ANNOTATION_NAME = "org.seasar.doma.Dao";
-
-    /** SELECTメソッドを表すアノテーション */
-    private static final String DAO_SELECT_ANNOTATION = "org.seasar.doma.Select";
 
     @NotNull
     public String getDisplayName() {
@@ -41,29 +35,6 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
         return "DaoInspection";
     }
 
-    /**
-     * チェック対象のクラスか判定する。
-     * <p/>
-     * クラスに対して{@link #DAO_ANNOTATION_NAME}アノテーションが設定されている場合はチェック対象とする。
-     *
-     * @param psiClass 判定対象のクラス
-     * @return チェック対象の場合はtrue
-     */
-    private static boolean isCheckedClass(PsiClass psiClass) {
-        PsiModifierList modifierList = psiClass.getModifierList();
-        if (modifierList == null) {
-            return false;
-        }
-        PsiAnnotation[] annotations = modifierList.getAnnotations();
-        for (PsiAnnotation annotation : annotations) {
-            String name = annotation.getQualifiedName();
-            if (DAO_ANNOTATION_NAME.equals(name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     @NotNull
     @Override
     public PsiElementVisitor buildVisitor(@NotNull final ProblemsHolder holder, boolean isOnTheFly) {
@@ -74,7 +45,7 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
                 super.visitMethod(method);
 
                 PsiClass psiClass = method.getContainingClass();
-                if (!isCheckedClass(psiClass)) {
+                if (!DomaUtils.isDaoMethod(method)) {
                     return;
                 }
 
@@ -93,13 +64,13 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
              * @return Inspectionを実行するクラスのインスタンス
              */
             private DaoMethodInspection createDaoMethodInspection(PsiMethod method) {
-                PsiAnnotation[] annotations = method.getModifierList().getAnnotations();
-                for (PsiAnnotation annotation : annotations) {
-                    if (DAO_SELECT_ANNOTATION.equals(annotation.getQualifiedName())) {
+                DaoType type = DomaUtils.toDaoType(method);
+                switch (type) {
+                    case SELECT:
                         return new SelectMethodInspection();
-                    }
+                    default:
+                        return null;
                 }
-                return null;
             }
         };
     }
