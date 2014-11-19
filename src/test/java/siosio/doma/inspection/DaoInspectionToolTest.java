@@ -1,5 +1,8 @@
 package siosio.doma.inspection;
 
+import static org.junit.Assert.assertThat;
+import static siosio.doma.DomaBundle.message;
+
 import java.util.List;
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -64,7 +67,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
 
     private HighlightInfo findHighlightInfo(List<HighlightInfo> highlightInfos, String elementName) {
         for (HighlightInfo highlightInfo : highlightInfos) {
-            if (elementName.equals(highlightInfo.getText())) {
+            if (highlightInfo.getText().contains(elementName)) {
                 return highlightInfo;
             }
         }
@@ -117,11 +120,40 @@ public class DaoInspectionToolTest extends UsefulTestCase {
     public void test_SelectメソッドでSQLファイルがない場合_検査エラーとなる() throws Exception {
         List<HighlightInfo> infos = doInspection("SQLファイルが存在していない");
 
-        assertTrue("SQLが存在しているメソッドはエラーとならない", findHighlightInfo(infos, "sqlFound").getSeverity()
-                == HighlightSeverity.ERROR);
+        assertTrue("SQLが存在しているメソッドはエラーとならない",
+                findHighlightInfo(infos, "sqlFound").getSeverity() != HighlightSeverity.ERROR);
         HighlightInfo errorMethod = findHighlightInfo(infos, "sqlNotFound");
         assertEquals("SQLファイルが存在していないメソッドはエラー", HighlightSeverity.ERROR, errorMethod.getSeverity());
-        assertEquals(DomaBundle.message("inspection.dao.sql-not-found"), errorMethod.getDescription());
+        assertEquals(message("inspection.dao.sql-not-found"), errorMethod.getDescription());
+    }
+
+    /**
+     * SelectOptions型の引数が1だけの場合のケース
+     *
+     * SelectOptions1つはvalidなのでエラーとならないこと
+     */
+    public void test_SelectOptions引数が1つの場合_検査エラーとならないこと() throws Exception {
+        List<HighlightInfo> infos = doInspection("SelectOptions1つ");
+
+        HighlightInfo option = findHighlightInfo(infos, "option");
+        assertNull(option);
+    }
+
+    /**
+     * SelectOptios型の引数が2つある場合のケース
+     *
+     * SelectOptions型の引数は両方ともエラーとなること
+     */
+    public void test_SelectOptions引数が2つの場合_検査エラーとなること() throws Exception {
+        List<HighlightInfo> infos = doInspection("SelectOptions2つ");
+
+        HighlightInfo option1 = findHighlightInfo(infos, "option1");
+        assertEquals(HighlightSeverity.ERROR, option1.getSeverity());
+        assertEquals(message("inspection.dao.multi-SelectOptions"), option1.getDescription());
+
+        HighlightInfo option2 = findHighlightInfo(infos, "option2");
+        assertEquals(HighlightSeverity.ERROR, option2.getSeverity());
+        assertEquals(message("inspection.dao.multi-SelectOptions"), option2.getDescription());
     }
 }
 

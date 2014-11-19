@@ -58,7 +58,7 @@ public class SelectMethodInspection extends DaoMethodInspection {
             }
         }
 
-        if (selectOptionsParameters.size() <= 0) {
+        if (selectOptionsParameters.size() <= 1) {
             return;
         }
         for (PsiParameter errorParameter : selectOptionsParameters) {
