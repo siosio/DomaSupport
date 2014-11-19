@@ -49,13 +49,16 @@ public class DaoInspectionToolTest extends UsefulTestCase {
         myFixture = null;
     }
 
-    protected void doTest(String testName) throws Throwable {
+    protected void doNormalEndTest(String testName, String... methodNames) throws Exception {
         myFixture.configureByFile(testName + ".java");
         myFixture.enableInspections(DaoInspectionTool.class);
         List<HighlightInfo> highlightInfos = myFixture.doHighlighting();
 
-        HighlightInfo info = findHighlightInfo(highlightInfos, "findById");
-        assertFalse("Inspection対象外なのでエラー報告されないこと", info.getSeverity() == HighlightSeverity.ERROR);
+        for (String name : methodNames) {
+            HighlightInfo info = findHighlightInfo(highlightInfos, name);
+            assertFalse(name + "メソッドはInspection対象外なのでエラー報告されないこと",
+                    info.getSeverity() == HighlightSeverity.ERROR);
+        }
     }
 
     private HighlightInfo findHighlightInfo(List<HighlightInfo> highlightInfos, String elementName) {
@@ -69,11 +72,22 @@ public class DaoInspectionToolTest extends UsefulTestCase {
 
     /**
      * DAOアノテーションが設定されていないインタフェースのケース
-     *
+     * <p/>
      * DAOアノテーションが付加されていないので、@Selectアノテーションが設定されていて
      * SQLファイルがない場合でもエラーとはならないこと
      */
-    public void test_DAOアノテーションがついていない場合_検査対象外() throws Throwable {
-        doTest("DAOではないインタフェース");
+    public void test_DAOアノテーションがついていない場合_検査対象外() throws Exception {
+        doNormalEndTest("DAOではないインタフェース", "findById");
     }
+
+    /**
+     * DAOインタフェースでアノテーションの設定されていないメソッドのケース
+     * <p/>
+     * アノテーションが設定されていないメソッドなので、SQLファイルがなくてもエラーとならないこと
+     */
+    public void test_DAOメソッドが存在しない場合_検査対象外() throws Exception {
+        doNormalEndTest("DAOメソッドではない", "findById", "findByName");
+    }
+
 }
+
