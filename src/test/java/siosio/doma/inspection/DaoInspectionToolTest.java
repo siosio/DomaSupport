@@ -14,6 +14,7 @@ import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.util.PathUtil;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Select;
+import siosio.doma.DomaBundle;
 
 /**
  * {@link DaoInspectionTool}のテストクラス。
@@ -108,5 +109,19 @@ public class DaoInspectionToolTest extends UsefulTestCase {
         assertTrue(findHighlightInfo(infos, "findByName").getSeverity() != HighlightSeverity.ERROR);
     }
 
+    /**
+     * DAOメソッドでSQLファイルが存在していない場合のケース
+     * <p/>
+     * SQLファイルが存在していないメソッドだけ、エラーとなること。
+     */
+    public void test_SelectメソッドでSQLファイルがない場合_検査エラーとなる() throws Exception {
+        List<HighlightInfo> infos = doInspection("SQLファイルが存在していない");
+
+        assertTrue("SQLが存在しているメソッドはエラーとならない", findHighlightInfo(infos, "sqlFound").getSeverity()
+                == HighlightSeverity.ERROR);
+        HighlightInfo errorMethod = findHighlightInfo(infos, "sqlNotFound");
+        assertEquals("SQLファイルが存在していないメソッドはエラー", HighlightSeverity.ERROR, errorMethod.getSeverity());
+        assertEquals(DomaBundle.message("inspection.dao.sql-not-found"), errorMethod.getDescription());
+    }
 }
 
