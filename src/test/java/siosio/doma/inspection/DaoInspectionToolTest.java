@@ -50,16 +50,15 @@ public class DaoInspectionToolTest extends UsefulTestCase {
         myFixture = null;
     }
 
-    protected void doNormalEndTest(String testName, String... methodNames) throws Exception {
+    /**
+     * 指定されたJavaコードに対するインスペクションを実行する。
+     *
+     * @param testName Javaコード
+     */
+    private List<HighlightInfo> doInspection(String testName) {
         myFixture.configureByFile(testName + ".java");
         myFixture.enableInspections(DaoInspectionTool.class);
-        List<HighlightInfo> highlightInfos = myFixture.doHighlighting();
-
-        for (String name : methodNames) {
-            HighlightInfo info = findHighlightInfo(highlightInfos, name);
-            assertFalse(name + "メソッドはInspection対象外なのでエラー報告されないこと",
-                    info.getSeverity() == HighlightSeverity.ERROR);
-        }
+        return myFixture.doHighlighting();
     }
 
     private HighlightInfo findHighlightInfo(List<HighlightInfo> highlightInfos, String elementName) {
@@ -78,7 +77,11 @@ public class DaoInspectionToolTest extends UsefulTestCase {
      * SQLファイルがない場合でもエラーとはならないこと
      */
     public void test_DAOアノテーションがついていない場合_検査対象外() throws Exception {
-        doNormalEndTest("DAOではないインタフェース", "findById");
+        List<HighlightInfo> infos = doInspection("DAOではないインタフェース");
+
+        HighlightInfo info = findHighlightInfo(infos, "findById");
+        assertTrue("メソッドはInspection対象外なのでエラー報告されないこと",
+                info.getSeverity() != HighlightSeverity.ERROR);
     }
 
     /**
@@ -87,17 +90,23 @@ public class DaoInspectionToolTest extends UsefulTestCase {
      * アノテーションが設定されていないメソッドなので、SQLファイルがなくてもエラーとならないこと
      */
     public void test_DAOメソッドが存在しない場合_検査対象外() throws Exception {
-        doNormalEndTest("DAOメソッドではない", "findById", "findByName");
+        List<HighlightInfo> infos = doInspection("DAOメソッドではない");
+
+        assertTrue(findHighlightInfo(infos, "findById").getSeverity() != HighlightSeverity.ERROR);
+        assertTrue(findHighlightInfo(infos, "findByName").getSeverity() != HighlightSeverity.ERROR);
     }
 
     /**
-     * DAOメソッドでSQLファイルが
+     * DAOメソッドでSQLファイルが存在している場合のケース
      * <p/>
      * アノテーションが設定されていないメソッドなので、SQLファイルがなくてもエラーとならないこと
      */
     public void test_SelectメソッドでSQLファイルがある場合_検査エラーとはならない() throws Exception {
-        doNormalEndTest("SQLファイルが存在している", "findById", "findByName");
-    }
-}
+        List<HighlightInfo> infos = doInspection("SQLファイルが存在している");
 
+        assertTrue(findHighlightInfo(infos, "findById").getSeverity() != HighlightSeverity.ERROR);
+        assertTrue(findHighlightInfo(infos, "findByName").getSeverity() != HighlightSeverity.ERROR);
+    }
+
+}
 

@@ -8,7 +8,6 @@ import javax.swing.*;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -48,8 +47,8 @@ public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
         if (file == null) {
             return;
         }
-        PsiFile psiFile = PsiManager.getInstance(element.getProject()).findFile(file);
 
+        PsiFile psiFile = PsiManager.getInstance(element.getProject()).findFile(file);
         NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder
                 .create(SQL_FILE_ICON)
                 .setTargets(psiFile)
