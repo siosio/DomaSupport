@@ -40,6 +40,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
         builder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
         builder.addLibrary("dao", PathUtil.getJarPathForClass(Dao.class));
         builder.addLibrary("select", PathUtil.getJarPathForClass(Select.class));
+        builder.addSourceContentRoot("./src/test/data");
 
         myFixture.setUp();
     }
@@ -89,5 +90,14 @@ public class DaoInspectionToolTest extends UsefulTestCase {
         doNormalEndTest("DAOメソッドではない", "findById", "findByName");
     }
 
+    /**
+     * DAOメソッドでSQLファイルが
+     * <p/>
+     * アノテーションが設定されていないメソッドなので、SQLファイルがなくてもエラーとならないこと
+     */
+    public void test_SelectメソッドでSQLファイルがある場合_検査エラーとはならない() throws Exception {
+        doNormalEndTest("SQLファイルが存在している", "findById", "findByName");
+    }
 }
+
 
