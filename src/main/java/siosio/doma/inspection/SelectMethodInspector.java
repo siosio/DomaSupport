@@ -18,10 +18,17 @@ import siosio.doma.DomaBundle;
  * @author siosio
  * @since 1
  */
-public class SelectMethodInspection extends DaoMethodInspection {
+public class SelectMethodInspector extends DaoMethodInspector {
 
     /** SelectOptionsの完全修飾名 */
     private static final String SELECT_OPTIONS_CLASS_NAME = "org.seasar.doma.jdbc.SelectOptions";
+
+    /** シングルトンオブジェクト */
+    private static final SelectMethodInspector INSPECTION = new SelectMethodInspector();
+
+    public static final SelectMethodInspector getInspection() {
+        return INSPECTION;
+    }
 
     /**
      * 以下の検査を行う。

@@ -16,7 +16,7 @@ import siosio.doma.DomaUtils;
  * @author siosio
  * @since 1
  */
-abstract class DaoMethodInspection {
+abstract class DaoMethodInspector {
 
     /**
      * 検査を行う。

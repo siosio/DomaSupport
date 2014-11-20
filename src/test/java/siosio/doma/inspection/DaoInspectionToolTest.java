@@ -1,8 +1,5 @@
 package siosio.doma.inspection;
 
-import static org.junit.Assert.assertThat;
-import static siosio.doma.DomaBundle.message;
-
 import java.util.List;
 
 import com.intellij.codeInsight.daemon.impl.HighlightInfo;
@@ -17,7 +14,8 @@ import com.intellij.testFramework.fixtures.TestFixtureBuilder;
 import com.intellij.util.PathUtil;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Select;
-import siosio.doma.DomaBundle;
+
+import static siosio.doma.DomaBundle.message;
 
 /**
  * {@link DaoInspectionTool}のテストクラス。

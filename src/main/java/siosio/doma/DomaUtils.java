@@ -66,8 +66,8 @@ public class DomaUtils {
     /**
      * DAOのタイプへとな
      *
-     * @param method
-     * @return
+     * @param method メソッド
+     * @return DAOのタイプを取得する
      */
     public static DaoType toDaoType(PsiMethod method) {
         if (!isDaoClass(method.getContainingClass())) {
@@ -80,7 +80,7 @@ public class DomaUtils {
                 return DaoType.SELECT;
             }
         }
-        return DaoType.INVALID;
+        return null;
     }
 
     /**
