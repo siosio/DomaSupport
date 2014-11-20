@@ -25,3 +25,5 @@ IntelliJ上で、[Doma](http://doma.seasar.org/)を使った開発を少しだ�
     SelectOptions型の引数が最大でも1つであることのチェックが行われます。
     Quick Fixで、引数を削除することが出来ます。
 
+# ライセンス
+This software is released under the MIT License, see LICENSE.txt.
