@@ -3,10 +3,12 @@ package siosio.doma.editor;
 import java.util.Collection;
 import java.util.List;
 
+import javax.swing.*;
+
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
-import com.intellij.icons.AllIcons;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
@@ -20,6 +22,8 @@ import siosio.doma.DomaUtils;
  * DAOのメソッドからSQLファイルへの移動を実現するやつ
  */
 public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
+
+    private static final Icon SQL_FILE_ICON = IconLoader.getIcon("/icons/sql.png");
 
     @Override
     public void collectNavigationMarkers(List<PsiElement> elements,
@@ -43,11 +47,12 @@ public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
         if (file == null) {
             return;
         }
-        PsiFile psiFile = PsiManager.getInstance(element.getProject()).findFile(file);
 
-        NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder.create(AllIcons.FileTypes.Custom).
-                setTargets(psiFile).
-                setTooltipText(DomaBundle.message("editor.goto-sql-file"));
+        PsiFile psiFile = PsiManager.getInstance(element.getProject()).findFile(file);
+        NavigationGutterIconBuilder<PsiElement> builder = NavigationGutterIconBuilder
+                .create(SQL_FILE_ICON)
+                .setTargets(psiFile)
+                .setTooltipText(DomaBundle.message("editor.goto-sql-file"));
         result.add(builder.createLineMarkerInfo(element));
     }
 }

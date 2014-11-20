@@ -2,7 +2,8 @@
   <id>siosio.DomaSupport</id>
   <name>Doma Support plugin</name>
   <version>0.1</version>
-  <vendor email="siosio12@gmail.com" url="">siosio</vendor>
+  <vendor email="siosio12@gmail.com" url="https://github.com/siosio/DomaSupport">siosio</vendor>
+  <depends>com.intellij.database</depends>
 
   <description><![CDATA[
     ]]></description>
@@ -12,7 +13,7 @@
   </change-notes>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="131"/>
+  <idea-version since-build="139.225" />
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
@@ -21,8 +22,6 @@
   -->
 
   <extensions defaultExtensionNs="com.intellij">
-    <psi.fileReferenceHelper implementation="siosio.doma.references.SqlFileReference" />
-    <psi.referenceProvider language="JAVA" providerClass="siosio.doma.references.Hoge" />
     <inspectionToolProvider implementation="siosio.doma.inspection.DaoInspectionToolProvider" />
     <codeInsight.lineMarkerProvider language="JAVA"
         implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
