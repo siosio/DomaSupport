@@ -68,6 +68,8 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
                 switch (type) {
                     case SELECT:
                         return SelectMethodInspector.getInspection();
+                    case UPDATE:
+                        return UpdateMethodInspector.getInstance();
                     default:
                         return null;
                 }

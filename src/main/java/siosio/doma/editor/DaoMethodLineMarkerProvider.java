@@ -39,7 +39,7 @@ public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
         PsiMethod method = (PsiMethod) element;
         DaoType type = DomaUtils.toDaoType(method);
-        if (type == DaoType.INVALID) {
+        if (type == null) {
             return;
         }
 

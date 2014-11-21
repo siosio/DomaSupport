@@ -13,7 +13,7 @@ import com.intellij.psi.PsiParameterList;
 import siosio.doma.DomaBundle;
 
 /**
- * SQLメソッドの検索を行う。
+ * SQLメソッドの検査を行う。
  *
  * @author siosio
  * @since 1

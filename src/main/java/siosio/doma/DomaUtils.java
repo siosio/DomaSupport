@@ -1,14 +1,21 @@
 package siosio.doma;
 
+import java.util.Collection;
+
+import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ResourceFileUtil;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
+import com.intellij.psi.PsiAnnotationParameterList;
 import com.intellij.psi.PsiClass;
+import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
+import com.intellij.psi.PsiNameValuePair;
 import com.intellij.psi.search.GlobalSearchScope;
+import com.intellij.psi.util.PsiTreeUtil;
 
 /**
  * 便利メソッド群。
@@ -17,9 +24,6 @@ public class DomaUtils {
 
     /** DAOクラスを表すアノテーションクラス名 */
     private static final String DAO_ANNOTATION_NAME = "org.seasar.doma.Dao";
-
-    /** SELECTメソッドを表すアノテーション */
-    private static final String DAO_SELECT_ANNOTATION = "org.seasar.doma.Select";
 
     /**
      * DAOクラスか否か。
@@ -53,13 +57,8 @@ public class DomaUtils {
             return false;
         }
 
-        PsiAnnotation[] annotations = method.getModifierList().getAnnotations();
-        for (PsiAnnotation annotation : annotations) {
-            if (DAO_SELECT_ANNOTATION.equals(annotation.getQualifiedName())) {
-                return true;
-            }
-        }
-        return false;
+        DaoType daoType = toDaoType(method);
+        return daoType != null;
     }
 
     /**
@@ -70,13 +69,15 @@ public class DomaUtils {
      */
     public static DaoType toDaoType(PsiMethod method) {
         if (!isDaoClass(method.getContainingClass())) {
-            return DaoType.INVALID;
+            return null;
         }
 
         PsiAnnotation[] annotations = method.getModifierList().getAnnotations();
         for (PsiAnnotation annotation : annotations) {
-            if (DAO_SELECT_ANNOTATION.equals(annotation.getQualifiedName())) {
-                return DaoType.SELECT;
+            for (DaoType daoType : DaoType.values()) {
+                if (daoType.getAnnotation().equals(annotation.getQualifiedName())) {
+                    return daoType;
+                }
             }
         }
         return null;
@@ -122,6 +123,21 @@ public class DomaUtils {
 
         GlobalSearchScope scope = GlobalSearchScope.moduleRuntimeScope(module, false);
         return ResourceFileUtil.findResourceFileInScope(filePath, method.getProject(), scope);
+    }
+
+    public static String findAnnotationParameterValue(PsiElement element, String annotationClass, String paramName) {
+        Collection<PsiAnnotation> annotations = PsiTreeUtil.findChildrenOfType(element, PsiAnnotation.class);
+        for (PsiAnnotation annotation : annotations) {
+            if (annotation.getQualifiedName().equals(annotationClass)) {
+                Collection<PsiNameValuePair> pairs = PsiTreeUtil.findChildrenOfType(annotation, PsiNameValuePair.class);
+                for (PsiNameValuePair pair : pairs) {
+                    if (paramName.equals(pair.getNameIdentifier().getText())) {
+                        return pair.getValue().getText();
+                    }
+                }
+            }
+        }
+        return null;
     }
 }
 
