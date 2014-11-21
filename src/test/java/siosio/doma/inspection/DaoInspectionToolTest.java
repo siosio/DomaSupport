@@ -79,7 +79,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
      * SQLファイルがない場合でもエラーとはならないこと
      */
     public void test_DAOアノテーションがついていない場合_検査対象外() throws Exception {
-        List<HighlightInfo> infos = doInspection("DAOではないインタフェース");
+        List<HighlightInfo> infos = doInspection("NonDaoClass");
 
         HighlightInfo info = findHighlightInfo(infos, "findById");
         assertTrue("メソッドはInspection対象外なのでエラー報告されないこと",
@@ -92,7 +92,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
      * アノテーションが設定されていないメソッドなので、SQLファイルがなくてもエラーとならないこと
      */
     public void test_DAOメソッドが存在しない場合_検査対象外() throws Exception {
-        List<HighlightInfo> infos = doInspection("DAOメソッドではない");
+        List<HighlightInfo> infos = doInspection("NonDaoMethod");
 
         assertTrue(findHighlightInfo(infos, "findById").getSeverity() != HighlightSeverity.ERROR);
         assertTrue(findHighlightInfo(infos, "findByName").getSeverity() != HighlightSeverity.ERROR);
@@ -104,7 +104,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
      * アノテーションが設定されていないメソッドなので、SQLファイルがなくてもエラーとならないこと
      */
     public void test_SelectメソッドでSQLファイルがある場合_検査エラーとはならない() throws Exception {
-        List<HighlightInfo> infos = doInspection("SQLファイルが存在している");
+        List<HighlightInfo> infos = doInspection("ExistsSqlFile");
 
         assertTrue(findHighlightInfo(infos, "findById").getSeverity() != HighlightSeverity.ERROR);
         assertTrue(findHighlightInfo(infos, "findByName").getSeverity() != HighlightSeverity.ERROR);
@@ -116,7 +116,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
      * SQLファイルが存在していないメソッドだけ、エラーとなること。
      */
     public void test_SelectメソッドでSQLファイルがない場合_検査エラーとなる() throws Exception {
-        List<HighlightInfo> infos = doInspection("SQLファイルが存在していない");
+        List<HighlightInfo> infos = doInspection("NotExistsSqlFile");
 
         assertTrue("SQLが存在しているメソッドはエラーとならない",
                 findHighlightInfo(infos, "sqlFound").getSeverity() != HighlightSeverity.ERROR);
@@ -131,7 +131,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
      * SelectOptions1つはvalidなのでエラーとならないこと
      */
     public void test_SelectOptions引数が1つの場合_検査エラーとならないこと() throws Exception {
-        List<HighlightInfo> infos = doInspection("SelectOptions1つ");
+        List<HighlightInfo> infos = doInspection("SingleSelectOptions");
 
         HighlightInfo option = findHighlightInfo(infos, "option");
         assertNull(option);
@@ -143,7 +143,7 @@ public class DaoInspectionToolTest extends UsefulTestCase {
      * SelectOptions型の引数は両方ともエラーとなること
      */
     public void test_SelectOptions引数が2つの場合_検査エラーとなること() throws Exception {
-        List<HighlightInfo> infos = doInspection("SelectOptions2つ");
+        List<HighlightInfo> infos = doInspection("MultiSelectOptions");
 
         HighlightInfo option1 = findHighlightInfo(infos, "option1");
         assertEquals(HighlightSeverity.ERROR, option1.getSeverity());
