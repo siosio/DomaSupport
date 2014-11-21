@@ -8,11 +8,9 @@ import com.intellij.openapi.module.ResourceFileUtil;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiAnnotationParameterList;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.PsiNameValuePair;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -32,18 +30,8 @@ public class DomaUtils {
      * @return DAOならtrue
      */
     public static boolean isDaoClass(PsiClass psiClass) {
-        PsiModifierList modifierList = psiClass.getModifierList();
-        if (modifierList == null) {
-            return false;
-        }
-        PsiAnnotation[] annotations = modifierList.getAnnotations();
-        for (PsiAnnotation annotation : annotations) {
-            String name = annotation.getQualifiedName();
-            if (DAO_ANNOTATION_NAME.equals(name)) {
-                return true;
-            }
-        }
-        return false;
+        PsiAnnotation annotation = AnnotationUtil.findAnnotation(psiClass, DAO_ANNOTATION_NAME);
+        return annotation != null;
     }
 
     /**
@@ -72,12 +60,10 @@ public class DomaUtils {
             return null;
         }
 
-        PsiAnnotation[] annotations = method.getModifierList().getAnnotations();
-        for (PsiAnnotation annotation : annotations) {
-            for (DaoType daoType : DaoType.values()) {
-                if (daoType.getAnnotation().equals(annotation.getQualifiedName())) {
-                    return daoType;
-                }
+        for (DaoType daoType : DaoType.values()) {
+            PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, daoType.getAnnotation());
+            if (annotation != null) {
+                return daoType;
             }
         }
         return null;

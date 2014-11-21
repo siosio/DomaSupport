@@ -25,5 +25,12 @@ IntelliJ上で、[Doma](http://doma.seasar.org/)を使った開発を少しだ�
     SelectOptions型の引数が最大でも1つであることのチェックが行われます。
     Quick Fixで、引数を削除することが出来ます。
 
+* Updateメソッド
+
+  * SQLファイルの存在チェック
+
+    UpdateアノテーションのsqlFile属性がtrueの場合、SQLファイルが存在しているかのチェックが行われます。
+    SQLファイルが存在していない場合、Quick Fixで空のSQLファイルの作成が行えます。
+
 # ライセンス
 This software is released under the MIT License, see LICENSE.txt.

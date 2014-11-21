@@ -24,6 +24,16 @@ public class UpdateMethodInspector extends DaoMethodInspector {
     private UpdateMethodInspector() {
     }
 
+    /**
+     * 以下の検査を行う。
+     *
+     * <ul>
+     *     <li>sqlFile属性がtrueの場合のSQLの存在チェック</li>
+     * </ul>
+     * @param problemsHolder 検査結果の詳細（検査エラーが格納される）
+     * @param psiClass 検査対象クラス
+     * @param method 検査対象メソッド
+     */
     void inspect(ProblemsHolder problemsHolder, PsiClass psiClass, PsiMethod method) {
         PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, DaoType.UPDATE.getAnnotation());
         assert annotation != null;

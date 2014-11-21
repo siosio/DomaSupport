@@ -20,7 +20,7 @@ import static siosio.doma.DomaBundle.message;
 /**
  * {@link DaoInspectionTool}のテストクラス。
  */
-public class DaoInspectionToolTest extends UsefulTestCase {
+public class SelectMethodInspectorTest extends UsefulTestCase {
 
     protected CodeInsightTestFixture myFixture;
 

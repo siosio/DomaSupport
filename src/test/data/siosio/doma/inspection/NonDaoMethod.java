@@ -8,4 +8,6 @@ public interface EmployeeDao {
     Map<String, Object> findById(int id);
 
     Map<String, Object> findByName(String name);
+
+    int update(Emp emp);
 }
