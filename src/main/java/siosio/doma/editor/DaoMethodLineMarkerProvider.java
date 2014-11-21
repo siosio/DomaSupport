@@ -37,13 +37,14 @@ public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
             return;
         }
 
-        DaoType type = DomaUtils.toDaoType((PsiMethod) element);
+        PsiMethod method = (PsiMethod) element;
+        DaoType type = DomaUtils.toDaoType(method);
         if (type == DaoType.INVALID) {
             return;
         }
 
-        String slqFilePath = DomaUtils.makeSqlFilePath((PsiMethod) element);
-        VirtualFile file = DomaUtils.findSqlFile(element, slqFilePath);
+        String slqFilePath = DomaUtils.makeSqlFilePath(method);
+        VirtualFile file = DomaUtils.findSqlFile(method, slqFilePath);
         if (file == null) {
             return;
         }

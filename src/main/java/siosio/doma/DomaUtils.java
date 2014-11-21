@@ -6,7 +6,6 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -109,20 +108,20 @@ public class DomaUtils {
     /**
      * SQLファイルを検索する。
      *
-     * @param element
-     * @param filePath
-     * @return
+     * @param method メソッド
+     * @param filePath SQLのファイルパス
+     * @return SQLファイルを表すVirtualFile(存在しない場合は、null)
      */
-    public static VirtualFile findSqlFile(PsiElement element, String filePath) {
-        Module module = ProjectRootManager.getInstance(element.getProject())
-                .getFileIndex().getModuleForFile(element.getContainingFile().getVirtualFile());
+    public static VirtualFile findSqlFile(PsiMethod method, String filePath) {
+        Module module = ProjectRootManager.getInstance(method.getProject())
+                .getFileIndex().getModuleForFile(method.getContainingFile().getVirtualFile());
 
         if (module == null) {
             return null;
         }
 
         GlobalSearchScope scope = GlobalSearchScope.moduleRuntimeScope(module, false);
-        return ResourceFileUtil.findResourceFileInScope(filePath, element.getProject(), scope);
+        return ResourceFileUtil.findResourceFileInScope(filePath, method.getProject(), scope);
     }
 }
 

@@ -18,7 +18,7 @@ import siosio.doma.DomaBundle;
  * @author siosio
  * @since 1
  */
-public class SelectMethodInspector extends DaoMethodInspector {
+public final class SelectMethodInspector extends DaoMethodInspector {
 
     /** SelectOptionsの完全修飾名 */
     private static final String SELECT_OPTIONS_CLASS_NAME = "org.seasar.doma.jdbc.SelectOptions";
@@ -26,8 +26,16 @@ public class SelectMethodInspector extends DaoMethodInspector {
     /** シングルトンオブジェクト */
     private static final SelectMethodInspector INSPECTION = new SelectMethodInspector();
 
-    public static final SelectMethodInspector getInspection() {
+    /**
+     * シングルトンインスタンスをかえす。
+     * @return インスタンス
+     */
+    public static SelectMethodInspector getInspection() {
         return INSPECTION;
+    }
+
+    /** 隠蔽コンストラクタ */
+    private SelectMethodInspector() {
     }
 
     /**
@@ -45,8 +53,7 @@ public class SelectMethodInspector extends DaoMethodInspector {
     public void inspect(ProblemsHolder problemsHolder, PsiClass psiClass, PsiMethod method) {
         validateRequiredSqlFile(problemsHolder, psiClass, method);
 
-        PsiParameterList parameterList = method.getParameterList();
-        validateSelectOptionsParameter(problemsHolder, parameterList);
+        validateSelectOptionsParameter(problemsHolder, method.getParameterList());
     }
 
     /**
