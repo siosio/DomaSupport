@@ -15,13 +15,13 @@ import com.intellij.util.PathUtil;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
-import siosio.doma.DomaBundle;
+
+import static siosio.doma.DomaBundle.message;
 
 /**
- * {@linke UpdateMethodInspectorTest}のテストクラス
+ * {@link DaoInspectionTool}のテストクラス。
  */
-public class UpdateMethodInspectorTest extends UsefulTestCase {
-
+public class DaoInspectionToolTest extends UsefulTestCase {
 
     protected CodeInsightTestFixture myFixture;
 
@@ -43,7 +43,7 @@ public class UpdateMethodInspectorTest extends UsefulTestCase {
         builder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
         builder.addLibrary("dao", PathUtil.getJarPathForClass(Dao.class));
         builder.addLibrary("select", PathUtil.getJarPathForClass(Select.class));
-        builder.addLibrary("select", PathUtil.getJarPathForClass(Update.class));
+        builder.addLibrary("update", PathUtil.getJarPathForClass(Update.class));
         builder.addSourceContentRoot("./src/test/data");
 
         myFixture.setUp();
@@ -82,10 +82,8 @@ public class UpdateMethodInspectorTest extends UsefulTestCase {
      */
     public void test_DAOアノテーションがついていない場合_検査対象外() throws Exception {
         List<HighlightInfo> infos = doInspection("NonDaoClass");
-
-        HighlightInfo info = findHighlightInfo(infos, "findById");
-        assertTrue("メソッドはInspection対象外なのでエラー報告されないこと",
-                info.getSeverity() != HighlightSeverity.ERROR);
+        assertHasNotError(infos, "findById");
+        assertHasNotError(infos, "update");
     }
 
     /**
@@ -96,33 +94,49 @@ public class UpdateMethodInspectorTest extends UsefulTestCase {
     public void test_DAOメソッドが存在しない場合_検査対象外() throws Exception {
         List<HighlightInfo> infos = doInspection("NonDaoMethod");
 
-        assertTrue(findHighlightInfo(infos, "update").getSeverity() != HighlightSeverity.ERROR);
+        assertHasNotError(infos, "findById");
+        assertHasNotError(infos, "findByName");
+        assertHasNotError(infos, "update");
     }
 
     /**
-     * UpdateメソッドでsqlFileがtrueでSQLファイルが存在しない場合
-     *
-     * 検査エラーとなること
+     * DAOメソッドでSQLファイルが存在している場合のケース
+     * <p/>
+     * アノテーションが設定されていないメソッドなので、SQLファイルがなくてもエラーとならないこと
      */
-    public void test_useSqlがtrueでSQLファイルが存在しない場合_検査エラーとなること() {
-        List<HighlightInfo> infos = doInspection("NotExistsSqlFile");
-
-        HighlightInfo info = findHighlightInfo(infos, "update");
-        assertTrue("SQLファイルが存在しないのでエラーとなる", info.getSeverity() == HighlightSeverity.ERROR);
-        assertEquals(DomaBundle.message("inspection.dao.sql-not-found"), info.getDescription());
-    }
-
-    /**
-     * UpdateメソッドでsqlFileがfalseyaでSQLファイルが存在しない場合
-     *
-     * 検査エラーとなること
-     */
-    public void test_useSqlがfalseでSQLファイルが存在しない場合_検査エラーとならないこと() {
+    public void test_DAOメソッドでSQLファイルがある場合_検査エラーとはならない() throws Exception {
         List<HighlightInfo> infos = doInspection("ExistsSqlFile");
 
-        assertTrue("SQLファイルが存在しないのでエラーとなる", findHighlightInfo(infos, "update1").getSeverity() != HighlightSeverity.ERROR);
-        assertTrue("SQLファイルが存在しないのでエラーとなる", findHighlightInfo(infos, "update2").getSeverity() != HighlightSeverity.ERROR);
-        assertTrue("SQLファイルが存在しないのでエラーとなる", findHighlightInfo(infos, "update3").getSeverity() != HighlightSeverity.ERROR);
+        assertHasNotError(infos, "findById");
+        assertHasNotError(infos, "findByName");
+        assertHasNotError(infos, "update1");
+        assertHasNotError(infos, "update2");
+        assertHasNotError(infos, "update3");
+    }
+
+    /**
+     * DAOメソッドでSQLファイルが存在していない場合のケース
+     * <p/>
+     * SQLファイルが存在していないメソッドだけ、エラーとなること。
+     */
+    public void test_DAOメソッドでSQLファイルがない場合_検査エラーとなる() throws Exception {
+        List<HighlightInfo> infos = doInspection("NotExistsSqlFile");
+
+        assertHasError(infos, "sqlNotFound");
+        assertHasError(infos, "update");
+    }
+
+
+    private void assertHasNotError(List<HighlightInfo> infos, String elementName) {
+        HighlightInfo info = findHighlightInfo(infos, elementName);
+        assertTrue(elementName + "はInspectionでエラーが発生していないこと",
+                info.getSeverity() != HighlightSeverity.ERROR);
+    }
+
+    private void assertHasError(List<HighlightInfo> infos, String elementName) {
+        HighlightInfo errorMethod = findHighlightInfo(infos, elementName);
+        assertEquals("SQLファイルが存在していないメソッドはエラー", HighlightSeverity.ERROR, errorMethod.getSeverity());
+        assertEquals(message("inspection.dao.sql-not-found"), errorMethod.getDescription());
     }
 }
 

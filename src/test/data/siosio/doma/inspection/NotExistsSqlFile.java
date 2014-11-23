@@ -7,8 +7,6 @@ import test.AppConfig;
 
 @Dao(config = AppConfig.class)
 public interface EmployeeDao {
-    @Select
-    Map<String, Object> sqlFound(String name);
 
     @Select
     Map<String, Object> sqlNotFound(int id);

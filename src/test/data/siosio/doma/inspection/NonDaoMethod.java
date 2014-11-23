@@ -1,6 +1,6 @@
 import org.seasar.doma.Dao;
 import org.seasar.doma.Select;
-import test.AppConfig
+import test.AppConfig;
 
 @Dao(config = AppConfig.class)
 public interface EmployeeDao {
