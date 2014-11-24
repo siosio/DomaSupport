@@ -1,19 +1,13 @@
 package siosio.doma;
 
-import java.util.Collection;
-
 import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ResourceFileUtil;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiNameValuePair;
 import com.intellij.psi.search.GlobalSearchScope;
-import com.intellij.psi.util.PsiTreeUtil;
 
 /**
  * 便利メソッド群。
@@ -30,8 +24,7 @@ public class DomaUtils {
      * @return DAOならtrue
      */
     public static boolean isDaoClass(PsiClass psiClass) {
-        PsiAnnotation annotation = AnnotationUtil.findAnnotation(psiClass, DAO_ANNOTATION_NAME);
-        return annotation != null;
+        return AnnotationUtil.isAnnotated(psiClass, DAO_ANNOTATION_NAME, false);
     }
 
     /**
@@ -61,8 +54,7 @@ public class DomaUtils {
         }
 
         for (DaoType daoType : DaoType.values()) {
-            PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, daoType.getAnnotation());
-            if (annotation != null) {
+            if (AnnotationUtil.isAnnotated(method, daoType.getAnnotation(), false)) {
                 return daoType;
             }
         }
@@ -109,21 +101,6 @@ public class DomaUtils {
 
         GlobalSearchScope scope = GlobalSearchScope.moduleRuntimeScope(module, false);
         return ResourceFileUtil.findResourceFileInScope(filePath, method.getProject(), scope);
-    }
-
-    public static String findAnnotationParameterValue(PsiElement element, String annotationClass, String paramName) {
-        Collection<PsiAnnotation> annotations = PsiTreeUtil.findChildrenOfType(element, PsiAnnotation.class);
-        for (PsiAnnotation annotation : annotations) {
-            if (annotation.getQualifiedName().equals(annotationClass)) {
-                Collection<PsiNameValuePair> pairs = PsiTreeUtil.findChildrenOfType(annotation, PsiNameValuePair.class);
-                for (PsiNameValuePair pair : pairs) {
-                    if (paramName.equals(pair.getNameIdentifier().getText())) {
-                        return pair.getValue().getText();
-                    }
-                }
-            }
-        }
-        return null;
     }
 }
 
