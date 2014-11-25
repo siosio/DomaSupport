@@ -72,6 +72,8 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
                         return UpdateMethodInspector.getInstance();
                     case INSERT:
                         return InsertMethodInspector.getInstance();
+                    case DELETE:
+                        return DeleteMethodInspector.getInstance();
                     default:
                         return null;
                 }
