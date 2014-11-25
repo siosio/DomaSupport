@@ -35,10 +35,7 @@ public class UpdateMethodInspector extends DaoMethodInspector {
      * @param method 検査対象メソッド
      */
     void inspect(ProblemsHolder problemsHolder, PsiClass psiClass, PsiMethod method) {
-        PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, DaoType.UPDATE.getAnnotation());
-        assert annotation != null;
-        Boolean useSql = AnnotationUtil.getBooleanAttributeValue(annotation, "sqlFile");
-        if ((useSql != null) && useSql) {
+        if (useSqlFile(method, DaoType.UPDATE.getAnnotation())) {
             validateRequiredSqlFile(problemsHolder, psiClass, method);
         }
     }

@@ -10,7 +10,7 @@ public class DaoLiveTemplatesProvider implements DefaultLiveTemplatesProvider {
 
     @Override
     public String[] getDefaultLiveTemplateFiles() {
-        return new String[]{"doma.xml"};
+        return new String[]{"doma"};
     }
 
     @Nullable

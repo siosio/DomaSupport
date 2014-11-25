@@ -1,12 +1,15 @@
 package siosio.doma.inspection;
 
+import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
+import siosio.doma.DaoType;
 import siosio.doma.DomaBundle;
 import siosio.doma.DomaUtils;
 
@@ -65,6 +68,19 @@ abstract class DaoMethodInspector {
                     ProblemHighlightType.ERROR,
                     new CreateSqlFileQuickFix(module, sqlFileName));
         }
+    }
+
+    /**
+     * このメソッドがSQLファイル必要としているか否か
+     * @param method メソッド
+     * @param annotationName アノテーション
+     * @return true or false
+     */
+    protected static boolean useSqlFile(PsiMethod method, String annotationName) {
+        PsiAnnotation annotation = AnnotationUtil.findAnnotation(method, annotationName);
+        assert annotation != null;
+        Boolean useSql = AnnotationUtil.getBooleanAttributeValue(annotation, "sqlFile");
+        return (useSql != null) && useSql;
     }
 }
 
