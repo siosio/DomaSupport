@@ -12,25 +12,26 @@ IntelliJ上で、[Doma](http://doma.seasar.org/)を使った開発を少しだ�
   
   SQLファイルが存在している場合、該当メソッドのGutter部(行番号の右側の部分)にSQLアイコンが表示されます。
   このアイコンをクリックすることで、関連するSQLへ移動できます。
-
-* Selectメソッド
-
-  * SQLファイルの存在チェック
+  
+* SQLファイルの存在チェック
+ 
+  * Selectメソッド
   
     SQLファイルが存在しているかのチェックが行われます。
     SQLファイルが存在していない場合、Quick Fixで空のSQLファイルの作成が行えます。
+    
+  * 更新(Insert、Update、Delete)メソッド
+
+    UpdateアノテーションのsqlFile属性がtrueの場合、SQLファイルが存在しているかのチェックが行われます。
+    SQLファイルが存在していない場合、Quick Fixで空のSQLファイルの作成が行えます。
+
+* Selectメソッド
     
   * 引数のチェック
   
     SelectOptions型の引数が最大でも1つであることのチェックが行われます。
     Quick Fixで、引数を削除することが出来ます。
 
-* Updateメソッド
-
-  * SQLファイルの存在チェック
-
-    UpdateアノテーションのsqlFile属性がtrueの場合、SQLファイルが存在しているかのチェックが行われます。
-    SQLファイルが存在していない場合、Quick Fixで空のSQLファイルの作成が行えます。
 
 # ライセンス
 This software is released under the MIT License, see LICENSE.txt.
