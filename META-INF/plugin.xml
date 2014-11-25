@@ -3,7 +3,6 @@
   <name>Doma Support</name>
   <version>0.1</version>
   <vendor email="siosio12@gmail.com" url="https://github.com/siosio/DomaSupport">siosio</vendor>
-  <depends>com.intellij.database</depends>
 
   <description><![CDATA[
   Support for <a href='http://doma.readthedocs.org/ja/latest/'>Doma framework</a>.
@@ -18,11 +17,9 @@
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
   <idea-version since-build="139.225" />
 
-  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
+  <depends>com.intellij.modules.java</depends>
+  <depends>com.intellij.modules.ultimate</depends>
+  <depends>com.intellij.database</depends>
 
   <extensions defaultExtensionNs="com.intellij">
     <inspectionToolProvider implementation="siosio.doma.inspection.DaoInspectionToolProvider" />
