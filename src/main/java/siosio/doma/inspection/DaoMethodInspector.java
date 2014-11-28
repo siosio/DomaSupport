@@ -9,7 +9,6 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
-import siosio.doma.DaoType;
 import siosio.doma.DomaBundle;
 import siosio.doma.DomaUtils;
 
@@ -19,7 +18,7 @@ import siosio.doma.DomaUtils;
  * @author siosio
  * @since 1
  */
-abstract class DaoMethodInspector {
+public abstract class DaoMethodInspector {
 
     /**
      * 検査を行う。

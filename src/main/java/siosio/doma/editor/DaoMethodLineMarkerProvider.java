@@ -1,10 +1,5 @@
 package siosio.doma.editor;
 
-import java.util.Collection;
-import java.util.List;
-
-import javax.swing.*;
-
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
@@ -18,11 +13,16 @@ import siosio.doma.DaoType;
 import siosio.doma.DomaBundle;
 import siosio.doma.DomaUtils;
 
+import javax.swing.*;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * DAOのメソッドからSQLファイルへの移動を実現するやつ
  */
 public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
+    /** SQLファイルのアイコン */
     private static final Icon SQL_FILE_ICON = IconLoader.getIcon("/icons/sql.png");
 
     @Override

@@ -49,34 +49,11 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
                     return;
                 }
 
-                DaoMethodInspector inspection = createDaoMethodInspection(method);
-                if (inspection == null) {
+                DaoType daoType = DomaUtils.toDaoType(method);
+                if (daoType == null) {
                     return;
                 }
-
-                inspection.inspect(holder, psiClass, method);
-            }
-
-            /**
-             * Inspectionを実行するクラスを生成する。
-             *
-             * @param method チェック対象メソッド
-             * @return Inspectionを実行するクラスのインスタンス
-             */
-            private DaoMethodInspector createDaoMethodInspection(PsiMethod method) {
-                DaoType type = DomaUtils.toDaoType(method);
-                switch (type) {
-                    case SELECT:
-                        return SelectMethodInspector.getInspection();
-                    case UPDATE:
-                        return UpdateMethodInspector.getInstance();
-                    case INSERT:
-                        return InsertMethodInspector.getInstance();
-                    case DELETE:
-                        return DeleteMethodInspector.getInstance();
-                    default:
-                        return null;
-                }
+                daoType.getInspector().inspect(holder, psiClass, method);
             }
         };
     }

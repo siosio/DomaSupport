@@ -79,6 +79,7 @@ public class DomaUtils {
      * @param method DAOメソッド
      * @return SQLのファイルパス(クラスパス配下からのパス)
      */
+    @SuppressWarnings("ConstantConditions")
     public static String makeSqlFilePath(PsiClass psiClass, PsiMethod method) {
         return "META-INF/" + psiClass.getQualifiedName().replace('.', '/')
                 + '/' + method.getName() + ".sql";
