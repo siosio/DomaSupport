@@ -9,6 +9,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiMethod;
+import org.jetbrains.annotations.NotNull;
 import siosio.doma.DaoType;
 import siosio.doma.DomaBundle;
 import siosio.doma.DomaUtils;
@@ -22,29 +23,27 @@ import java.util.List;
  */
 public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
-    /** SQLファイルのアイコン */
+    /**
+     * SQLファイルのアイコン
+     */
     private static final Icon SQL_FILE_ICON = IconLoader.getIcon("/icons/sql.png");
 
     @Override
     public void collectNavigationMarkers(List<PsiElement> elements,
-            Collection<? super RelatedItemLineMarkerInfo> result, boolean forNavigation) {
+                                         Collection<? super RelatedItemLineMarkerInfo> result, boolean forNavigation) {
         super.collectNavigationMarkers(elements, result, forNavigation);
     }
 
     @Override
-    protected void collectNavigationMarkers(PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+    protected void collectNavigationMarkers(
+            @NotNull PsiElement element,
+            Collection<? super RelatedItemLineMarkerInfo> result) {
+
         if (!(element instanceof PsiMethod)) {
             return;
         }
 
-        PsiMethod method = (PsiMethod) element;
-        DaoType type = DomaUtils.toDaoType(method);
-        if (type == null) {
-            return;
-        }
-
-        String slqFilePath = DomaUtils.makeSqlFilePath(method);
-        VirtualFile file = DomaUtils.findSqlFile(method, slqFilePath);
+        VirtualFile file = makeSqlFilePath((PsiMethod) element);
         if (file == null) {
             return;
         }
@@ -55,6 +54,21 @@ public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
                 .setTargets(psiFile)
                 .setTooltipText(DomaBundle.message("editor.goto-sql-file"));
         result.add(builder.createLineMarkerInfo(element));
+    }
+
+    /**
+     * メソッドに対応したSQLファイルのパスを取得する。
+     *
+     * @param method メソッド
+     * @return SQLファイルのパス
+     */
+    private VirtualFile makeSqlFilePath(PsiMethod method) {
+        DaoType type = DomaUtils.toDaoType(method);
+        if (type == null) {
+            return null;
+        }
+        String slqFilePath = DomaUtils.makeSqlFilePath(method);
+        return DomaUtils.findSqlFile(method, slqFilePath);
     }
 }
 
