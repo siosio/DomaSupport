@@ -1,5 +1,8 @@
 package siosio.doma.inspection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.codeInspection.compiler.RemoveElementQuickFix;
@@ -8,9 +11,6 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
 import siosio.doma.DomaBundle;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * SQLメソッドの検査を行う。

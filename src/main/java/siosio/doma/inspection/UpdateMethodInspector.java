@@ -1,8 +1,6 @@
 package siosio.doma.inspection;
 
-import com.intellij.codeInsight.AnnotationUtil;
 import com.intellij.codeInspection.ProblemsHolder;
-import com.intellij.psi.PsiAnnotation;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import siosio.doma.DaoType;

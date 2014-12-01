@@ -1,5 +1,10 @@
 package siosio.doma.editor;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.swing.*;
+
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
@@ -13,10 +18,6 @@ import org.jetbrains.annotations.NotNull;
 import siosio.doma.DaoType;
 import siosio.doma.DomaBundle;
 import siosio.doma.DomaUtils;
-
-import javax.swing.*;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * DAOのメソッドからSQLファイルへの移動を実現するやつ

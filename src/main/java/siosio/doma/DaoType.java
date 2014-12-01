@@ -1,6 +1,10 @@
 package siosio.doma;
 
-import siosio.doma.inspection.*;
+import siosio.doma.inspection.DaoMethodInspector;
+import siosio.doma.inspection.DeleteMethodInspector;
+import siosio.doma.inspection.InsertMethodInspector;
+import siosio.doma.inspection.SelectMethodInspector;
+import siosio.doma.inspection.UpdateMethodInspector;
 
 public enum DaoType {
     SELECT("org.seasar.doma.Select", SelectMethodInspector.getInspection()),
