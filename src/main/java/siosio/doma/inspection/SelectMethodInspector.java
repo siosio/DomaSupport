@@ -10,6 +10,8 @@ import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
+import com.intellij.psi.PsiType;
+import com.intellij.psi.PsiTypeElement;
 import siosio.doma.DomaBundle;
 
 /**
@@ -54,6 +56,8 @@ public final class SelectMethodInspector extends DaoMethodInspector {
         validateRequiredSqlFile(problemsHolder, psiClass, method);
 
         validateSelectOptionsParameter(problemsHolder, method.getParameterList());
+
+        validateReturnType(problemsHolder, method.getReturnTypeElement());
     }
 
     /**
@@ -82,6 +86,26 @@ public final class SelectMethodInspector extends DaoMethodInspector {
                     ProblemHighlightType.ERROR,
                     new RemoveElementQuickFix(DomaBundle.message("quick-fix.remove", errorParameter.getName()))
             );
+        }
+    }
+
+    /**
+     * 戻り値の検査を行う。
+     *
+     * 以下に該当する場合はエラーとする。
+     * <ul>
+     *     <li>戻り値がvoidの場合</li>
+     * </ul>
+     * @param problemsHolder 検査結果の詳細（検査エラーが格納される）
+     * @param returnElement 戻り値
+     */
+    private void validateReturnType(ProblemsHolder problemsHolder, PsiTypeElement returnElement) {
+        if (!returnElement.isValid()) {
+            return;
+        }
+
+        if (returnElement.getType().isAssignableFrom(PsiType.VOID)) {
+            problemsHolder.registerProblem(returnElement, DomaBundle.message("inspection.dao.invalid-selectReturnType"), ProblemHighlightType.ERROR);
         }
     }
 }

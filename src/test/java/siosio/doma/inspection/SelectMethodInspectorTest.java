@@ -15,6 +15,7 @@ import com.intellij.util.PathUtil;
 import org.seasar.doma.Dao;
 import org.seasar.doma.Select;
 import org.seasar.doma.Update;
+import siosio.doma.DomaBundle;
 
 import static siosio.doma.DomaBundle.message;
 
@@ -103,5 +104,18 @@ public class SelectMethodInspectorTest extends UsefulTestCase {
         assertEquals(message("inspection.dao.multi-SelectOptions"), option2.getDescription());
     }
 
+    /**
+     * selectメソッドの戻り値がvoidのケース
+     * <p/>
+     * selectでvoidは許容されないのでエラーとなること
+     *
+     * @throws Exception
+     */
+    public void test_戻り値がvoidの場合_検査エラーとなること() throws Exception {
+        List<HighlightInfo> infos = doInspection("SelectReturnType");
+        HighlightInfo actual = findHighlightInfo(infos, "void");
 
+        assertEquals(HighlightSeverity.ERROR, actual.getSeverity());
+        assertEquals(DomaBundle.message("inspection.dao.invalid-selectReturnType"), actual.getDescription());
+    }
 }
