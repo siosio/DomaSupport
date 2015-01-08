@@ -43,6 +43,9 @@ public class DaoInspectionTool extends BaseJavaLocalInspectionTool {
             @Override
             public void visitMethod(PsiMethod method) {
                 super.visitMethod(method);
+                if (!method.isValid()) {
+                    return;
+                }
 
                 PsiClass psiClass = method.getContainingClass();
                 if (!DomaUtils.isDaoMethod(method)) {

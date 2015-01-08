@@ -27,7 +27,7 @@ public class SelectMethodInspectorTest extends UsefulTestCase {
     protected CodeInsightTestFixture myFixture;
 
     private static final String DATA_PATH = "./src/test/data/siosio/doma/inspection/";
-
+    
 
     public void setUp() throws Exception {
 
@@ -43,8 +43,9 @@ public class SelectMethodInspectorTest extends UsefulTestCase {
         builder.addContentRoot(myFixture.getTempDirPath()).addSourceRoot("");
         builder.setMockJdkLevel(JavaModuleFixtureBuilder.MockJdkLevel.jdk15);
         builder.addLibrary("dao", PathUtil.getJarPathForClass(Dao.class));
-        builder.addLibrary("select", PathUtil.getJarPathForClass(Select.class));
+        builder.addLibrary("Select", PathUtil.getJarPathForClass(Select.class));
         builder.addLibrary("update", PathUtil.getJarPathForClass(Update.class));
+        builder.addLibrary("TestEnum", PathUtil.getJarPathForClass(TestEnum.class));
         builder.addSourceContentRoot("./src/test/data");
 
         myFixture.setUp();
@@ -118,4 +119,18 @@ public class SelectMethodInspectorTest extends UsefulTestCase {
         assertEquals(HighlightSeverity.ERROR, actual.getSeverity());
         assertEquals(DomaBundle.message("inspection.dao.invalid-selectReturnType"), actual.getDescription());
     }
+
+    /**
+     * selectメソッドの戻り値がenumのケース
+     * <p/>
+     * selectでenumはOKなのでエラーとならないこと
+     *
+     * @throws Exception
+     */
+    public void test_戻り値がenumの場合_検査エラーとならないこと() throws Exception {
+        List<HighlightInfo> infos = doInspection("SelectReturnType");
+        HighlightInfo actual = findHighlightInfo(infos, "TestEnum");
+        assertNull(actual.getDescription());
+    }
 }
+

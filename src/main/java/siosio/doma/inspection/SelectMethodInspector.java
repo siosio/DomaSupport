@@ -1,6 +1,7 @@
 package siosio.doma.inspection;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.intellij.codeInspection.ProblemHighlightType;
@@ -12,13 +13,17 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.PsiParameterList;
 import com.intellij.psi.PsiType;
 import com.intellij.psi.PsiTypeElement;
+import com.intellij.psi.util.PsiTypesUtil;
+import com.intellij.spring.model.utils.PsiTypeUtil;
+import com.intellij.uiDesigner.lw.LwXmlReader;
 import siosio.doma.DomaBundle;
+import siosio.doma.DomaUtils;
 
 /**
- * SQLメソッドの検査を行う。
+ * SELECTメソッドの検査を行う。
  *
  * @author siosio
- * @since 1
+ * @since 1.0
  */
 public final class SelectMethodInspector extends DaoMethodInspector {
 
@@ -46,6 +51,12 @@ public final class SelectMethodInspector extends DaoMethodInspector {
      * <ul>
      *     <li>SQLの存在チェック</li>
      *     <li>パラメータチェック</li>
+     *     <li>
+     *         戻り値の型チェック
+     *         <ul>
+     *             voidはNG
+     *         </ul>
+     *     </li>
      * </ul>
      * @param problemsHolder 検査結果の詳細（検査エラーが格納される）
      * @param psiClass 検査対象クラス
@@ -89,6 +100,7 @@ public final class SelectMethodInspector extends DaoMethodInspector {
         }
     }
 
+
     /**
      * 戻り値の検査を行う。
      *
@@ -99,14 +111,16 @@ public final class SelectMethodInspector extends DaoMethodInspector {
      * @param problemsHolder 検査結果の詳細（検査エラーが格納される）
      * @param returnElement 戻り値
      */
-    private void validateReturnType(ProblemsHolder problemsHolder, PsiTypeElement returnElement) {
-        if (!returnElement.isValid()) {
+    private static void validateReturnType(ProblemsHolder problemsHolder, PsiTypeElement returnElement) {
+        if ((returnElement == null) || !returnElement.isValid()) {
             return;
         }
 
-        if (returnElement.getType().isAssignableFrom(PsiType.VOID)) {
-            problemsHolder.registerProblem(returnElement, DomaBundle.message("inspection.dao.invalid-selectReturnType"), ProblemHighlightType.ERROR);
+        if (DomaUtils.isBasicType(returnElement.getType())) {
+            return;
         }
+        problemsHolder.registerProblem(returnElement,
+                DomaBundle.message("inspection.dao.invalid-selectReturnType"), ProblemHighlightType.ERROR);
     }
 }
 
