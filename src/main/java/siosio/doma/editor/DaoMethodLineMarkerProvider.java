@@ -64,12 +64,13 @@ public class DaoMethodLineMarkerProvider extends RelatedItemLineMarkerProvider {
      * @return SQLファイルのパス
      */
     private VirtualFile makeSqlFilePath(PsiMethod method) {
-        DaoType type = DomaUtils.toDaoType(method);
-        if (type == null) {
-            return null;
-        }
-        String slqFilePath = DomaUtils.makeSqlFilePath(method);
-        return DomaUtils.findSqlFile(method, slqFilePath);
+        //DaoType type = DomaUtils.toDaoType(method);
+        //if (type == null) {
+        //    return null;
+        //}
+        //String slqFilePath = DomaUtils.makeSqlFilePath(method);
+        //return DomaUtils.findSqlFile(method, slqFilePath);
+        return null;
     }
 }
 

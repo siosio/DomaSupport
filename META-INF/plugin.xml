@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>siosio.DomaSupport</id>
   <name>Doma Support</name>
-  <version>0.1</version>
+  <version>0.2</version>
   <vendor email="siosio12@gmail.com" url="https://github.com/siosio/DomaSupport">siosio</vendor>
 
   <description><![CDATA[
@@ -22,7 +22,7 @@
   <depends>com.intellij.database</depends>
 
   <extensions defaultExtensionNs="com.intellij">
-    <inspectionToolProvider implementation="siosio.doma.inspection.DaoInspectionToolProvider" />
+    <inspectionToolProvider implementation="siosio.doma.inspection.dao.DaoInspectionToolProvider" />
     <codeInsight.lineMarkerProvider language="JAVA"
         implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
     <defaultLiveTemplatesProvider implementation="siosio.doma.livetemplate.DaoLiveTemplatesProvider" />
