@@ -30,7 +30,8 @@ public class DaoMethodInspectionContext(
   companion object {
     val daoInspectors = mapOf(
         DaoType.SELECT to listOf(
-            SqlFileInspector("sql")
+            SqlFileInspector("sql"),
+            SelectOptionsInspector()
         ),
         DaoType.INSERT to listOf(
             OptionalSqlFileInspector("sql")
