@@ -34,7 +34,8 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
                 "SelectDao/selectOptions1つ",
                 "SelectDao/selectOptions2つ",
                 "InsertDao/SQLファイルあり",
-                "UpdateDao/SQLファイルあり"
+                "UpdateDao/SQLファイルあり",
+                "DeleteDao/SQLファイルあり"
         );
     }
 
@@ -92,6 +93,13 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
      */
     public void test_updateメソッド() {
         myFixture.testHighlighting("UpdateDao.java");
+    }
+
+    /**
+     * deleteメソッドのテストを行う。
+     */
+    public void test_deleteメソッド() {
+        myFixture.testHighlighting("DeleteDao.java");
     }
 
     public static class DomaProjectDescriptor extends DefaultLightProjectDescriptor {
