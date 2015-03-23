@@ -33,7 +33,9 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
                 "SelectDao/SQLファイルあり",
                 "SelectDao/selectOptions1つ",
                 "SelectDao/selectOptions2つ",
-                "InsertDao/SQLファイルあり");
+                "InsertDao/SQLファイルあり",
+                "UpdateDao/SQLファイルあり"
+        );
     }
 
     private void createSqlFile(String... sqlFileNames) {
@@ -42,6 +44,9 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
         }
     }
 
+    /**
+     * テストで必要となるDoma関連クラスを作成する。
+     */
     private void createDomaClass() {
         myFixture.addClass("package org.seasar.doma;"
                 + "@Target(ElementType.TYPE)"
@@ -51,14 +56,21 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
                 + "@Target(ElementType.METHOD)"
                 + "@Retention(RetentionPolicy.RUNTIME)"
                 + "public @interface Select {}");
+        myFixture.addClass("package org.seasar.doma.jdbc;"
+                + "public class SelectOptions {}");
+
+        createUpdateAnnotation("Insert");
+        createUpdateAnnotation("Update");
+        createUpdateAnnotation("Delete");
+    }
+
+    private void createUpdateAnnotation(String className) {
         myFixture.addClass("package org.seasar.doma;"
                 + "@Target(ElementType.METHOD)"
                 + "@Retention(RetentionPolicy.RUNTIME)"
-                + "public @interface Insert {"
+                + "public @interface " + className + "{"
                 + " boolean sqlFile() default false;"
                 + "}");
-        myFixture.addClass("package org.seasar.doma.jdbc;"
-                + "public class SelectOptions {}");
     }
 
     /**
@@ -73,6 +85,13 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
      */
     public void test_insertメソッド() {
         myFixture.testHighlighting("InsertDao.java");
+    }
+
+    /**
+     * updateメソッドのテストを行う。
+     */
+    public void test_updateメソッド() {
+        myFixture.testHighlighting("UpdateDao.java");
     }
 
     public static class DomaProjectDescriptor extends DefaultLightProjectDescriptor {
