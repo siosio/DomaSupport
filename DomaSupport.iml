@@ -11,16 +11,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="TEST">
-      <library>
-        <CLASSES>
-          <root url="file://$MODULE_DIR$/src/test/lib" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-        <jarDirectory url="file://$MODULE_DIR$/src/test/lib" recursive="false" />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="KotlinJavaRuntime" level="project" />
   </component>
   <component name="org.twodividedbyzero.idea.findbugs">

@@ -1,4 +1,4 @@
-package select;
+package dao;
 
 import org.seasar.doma.*;
 import org.seasar.doma.jdbc.*;
