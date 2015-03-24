@@ -1,7 +1,4 @@
-package siosio.doma.inspection.dao
-
-import java.io.IOException
-import java.util.HashMap
+package siosio.doma.inspection.dao.quickfix
 
 import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemDescriptor
@@ -12,13 +9,13 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.roots.ModuleRootManager
 import com.intellij.openapi.util.text.StringUtil
 import com.intellij.openapi.vfs.VfsUtil
-import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiDirectory
-import com.intellij.psi.PsiFile
 import com.intellij.psi.PsiManager
 import com.intellij.util.ArrayUtil
 import com.intellij.util.IncorrectOperationException
 import siosio.doma.DomaBundle
+import java.io.IOException
+import java.util.HashMap
 
 /**
  * SQLファイルを作成するクィックフィックス実装。
@@ -67,4 +64,3 @@ class CreateSqlFileQuickFix(
     editorManager.openFile(file.getVirtualFile(), true)
   }
 }
-

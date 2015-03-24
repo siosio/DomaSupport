@@ -6,6 +6,7 @@ import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiMethod
 import siosio.doma.DomaBundle
 import siosio.doma.DomaUtils
+import siosio.doma.inspection.dao.quickfix.CreateSqlFileQuickFix
 
 /**
  * SQLファイルの存在チェックを行うインスペクションクラス。
