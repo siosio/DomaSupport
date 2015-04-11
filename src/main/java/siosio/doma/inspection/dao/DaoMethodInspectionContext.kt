@@ -5,46 +5,19 @@ import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiClass
 import com.intellij.psi.util.PsiUtil
 import siosio.doma.DaoType
-import siosio.doma.DomaUtils
+import siosio.doma.inspection.dao.DaoInspectorFactory
+import siosio.doma.psi.PsiDaoMethod
 
 /**
  * DAOメソッドのインスペクション情報
  */
 public class DaoMethodInspectionContext(
     val problemsHolder: ProblemsHolder,
-    val method: PsiMethod
+    val method: PsiDaoMethod
 ) {
-  val psiClass: PsiClass
-  val daoType: DaoType
-
-  init {
-    psiClass = method.getContainingClass()!!
-    daoType = DomaUtils.toDaoType(method)!!
-  }
 
   fun doInspection() {
-    val inspectors = daoInspectors.get(daoType) ?: listOf()
-    inspectors.forEach { it.doInspection(this)}
-  }
-
-  companion object {
-    val daoInspectors = mapOf(
-        DaoType.SELECT to listOf(
-            SqlFileInspector("sql"),
-            SelectOptionsInspector()
-        ),
-        DaoType.INSERT to listOf(
-            OptionalSqlFileInspector("sql")
-        ),
-        DaoType.UPDATE to listOf(
-            OptionalSqlFileInspector("sql")
-        ),
-        DaoType.DELETE to listOf(
-            OptionalSqlFileInspector("sql")
-        ),
-        DaoType.BATCH_INSERT to listOf(
-            OptionalSqlFileInspector("sql")
-        )
-    )
+    val inspectors = DaoInspectorFactory.createDaoMethodInspector(method.daoType)
+    inspectors.inspect(this)
   }
 }

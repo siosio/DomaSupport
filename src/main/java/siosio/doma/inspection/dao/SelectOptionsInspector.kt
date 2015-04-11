@@ -7,13 +7,13 @@ import siosio.doma.DomaBundle
 /**
  * selectメソッドの検索オプション(SelectOptions)の検査を行うクラス。
  */
-class SelectOptionsInspector : Inspector {
+class SelectOptionsInspector  {
 
   companion object {
-    kotlin.platform.platformStatic val SELECT_OPTIONS_CLASS_NAME = "org.seasar.doma.jdbc.SelectOptions";
+    kotlin.platform.platformStatic val SELECT_OPTIONS_CLASS_NAME = "";
   }
 
-  override fun doInspection(context: DaoMethodInspectionContext) {
+  fun doInspection(context: DaoMethodInspectionContext) {
 
     val selectOptions = context.method.getParameterList().getParameters().filter {
       SELECT_OPTIONS_CLASS_NAME.equals(it.getType().getCanonicalText())

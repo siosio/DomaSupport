@@ -10,27 +10,12 @@ import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiMethod
 import siosio.doma.DaoType
 import siosio.doma.DomaBundle
-import siosio.doma.DomaUtils
+import siosio.doma.psi.PsiDaoMethod
 
 /**
  * DomaのDAOのチェックを行うクラス。
  */
 class DaoInspectionTool : BaseJavaLocalInspectionTool() {
-
-  fun PsiMethod.isDaoMethod(): Boolean {
-    if (!this.isValid()) {
-      return false
-    }
-    val psiClass = this.getContainingClass()
-    if (psiClass == null) {
-      return false
-    }
-    if (!AnnotationUtil.isAnnotated(psiClass, DomaUtils.DAO_ANNOTATION_NAME, false)) {
-      return false
-    }
-    val daoType = DomaUtils.toDaoType(this)
-    return daoType != null
-  }
 
   override fun getDisplayName(): String {
     return DomaBundle.message("inspection.dao-inspection")
@@ -49,15 +34,20 @@ class DaoInspectionTool : BaseJavaLocalInspectionTool() {
   }
 
   override fun buildVisitor(problemsHolder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
-
     return object : JavaElementVisitor() {
-
       override fun visitMethod(method: PsiMethod) {
         super.visitMethod(method)
-        if (!method.isDaoMethod()) {
-          return
+
+        val daoType = DaoType.values().firstOrNull {
+          AnnotationUtil.isAnnotated(method, it.annotationName, false)
         }
-        val context = DaoMethodInspectionContext(problemsHolder, method)
+        if (daoType == null) {
+          return;
+        }
+
+        val psiDaoMethod = PsiDaoMethod(method, daoType)
+
+        val context = DaoMethodInspectionContext(problemsHolder, psiDaoMethod)
         context.doInspection()
       }
     }
