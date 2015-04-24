@@ -3,19 +3,33 @@ package siosio.doma.inspection.dao
 import com.intellij.codeInsight.AnnotationUtil
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.compiler.RemoveElementQuickFix
+import com.intellij.psi.PsiParameter
 import siosio.doma.DomaBundle
 import siosio.doma.inspection.dao.quickfix.CreateSqlFileQuickFix
+import siosio.doma.psi.PsiDaoMethod
 import java.util.ArrayList
 import kotlin.properties.Delegates
 
-abstract class Rule {
-  protected val rules: MutableList<Rule> = ArrayList()
+/**
+ * DAOクラスのインスペクションルール
+ */
+abstract class DaoInspectionRule {
+
+  val rules: MutableList<DaoInspectionRule> = ArrayList()
+
+  /**
+   * 検査を実行する
+   */
   open fun inspect(context: DaoMethodInspectionContext) {
     rules.forEach { it.inspect(context) }
   }
 }
 
-class Dao : Rule() {
+/**
+ * DAOクラスの定義
+ */
+class Dao : DaoInspectionRule() {
+
   companion object {
     fun dao(init: Dao.() -> Unit): Dao {
       val dao = Dao()
@@ -30,8 +44,8 @@ class Dao : Rule() {
     return sql
   }
 
-  fun parameter(init: Parameter.() -> Unit): Parameter {
-    val parameter = Parameter()
+  fun parameter(init: ParameterInspectionRule.() -> Unit): ParameterInspectionRule {
+    val parameter = ParameterInspectionRule()
     rules.add(parameter)
     parameter.init()
     return parameter
@@ -41,7 +55,7 @@ class Dao : Rule() {
 /**
  * SQLファイルの検査を行うクラス。
  */
-class Sql(val required: Boolean) : Rule() {
+class Sql(val required: Boolean) : DaoInspectionRule() {
 
   val sqlFileInspector = fun (context: DaoMethodInspectionContext) {
 
@@ -66,30 +80,19 @@ class Sql(val required: Boolean) : Rule() {
   }
 }
 
-class Parameter : Rule() {
+/**
+ * パラメータの検査を行うクラス
+ */
+class ParameterInspectionRule : DaoInspectionRule() {
 
-  class Type(val type: String, val min: Int = 0, val max: Int = 0) : Rule() {
-    override fun inspect(context: DaoMethodInspectionContext) {
-      val selectOptions = context.method.getParameterList().getParameters().filter {
-        type.equals(it.getType().getCanonicalText())
-      }
-
-      if (selectOptions !in min..max) {
-        selectOptions.forEach {
-          context.problemsHolder.registerProblem(
-              it,
-              DomaBundle.message("inspection.dao.multi-SelectOptions"),
-              ProblemHighlightType.ERROR,
-              RemoveElementQuickFix(DomaBundle.message("quick-fix.remove", it.getName())))
-        }
+  fun typeInspection(inspector: (List<PsiParameter>, DaoMethodInspectionContext) -> Unit) {
+    class TypeInspectionRule : DaoInspectionRule() {
+      override fun inspect(context: DaoMethodInspectionContext) {
+        val params = context.method.getParameterList().getParameters().toList()
+        inspector(params, context)
       }
     }
-  }
-
-  fun type(clazz: String, min: Int = 0, max: Int = 0): Type {
-    val type = Type(clazz, min, max)
-    rules.add(type)
-    return type
+    rules.add(TypeInspectionRule())
   }
 }
 

@@ -13,9 +13,13 @@ public interface SelectDao {
     @Select
     int <error descr="SQLファイルがありません。">SQLファイルなし</error>();
 
+    // SelectOptionsなしはOK
+    @Select
+    int selectOptionsなし();
+
     // SelectOptions1つはOK
     @Select
-    int selectOptions1つ();
+    int selectOptions1つ(SelectOptions option1);
 
     // SelectOptions複数はNG
     @Select

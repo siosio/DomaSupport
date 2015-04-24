@@ -17,6 +17,7 @@ import com.intellij.util.IncorrectOperationException
 import siosio.doma.DomaBundle
 import java.io.File
 import java.io.IOException
+import java.util.Collections
 import java.util.HashMap
 
 /**
@@ -33,36 +34,37 @@ class CreateSqlFileQuickFix(
   override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
     val roots = ModuleRootManager.getInstance(module).getSourceRoots()
 
-    val psiManager = PsiManager.getInstance(project)
-    val psiDirectories = roots.map { psiManager.findDirectory(it) }.copyToArray()
+    val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.copyToArray()
 
-    val rootDir = DirectoryChooserUtil.chooseDirectory(psiDirectories, null, project, HashMap<PsiDirectory, String>())
+    val rootDir = DirectoryChooserUtil.chooseDirectory(
+        psiDirectories, null, project, HashMap<PsiDirectory, String>())
 
-    if (rootDir == null) {
-      return
+    rootDir?.let {
+      it.getVirtualFile()
+    }?.let {
+      val sqlFile = SqlFile(sqlFilePath)
+      try {
+        VfsUtil.createDirectoryIfMissing(it, sqlFile.parentDirPath)
+      } catch (e: IOException) {
+        throw IncorrectOperationException(e.getMessage())
+      }
+      val sqlOutputDir = PsiManager.getInstance(project).findDirectory(
+          VfsUtil.findRelativeFile(it, *sqlFile.parentDirSplitPaths)!!)
+      FileEditorManager.getInstance(project)
+          .openFile(sqlOutputDir!!.createFile(sqlFile.fileName).getVirtualFile(), true)
     }
-
-    val f = SqlFile(sqlFilePath)
-    val rootVirtualFileDir = rootDir.getVirtualFile()
-    try {
-      VfsUtil.createDirectoryIfMissing(rootVirtualFileDir, f.sqlFilePath)
-    } catch (e: IOException) {
-      throw IncorrectOperationException(e.getMessage())
-    }
-    val sqlOutputDir = PsiManager.getInstance(project).findDirectory(
-        VfsUtil.findRelativeFile(rootVirtualFileDir, *ArrayUtil.toStringArray(StringUtil.split(f.sqlFilePath, "/"))))
-    val file = sqlOutputDir!!.createFile(f.fileName)
-    val editorManager = FileEditorManager.getInstance(project)
-    editorManager.openFile(file.getVirtualFile(), true)
   }
 
   class SqlFile(val sqlFilePath: String) {
-    val fileName:String
+    val fileName: String
     val parentDirPath: String
+    val parentDirSplitPaths:Array<String>
+
     init {
       val f = File(sqlFilePath)
       fileName = f.getName()
       parentDirPath = f.getParentFile().getPath()
+      parentDirSplitPaths = StringUtil.split(parentDirPath, "/").copyToArray()
     }
   }
 }

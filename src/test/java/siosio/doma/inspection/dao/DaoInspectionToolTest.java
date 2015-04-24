@@ -33,6 +33,7 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
         createSqlFile(
                 // select
                 "SelectDao/SQLファイルあり",
+                "SelectDao/selectOptionsなし",
                 "SelectDao/selectOptions1つ",
                 "SelectDao/selectOptions2つ",
                 "InsertDao/SQLファイルあり",

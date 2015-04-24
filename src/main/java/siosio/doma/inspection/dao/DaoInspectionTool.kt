@@ -41,14 +41,10 @@ class DaoInspectionTool : BaseJavaLocalInspectionTool() {
         val daoType = DaoType.values().firstOrNull {
           AnnotationUtil.isAnnotated(method, it.annotationName, false)
         }
-        if (daoType == null) {
-          return;
-        }
 
-        val psiDaoMethod = PsiDaoMethod(method, daoType)
-
-        val context = DaoMethodInspectionContext(problemsHolder, psiDaoMethod)
-        context.doInspection()
+        daoType?.let {
+          DaoMethodInspectionContext(problemsHolder, PsiDaoMethod(method, it))
+        }?.doInspection()
       }
     }
   }
