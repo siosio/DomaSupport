@@ -34,7 +34,7 @@ class CreateSqlFileQuickFix(
   override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
     val roots = ModuleRootManager.getInstance(module).getSourceRoots()
 
-    val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.copyToArray()
+    val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.toTypedArray()
 
     val rootDir = DirectoryChooserUtil.chooseDirectory(
         psiDirectories, null, project, HashMap<PsiDirectory, String>())
@@ -64,7 +64,7 @@ class CreateSqlFileQuickFix(
       val f = File(sqlFilePath)
       fileName = f.getName()
       parentDirPath = f.getParentFile().getPath()
-      parentDirSplitPaths = StringUtil.split(parentDirPath, "/").copyToArray()
+      parentDirSplitPaths = StringUtil.split(parentDirPath, "/").toTypedArray()
     }
   }
 }
