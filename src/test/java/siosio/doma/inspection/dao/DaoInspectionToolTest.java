@@ -15,7 +15,7 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
     @Override
     public String getBasePath() {
         return PluginPathManager.getPluginHomePathRelative("DomaSupport")
-                + "/testData/siosio/doma/inspection/dao/select";
+                + "/testData/siosio/doma/inspection/dao";
     }
 
     @NotNull
@@ -38,7 +38,8 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
                 "SelectDao/selectOptions2つ",
                 "InsertDao/SQLファイルあり",
                 "UpdateDao/SQLファイルあり",
-                "DeleteDao/SQLファイルあり"
+                "DeleteDao/SQLファイルあり",
+                "BatchInsertDao/SQLファイルあり"
         );
     }
 
@@ -66,6 +67,7 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
         createUpdateAnnotation("Insert");
         createUpdateAnnotation("Update");
         createUpdateAnnotation("Delete");
+        createUpdateAnnotation("BatchInsert");
     }
 
     private void createUpdateAnnotation(String className) {
@@ -103,6 +105,13 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
      */
     public void test_deleteメソッド() {
         myFixture.testHighlighting("DeleteDao.java");
+    }
+
+    /**
+     * batchInsertメソッドのテストを行う。
+     */
+    public void test_batchInsertメソッド() {
+        myFixture.testHighlighting("BatchInsertDao.java");
     }
 
     public static class DomaProjectDescriptor extends DefaultLightProjectDescriptor {

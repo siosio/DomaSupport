@@ -1,98 +1,101 @@
 package siosio.doma.inspection.dao
 
-import com.intellij.codeInsight.AnnotationUtil
-import com.intellij.codeInspection.ProblemHighlightType
-import com.intellij.codeInspection.compiler.RemoveElementQuickFix
-import com.intellij.psi.PsiParameter
-import siosio.doma.DomaBundle
-import siosio.doma.inspection.dao.quickfix.CreateSqlFileQuickFix
-import siosio.doma.psi.PsiDaoMethod
-import java.util.ArrayList
-import kotlin.properties.Delegates
+import com.intellij.codeInspection.*
+import com.intellij.openapi.editor.*
+import com.intellij.psi.*
+import siosio.doma.*
+import siosio.doma.inspection.*
+import siosio.doma.inspection.dao.quickfix.*
+import siosio.doma.psi.*
+import java.util.*
+
+fun rule(rule: DaoInspectionRule.() -> Unit): DaoInspectionRule {
+  val daoInspectionRule = DaoInspectionRule()
+  daoInspectionRule.rule()
+  return daoInspectionRule
+}
+
+interface DaoRule {
+  fun inspect(context: InspectionContext, daoMethod: PsiDaoMethod): Unit
+}
 
 /**
  * DAOクラスのインスペクションルール
  */
-abstract class DaoInspectionRule {
+class DaoInspectionRule : Rule<PsiDaoMethod> {
 
-  val rules: MutableList<DaoInspectionRule> = ArrayList()
+  val rules: MutableList<DaoRule> = ArrayList()
 
-  /**
-   * 検査を実行する
-   */
-  open fun inspect(context: DaoMethodInspectionContext) {
-    rules.forEach { it.inspect(context) }
-  }
-}
-
-/**
- * DAOクラスの定義
- */
-class Dao : DaoInspectionRule() {
-
-  companion object {
-    fun dao(init: Dao.() -> Unit): Dao {
-      val dao = Dao()
-      dao.init()
-      return dao
+  override fun inspect(context: InspectionContext, element: PsiDaoMethod) {
+    rules.forEach {
+      it.inspect(context, element)
     }
   }
 
-  fun sql(required: Boolean = false): Sql {
+  fun sql(required: Boolean) {
     val sql = Sql(required)
     rules.add(sql)
-    return sql
   }
 
-  fun parameter(init: ParameterInspectionRule.() -> Unit): ParameterInspectionRule {
-    val parameter = ParameterInspectionRule()
-    rules.add(parameter)
-    parameter.init()
-    return parameter
+  fun parameterRule(rule: List<PsiParameter>.(context: InspectionContext) -> Unit): ParameterRule {
+    val parameterRule = ParameterRule(rule)
+    rules.add(parameterRule)
+    return parameterRule
   }
 }
 
+///**
+// * DAOクラスの定義
+// */
+//class Dao : DaoInspectionRule() {
+//
+//  companion object {
+//    fun dao(init: Dao.() -> Unit): Dao {
+//      val dao = Dao()
+//      dao.init()
+//      return dao
+//    }
+//  }
+//
+//  fun sql(required: Boolean = false): Sql {
+//    val sql = Sql(required)
+//    rules.add(sql)
+//    return sql
+//  }
+//
+//  fun parameter(rule: ParameterInspectionRule.() -> Unit): ParameterInspectionRule {
+//    val parameter = ParameterInspectionRule()
+//    parameter.rule()
+//    rules.add(parameter)
+//    return parameter
+//  }
+//}
+//
 /**
  * SQLファイルの検査を行うクラス。
  */
-class Sql(val required: Boolean) : DaoInspectionRule() {
-
-  val sqlFileInspector = fun (context: DaoMethodInspectionContext) {
-
-    if (context.method.containsSqlFile()) {
-      context.problemsHolder.registerProblem(
-          context.method.getNameIdentifier()!!,
-          DomaBundle.message("inspection.dao.sql-not-found"),
-          ProblemHighlightType.ERROR,
-          CreateSqlFileQuickFix(context.method.getModule(), context.method.getSqlFilePath()))
-    }
-  }
-
-  /**
-   * 必須の場合は、必ず存在していること。
-   * 任意の場合には、sqlFile属性がtrueの場合のみ存在していること
-   */
-  override fun inspect(context: DaoMethodInspectionContext) {
-    if (!required && !context.method.daoAnnotation.useSqlFile()) {
+class Sql(val required: Boolean) : DaoRule {
+  override fun inspect(context: InspectionContext, daoMethod: PsiDaoMethod) {
+    if (!required && !daoMethod.daoAnnotation.useSqlFile()) {
       return
     }
-    sqlFileInspector(context)
+    if (!daoMethod.containsSqlFile()) {
+      context.problemsHolder.registerProblem(
+          daoMethod.getNameIdentifier()!!,
+          DomaBundle.message("inspection.dao.sql-not-found"),
+          ProblemHighlightType.ERROR,
+          CreateSqlFileQuickFix(daoMethod.getModule(), daoMethod.getSqlFilePath()))
+    }
   }
 }
 
 /**
  * パラメータの検査を行うクラス
  */
-class ParameterInspectionRule : DaoInspectionRule() {
-
-  fun typeInspection(inspector: (List<PsiParameter>, DaoMethodInspectionContext) -> Unit) {
-    class TypeInspectionRule : DaoInspectionRule() {
-      override fun inspect(context: DaoMethodInspectionContext) {
-        val params = context.method.getParameterList().getParameters().toList()
-        inspector(params, context)
-      }
-    }
-    rules.add(TypeInspectionRule())
+class ParameterRule(val rule: List<PsiParameter>.(context: InspectionContext) -> Unit) : DaoRule {
+  override fun inspect(context: InspectionContext, daoMethod: PsiDaoMethod) {
+    val params = daoMethod.getParameterList().getParameters().toList()
+    params.rule(context)
   }
 }
 

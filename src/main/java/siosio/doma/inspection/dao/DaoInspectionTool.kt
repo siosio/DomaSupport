@@ -10,6 +10,7 @@ import com.intellij.psi.PsiElementVisitor
 import com.intellij.psi.PsiMethod
 import siosio.doma.DaoType
 import siosio.doma.DomaBundle
+import siosio.doma.inspection.*
 import siosio.doma.psi.PsiDaoMethod
 
 /**
@@ -43,8 +44,11 @@ class DaoInspectionTool : BaseJavaLocalInspectionTool() {
         }
 
         daoType?.let {
-          DaoMethodInspectionContext(problemsHolder, PsiDaoMethod(method, it))
-        }?.doInspection()
+          val inspectionContext = InspectionContext(problemsHolder)
+          val psiDaoMethod = PsiDaoMethod(method, it)
+          val rule = psiDaoMethod.daoType.rule()
+          rule.inspect(inspectionContext, psiDaoMethod)
+        }
       }
     }
   }

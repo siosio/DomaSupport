@@ -34,7 +34,7 @@ public class PsiDaoMethod(val psiMethod: PsiMethod, val daoType: DaoType) : PsiM
   }
 
   fun containsSqlFile(): Boolean {
-    return findSqlFile() == null
+    return findSqlFile() != null
   }
 
   /**

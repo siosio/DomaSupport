@@ -4,69 +4,45 @@ import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.compiler.RemoveElementQuickFix
 import siosio.doma.DaoType
 import siosio.doma.DomaBundle
+import siosio.doma.inspection.*
 
-class DaoInspectorFactory {
-  companion object {
+val selectMethodRule =
+    rule {
+      sql(true)
 
-    fun createDaoMethodInspector(daoType: DaoType): Dao {
-      when (daoType) {
-        DaoType.SELECT ->
-          return createSelectMethod()
-        DaoType.INSERT ->
-          return createInsertMethod()
-        DaoType.UPDATE ->
-          return createUpdateMethod()
-        DaoType.DELETE ->
-          return createDeleteMethod()
-        DaoType.BATCH_INSERT ->
-          return createBatchInsertMethod()
-        else -> throw IllegalArgumentException("invalid dao type.")
+      parameterRule { context ->
+        val selectOptions = filter {
+          "org.seasar.doma.jdbc.SelectOptions".equals(it.getType().getCanonicalText())
+        }
+        if (selectOptions.size() !in 0..1) {
+          selectOptions.forEach {
+            context.problemsHolder.registerProblem(
+                it,
+                DomaBundle.message("inspection.dao.multi-SelectOptions"),
+                ProblemHighlightType.ERROR,
+                RemoveElementQuickFix(DomaBundle.message("quick-fix.remove", it.getName())))
+          }
+        }
       }
     }
 
-    private fun createSelectMethod() =
-        Dao.dao {
-          sql(required = true)
+val insertMethodRule =
+    rule {
+      sql(false)
+    }
 
-          parameter {
-            typeInspection { params, context ->
-              val selectOptions = params.filter {
-                "org.seasar.doma.jdbc.SelectOptions".equals(it.getType().getCanonicalText())
-              }
+val updateMethodRule =
+    rule {
+      sql(false)
+    }
 
-              if (selectOptions.size() !in 0..1) {
-                selectOptions.forEach {
-                  context.problemsHolder.registerProblem(
-                      it,
-                      DomaBundle.message("inspection.dao.multi-SelectOptions"),
-                      ProblemHighlightType.ERROR,
-                      RemoveElementQuickFix(DomaBundle.message("quick-fix.remove", it.getName())))
-                }
-              }
-            }
-          }
-        }
+val deleteMethodRule =
+    rule {
+      sql(false)
+    }
 
-    private fun createInsertMethod() =
-        Dao.dao {
-          sql(required = false)
-          parameter {
-          }
-        }
+val batchInsertMethodRule =
+    rule {
+      sql(false)
+    }
 
-    private fun createUpdateMethod() =
-        Dao.dao {
-          sql(required = false)
-        }
-
-    private fun createDeleteMethod() =
-        Dao.dao {
-          sql(required = false)
-        }
-
-    private fun createBatchInsertMethod() =
-        Dao.dao {
-          sql(required = false)
-        }
-  }
-}
