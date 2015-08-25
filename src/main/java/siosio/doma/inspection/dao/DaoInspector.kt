@@ -44,33 +44,6 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
   }
 }
 
-///**
-// * DAOクラスの定義
-// */
-//class Dao : DaoInspectionRule() {
-//
-//  companion object {
-//    fun dao(init: Dao.() -> Unit): Dao {
-//      val dao = Dao()
-//      dao.init()
-//      return dao
-//    }
-//  }
-//
-//  fun sql(required: Boolean = false): Sql {
-//    val sql = Sql(required)
-//    rules.add(sql)
-//    return sql
-//  }
-//
-//  fun parameter(rule: ParameterInspectionRule.() -> Unit): ParameterInspectionRule {
-//    val parameter = ParameterInspectionRule()
-//    parameter.rule()
-//    rules.add(parameter)
-//    return parameter
-//  }
-//}
-//
 /**
  * SQLファイルの検査を行うクラス。
  */
