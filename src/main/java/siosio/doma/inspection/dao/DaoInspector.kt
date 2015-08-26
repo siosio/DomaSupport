@@ -37,7 +37,7 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
     rules.add(sql)
   }
 
-  fun parameterRule(rule: List<PsiParameter>.(context: InspectionContext) -> Unit): ParameterRule {
+  fun parameterRule(rule: List<PsiParameter>.(context: InspectionContext, daoMethod: PsiDaoMethod) -> Unit): ParameterRule {
     val parameterRule = ParameterRule(rule)
     rules.add(parameterRule)
     return parameterRule
@@ -65,10 +65,10 @@ class Sql(val required: Boolean) : DaoRule {
 /**
  * パラメータの検査を行うクラス
  */
-class ParameterRule(val rule: List<PsiParameter>.(context: InspectionContext) -> Unit) : DaoRule {
+class ParameterRule(val rule: List<PsiParameter>.(context: InspectionContext, daoMethod:PsiDaoMethod) -> Unit) : DaoRule {
   override fun inspect(context: InspectionContext, daoMethod: PsiDaoMethod) {
     val params = daoMethod.getParameterList().getParameters().toList()
-    params.rule(context)
+    params.rule(context, daoMethod)
   }
 }
 

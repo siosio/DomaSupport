@@ -7,6 +7,6 @@ public class DaoInspectionToolProvider : InspectionToolProvider {
 
   override fun getInspectionClasses(): Array<Class<Any>> {
     @suppress("CAST_NEVER_SUCCEEDS")
-    return arrayOf(DaoInspectionTool::class) as Array<Class<Any>>
+    return arrayOf(javaClass<DaoInspectionTool>()) as Array<Class<Any>>
   }
 }

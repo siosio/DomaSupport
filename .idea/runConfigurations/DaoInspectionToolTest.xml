@@ -1,0 +1,30 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="DaoInspectionToolTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+    <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+      <pattern>
+        <option name="PATTERN" value="siosio.doma.inspection.dao.*" />
+        <option name="ENABLED" value="true" />
+      </pattern>
+    </extension>
+    <module name="DomaSupport" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+    <option name="ALTERNATIVE_JRE_PATH" value="" />
+    <option name="PACKAGE_NAME" value="siosio.doma.inspection.dao" />
+    <option name="MAIN_CLASS_NAME" value="siosio.doma.inspection.dao.DaoInspectionToolTest" />
+    <option name="METHOD_NAME" value="" />
+    <option name="TEST_OBJECT" value="class" />
+    <option name="VM_PARAMETERS" value="-ea -XX:+HeapDumpOnOutOfMemoryError -Xmx512m -XX:MaxPermSize=320m -Didea.system.path=../test-system -Didea.home.path=. -Didea.config.path=../test-config" />
+    <option name="PARAMETERS" value="" />
+    <option name="WORKING_DIRECTORY" value="file://$MODULE_DIR$" />
+    <option name="ENV_VARIABLES" />
+    <option name="PASS_PARENT_ENVS" value="true" />
+    <option name="TEST_SEARCH_SCOPE">
+      <value defaultName="singleModule" />
+    </option>
+    <envs>
+      <env name="NO_FS_ROOTS_ACCESS_CHECK" value="1" />
+    </envs>
+    <patterns />
+    <method />
+  </configuration>
+</component>

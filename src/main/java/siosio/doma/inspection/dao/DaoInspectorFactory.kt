@@ -10,7 +10,7 @@ val selectMethodRule =
     rule {
       sql(true)
 
-      parameterRule { context ->
+      parameterRule { context, method ->
         val selectOptions = filter {
           "org.seasar.doma.jdbc.SelectOptions".equals(it.getType().getCanonicalText())
         }
