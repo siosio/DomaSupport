@@ -10,13 +10,11 @@ import siosio.doma.psi.*
 
 public class DaoMethodRenameProcessor : RenameJavaMethodProcessor() {
 
-  override fun canProcessElement(method: PsiElement): Boolean {
-    val canProcessElement = super.canProcessElement(method)
+  override fun canProcessElement(element: PsiElement): Boolean {
+    val canProcessElement = super.canProcessElement(element)
     return if (canProcessElement) {
-      DaoType.values().firstOrNull {
-        AnnotationUtil.isAnnotated(method as PsiMethod, it.annotationName, false)
-      }?.let {
-        PsiDaoMethod(method as PsiMethod, it).findSqlFile()
+      createPsiDaoMethod(element as PsiMethod)?.let {
+        it.findSqlFile()
       }?.let {
         true
       } ?: false
@@ -26,16 +24,20 @@ public class DaoMethodRenameProcessor : RenameJavaMethodProcessor() {
   }
 
   override fun renameElement(element: PsiElement, name: String, p2: Array<out UsageInfo>?, p3: RefactoringElementListener) {
-    val daoType = DaoType.values().firstOrNull {
-      AnnotationUtil.isAnnotated(element as PsiMethod, it.annotationName, false)
-    }
-    daoType?.let {
-      val psiDaoMethod = PsiDaoMethod(element as PsiMethod, it)
-      psiDaoMethod.findSqlFile()
+    createPsiDaoMethod(element as PsiMethod)?.let {
+      it.findSqlFile()
     }?.let {
       val extension = it.getExtension()
       it.rename(it, "${name}.${extension}")
     }
     super.renameElement(element, name, p2, p3)
+  }
+
+  private fun createPsiDaoMethod(method: PsiMethod): PsiDaoMethod? {
+    return DaoType.values().firstOrNull {
+      AnnotationUtil.isAnnotated(method, it.annotationName, false)
+    }?.let {
+      PsiDaoMethod(method, it)
+    } ?: null
   }
 }
