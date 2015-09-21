@@ -1,7 +1,6 @@
 package siosio.doma.inspection.dao
 
-import com.intellij.codeInspection.InspectionToolProvider
-import siosio.doma.inspection.dao.DaoInspectionTool
+import com.intellij.codeInspection.*
 
 public class DaoInspectionToolProvider : InspectionToolProvider {
 

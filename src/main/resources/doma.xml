@@ -1,5 +1,5 @@
 <templateSet group="Doma">
-  <template name="dao:select" value="@org.seasar.doma.Select&#10;$RET$ select$NAME$($PARAM$);" shortcut="SPACE" description="Create select method." toReformat="true" toShortenFQNames="true" useStaticImport="true">
+  <template name="dao_select" value="@org.seasar.doma.Select&#10;$RET$ select$NAME$($PARAM$);" shortcut="SPACE" description="Create select method." toReformat="true" toShortenFQNames="true" useStaticImport="true">
     <variable name="NAME" expression="" defaultValue="" alwaysStopAt="true" />
     <variable name="RET" expression="" defaultValue="&quot;java.util.List&quot;" alwaysStopAt="true" />
     <variable name="PARAM" expression="" defaultValue="" alwaysStopAt="true" />
