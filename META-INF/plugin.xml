@@ -26,6 +26,7 @@
     <codeInsight.lineMarkerProvider language="JAVA"
         implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
     <defaultLiveTemplatesProvider implementation="siosio.doma.livetemplate.DaoLiveTemplatesProvider" />
+    <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoMethodRenameProcessor" order="first" />
   </extensions>
 
   <application-components>
