@@ -21,6 +21,9 @@ public enum class DaoType(val annotationName: String) {
   },
   BATCH_INSERT("org.seasar.doma.BatchInsert") {
     override fun rule(): DaoInspectionRule = batchInsertMethodRule
+  },
+  SCRIPT("org.seasar.doma.Script") {
+    override fun rule(): DaoInspectionRule = scriptMethodRule
   };
 
   abstract fun rule(): DaoInspectionRule

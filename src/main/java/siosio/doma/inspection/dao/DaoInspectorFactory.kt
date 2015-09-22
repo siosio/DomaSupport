@@ -46,3 +46,7 @@ val batchInsertMethodRule =
       sql(false)
     }
 
+val scriptMethodRule =
+    rule {
+      sql(true)
+    }
