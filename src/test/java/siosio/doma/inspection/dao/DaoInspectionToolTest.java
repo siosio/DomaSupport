@@ -79,7 +79,7 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
     /**
      * selectメソッドのテストを行う。
      */
-    public void test_select() {
+    public void test_selectメソッド() {
         myFixture.testHighlighting("SelectDao.java");
     }
 
