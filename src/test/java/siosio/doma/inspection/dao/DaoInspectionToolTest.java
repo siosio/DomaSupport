@@ -1,11 +1,9 @@
 package siosio.doma.inspection.dao;
 
-import com.intellij.openapi.projectRoots.Sdk;
-import com.intellij.testFramework.IdeaTestUtil;
 import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.testFramework.fixtures.DefaultLightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
+import siosio.doma.DomaProjectDescriptor;
 
 public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
 
@@ -111,11 +109,4 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
         myFixture.testHighlighting("BatchInsertDao.java");
     }
 
-    public static class DomaProjectDescriptor extends DefaultLightProjectDescriptor {
-
-        @Override
-        public Sdk getSdk() {
-            return IdeaTestUtil.getMockJdk18();
-        }
-    }
 }
