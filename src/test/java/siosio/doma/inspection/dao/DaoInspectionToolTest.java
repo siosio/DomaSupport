@@ -3,9 +3,10 @@ package siosio.doma.inspection.dao;
 import com.intellij.testFramework.LightProjectDescriptor;
 import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
 import org.jetbrains.annotations.NotNull;
+import siosio.doma.DaoTestCase;
 import siosio.doma.DomaProjectDescriptor;
 
-public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
+public class DaoInspectionToolTest extends DaoTestCase {
 
     @Override
     protected String getTestDataPath() {
@@ -13,65 +14,21 @@ public class DaoInspectionToolTest extends LightCodeInsightFixtureTestCase {
         return path + "/testData/siosio/doma/inspection/dao/";
     }
 
-    @NotNull
-    @Override
-    protected LightProjectDescriptor getProjectDescriptor() {
-        return new DomaProjectDescriptor();
-    }
 
     @Override
-    protected void setUp() throws Exception {
+    protected void setUp() {
         super.setUp();
         myFixture.enableInspections(DaoInspectionTool.class);
-
-        createDomaClass();
         createSqlFile(
-                // select
-                "SelectDao/SQLファイルあり",
-                "SelectDao/selectOptionsなし",
-                "SelectDao/selectOptions1つ",
-                "SelectDao/selectOptions2つ",
-                "InsertDao/SQLファイルあり",
-                "UpdateDao/SQLファイルあり",
-                "DeleteDao/SQLファイルあり",
-                "BatchInsertDao/SQLファイルあり"
+                "SelectDao/SQLファイルあり.sql",
+                "SelectDao/selectOptionsなし.sql",
+                "SelectDao/selectOptions1つ.sql",
+                "SelectDao/selectOptions2つ.sql",
+                "InsertDao/SQLファイルあり.sql",
+                "UpdateDao/SQLファイルあり.sql",
+                "DeleteDao/SQLファイルあり.sql",
+                "BatchInsertDao/SQLファイルあり.sql"
         );
-    }
-
-    private void createSqlFile(String... sqlFileNames) {
-        for (String name : sqlFileNames) {
-            myFixture.addFileToProject("META-INF/dao/" + name + ".sql", "");
-        }
-    }
-
-    /**
-     * テストで必要となるDoma関連クラスを作成する。
-     */
-    private void createDomaClass() {
-        myFixture.addClass("package org.seasar.doma;"
-                + "@Target(ElementType.TYPE)"
-                + "@Retention(RetentionPolicy.RUNTIME)"
-                + "public @interface Dao {}");
-        myFixture.addClass("package org.seasar.doma;"
-                + "@Target(ElementType.METHOD)"
-                + "@Retention(RetentionPolicy.RUNTIME)"
-                + "public @interface Select {}");
-        myFixture.addClass("package org.seasar.doma.jdbc;"
-                + "public class SelectOptions {}");
-
-        createUpdateAnnotation("Insert");
-        createUpdateAnnotation("Update");
-        createUpdateAnnotation("Delete");
-        createUpdateAnnotation("BatchInsert");
-    }
-
-    private void createUpdateAnnotation(String className) {
-        myFixture.addClass("package org.seasar.doma;"
-                + "@Target(ElementType.METHOD)"
-                + "@Retention(RetentionPolicy.RUNTIME)"
-                + "public @interface " + className + "{"
-                + " boolean sqlFile() default false;"
-                + "}");
     }
 
     /**

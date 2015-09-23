@@ -7,7 +7,7 @@ import com.intellij.psi.search.*
 import com.intellij.testFramework.*
 import com.intellij.testFramework.fixtures.*
 
-public open class DaoTestCase : LightCodeInsightFixtureTestCase() {
+internal abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
   override fun setUp() {
     VfsRootAccess.SHOULD_PERFORM_ACCESS_CHECK = false
     super.setUp();
@@ -18,15 +18,15 @@ public open class DaoTestCase : LightCodeInsightFixtureTestCase() {
     return DomaProjectDescriptor()
   }
 
-  internal fun createSqlFile(className:String, vararg sqlFileNames: String) {
+  internal fun createSqlFile(vararg sqlFileNames: String) {
     for (name in sqlFileNames) {
-      myFixture.addFileToProject("META-INF/dao/${className}/${name}", "");
+      myFixture.addFileToProject("META-INF/dao/${name}", "");
     }
   }
 
-  internal fun findSqlFile(classname:String, sqlFileName: String): VirtualFile? {
+  internal fun findSqlFile(sqlFileName: String): VirtualFile? {
     val scope = GlobalSearchScope.moduleRuntimeScope(myModule, false)
-    return ResourceFileUtil.findResourceFileInScope("META-INF/dao/${classname}/${sqlFileName}", myFixture.getProject(), scope)
+    return ResourceFileUtil.findResourceFileInScope("META-INF/dao/${sqlFileName}", myFixture.getProject(), scope)
   }
 
   /**

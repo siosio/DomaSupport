@@ -16,11 +16,13 @@ public class DaoMethodRenameProcessorTest : DaoTestCase() {
   }
 
   fun test_daoメソッド名変更() {
-    createSqlFile("User", "insert.sql")
+    createSqlFile("User/insert.sql")
+
     myFixture.configureByFiles("DaoMethodRename.java")
     myFixture.renameElementAtCaret("insertUser")
     myFixture.checkResultByFile("DaoMethodRenameAfter.java", false)
-    assert(findSqlFile("User", "insertUser.sql") != null, "リネーム後のSQLファイルが存在すること")
-    assert(findSqlFile("User", "insert.sql") == null, "リネーム前のSQLファイルは存在しないこと")
+
+    assert(findSqlFile("User/insertUser.sql") != null, "リネーム後のSQLファイルが存在すること")
+    assert(findSqlFile("User/insert.sql") == null, "リネーム前のSQLファイルは存在しないこと")
   }
 }
