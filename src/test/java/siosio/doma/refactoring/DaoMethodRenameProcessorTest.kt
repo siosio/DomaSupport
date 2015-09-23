@@ -12,7 +12,7 @@ public class DaoMethodRenameProcessorTest : DaoTestCase() {
 
   override fun getTestDataPath(): String? {
     val path = super.getTestDataPath();
-    return "${path}/testData/siosio/doma/refactoring/";
+    return "${path}/testData/siosio/doma/refactoring/rename/";
   }
 
   fun test_daoメソッド名変更() {
@@ -24,5 +24,11 @@ public class DaoMethodRenameProcessorTest : DaoTestCase() {
 
     assert(findSqlFile("User/insertUser.sql") != null, "リネーム後のSQLファイルが存在すること")
     assert(findSqlFile("User/insert.sql") == null, "リネーム前のSQLファイルは存在しないこと")
+  }
+
+  fun test_SQLファイルなし_メソッド名のリネームは成功すること() {
+    myFixture.configureByFiles("RenameWithoutSqlFile.java")
+    myFixture.renameElementAtCaret("insert2")
+    myFixture.checkResultByFile("RenameWithoutSqlFileAfter.java", false)
   }
 }
