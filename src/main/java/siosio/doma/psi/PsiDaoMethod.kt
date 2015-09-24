@@ -29,7 +29,7 @@ public class PsiDaoMethod(val psiMethod: PsiMethod, val daoType: DaoType) : PsiM
     return ("META-INF/"
         + this.getContainingClass()!!.getQualifiedName()!!.replace('.', '/')
         + '/' + this.getName()
-        + '.' + "sql"
+        + '.' + daoType.extension
         )
   }
 

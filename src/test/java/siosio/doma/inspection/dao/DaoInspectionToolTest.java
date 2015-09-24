@@ -27,7 +27,8 @@ public class DaoInspectionToolTest extends DaoTestCase {
                 "InsertDao/SQLファイルあり.sql",
                 "UpdateDao/SQLファイルあり.sql",
                 "DeleteDao/SQLファイルあり.sql",
-                "BatchInsertDao/SQLファイルあり.sql"
+                "BatchInsertDao/SQLファイルあり.sql",
+                "ScriptDao/SQLファイルあり.script"
         );
     }
 
@@ -66,4 +67,10 @@ public class DaoInspectionToolTest extends DaoTestCase {
         myFixture.testHighlighting("BatchInsertDao.java");
     }
 
+    /**
+     * scriptメソッドのテストを行う。
+     */
+    public void test_scriptメソッド() {
+        myFixture.testHighlighting("ScriptDao.java");
+    }
 }

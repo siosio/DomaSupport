@@ -48,6 +48,7 @@ internal abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
     createUpdateAnnotation("Update");
     createUpdateAnnotation("Delete");
     createUpdateAnnotation("BatchInsert");
+    createUpdateAnnotation("Script");
   }
 
   private fun createUpdateAnnotation(className: String) {
