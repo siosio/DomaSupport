@@ -1,21 +1,13 @@
 package siosio.doma.editor
 
 
-import com.intellij.codeInsight.AnnotationUtil
-import javax.swing.*
-
-import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo
-import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider
-import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder
-import com.intellij.openapi.util.IconLoader
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiFile
-import com.intellij.psi.PsiManager
-import com.intellij.psi.PsiMethod
-import siosio.doma.DaoType
-import siosio.doma.DomaBundle
-import siosio.doma.psi.PsiDaoMethod
+import com.intellij.codeInsight.*
+import com.intellij.codeInsight.daemon.*
+import com.intellij.codeInsight.navigation.*
+import com.intellij.openapi.util.*
+import com.intellij.psi.*
+import siosio.doma.*
+import siosio.doma.psi.*
 
 /**
  * DAOのメソッドからSQLファイルへの移動を実現するやつ
@@ -35,11 +27,9 @@ public class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
       return
     }
 
-    val daoType = DaoType.values().firstOrNull {
+    DaoType.values().firstOrNull {
       AnnotationUtil.isAnnotated(element, it.annotationName, false)
-    }
-
-    daoType?.let {
+    }?.let {
       val psiDaoMethod = PsiDaoMethod(element, it)
       psiDaoMethod.findSqlFile()
     }?.let {
