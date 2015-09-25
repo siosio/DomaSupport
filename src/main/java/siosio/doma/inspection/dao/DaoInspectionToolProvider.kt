@@ -5,7 +5,7 @@ import com.intellij.codeInspection.*
 public class DaoInspectionToolProvider : InspectionToolProvider {
 
   override fun getInspectionClasses(): Array<Class<Any>> {
-    @suppress("CAST_NEVER_SUCCEEDS")
-    return arrayOf(javaClass<DaoInspectionTool>()) as Array<Class<Any>>
+    @Suppress("CAST_NEVER_SUCCEEDS")
+    return arrayOf(DaoInspectionTool::class.java) as Array<Class<Any>>
   }
 }
