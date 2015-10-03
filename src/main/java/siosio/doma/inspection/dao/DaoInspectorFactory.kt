@@ -10,13 +10,13 @@ val selectMethodRule =
     rule {
       sql(true)
 
-      parameterRule { context, method ->
+      parameterRule { problemsHolder, method ->
         val selectOptions = filter {
           "org.seasar.doma.jdbc.SelectOptions".equals(it.getType().getCanonicalText())
         }
         if (selectOptions.size() !in 0..1) {
           selectOptions.forEach {
-            context.problemsHolder.registerProblem(
+            problemsHolder.registerProblem(
                 it,
                 DomaBundle.message("inspection.dao.multi-SelectOptions"),
                 ProblemHighlightType.ERROR,

@@ -44,10 +44,9 @@ class DaoInspectionTool : BaseJavaLocalInspectionTool() {
         }
 
         daoType?.let {
-          val inspectionContext = InspectionContext(problemsHolder)
           val psiDaoMethod = PsiDaoMethod(method, it)
           val rule = psiDaoMethod.daoType.rule
-          rule.inspect(inspectionContext, psiDaoMethod)
+          rule.inspect(problemsHolder, psiDaoMethod)
         }
       }
     }

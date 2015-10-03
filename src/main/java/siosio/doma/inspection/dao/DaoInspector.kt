@@ -16,7 +16,7 @@ fun rule(rule: DaoInspectionRule.() -> Unit): DaoInspectionRule {
 }
 
 interface DaoRule {
-  fun inspect(context: InspectionContext, daoMethod: PsiDaoMethod): Unit
+  fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod): Unit
 }
 
 /**
@@ -26,9 +26,9 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
 
   val rules: MutableList<DaoRule> = ArrayList()
 
-  override fun inspect(context: InspectionContext, element: PsiDaoMethod) {
+  override fun inspect(problemsHolder: ProblemsHolder, element: PsiDaoMethod) {
     rules.forEach {
-      it.inspect(context, element)
+      it.inspect(problemsHolder, element)
     }
   }
 
@@ -37,7 +37,7 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
     rules.add(sql)
   }
 
-  fun parameterRule(rule: List<PsiParameter>.(context: InspectionContext, daoMethod: PsiDaoMethod) -> Unit): ParameterRule {
+  fun parameterRule(rule: List<PsiParameter>.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit): ParameterRule {
     val parameterRule = ParameterRule(rule)
     rules.add(parameterRule)
     return parameterRule
@@ -48,12 +48,12 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
  * SQLファイルの検査を行うクラス。
  */
 class Sql(val required: Boolean) : DaoRule {
-  override fun inspect(context: InspectionContext, daoMethod: PsiDaoMethod) {
+  override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
     if (!required && !daoMethod.daoAnnotation.useSqlFile()) {
       return
     }
     if (!daoMethod.containsSqlFile()) {
-      context.problemsHolder.registerProblem(
+      problemsHolder.registerProblem(
           daoMethod.getNameIdentifier()!!,
           DomaBundle.message("inspection.dao.sql-not-found"),
           ProblemHighlightType.ERROR,
@@ -65,10 +65,10 @@ class Sql(val required: Boolean) : DaoRule {
 /**
  * パラメータの検査を行うクラス
  */
-class ParameterRule(val rule: List<PsiParameter>.(context: InspectionContext, daoMethod:PsiDaoMethod) -> Unit) : DaoRule {
-  override fun inspect(context: InspectionContext, daoMethod: PsiDaoMethod) {
+class ParameterRule(val rule: List<PsiParameter>.(problemsHolder: ProblemsHolder, daoMethod:PsiDaoMethod) -> Unit) : DaoRule {
+  override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
     val params = daoMethod.getParameterList().getParameters().toList()
-    params.rule(context, daoMethod)
+    params.rule(problemsHolder, daoMethod)
   }
 }
 
