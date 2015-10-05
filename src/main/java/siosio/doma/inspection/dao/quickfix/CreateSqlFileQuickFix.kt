@@ -32,7 +32,7 @@ class CreateSqlFileQuickFix(
   override fun getFamilyName() = DomaBundle.message("quick-fix.create-sql-file")
 
   override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
-    val roots = ModuleRootManager.getInstance(module).sourceRoots
+    val roots = ModuleRootManager.getInstance(module).getSourceRoots(false)
 
     val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.toTypedArray()
 
