@@ -46,7 +46,7 @@ class CreateSqlFileQuickFix(
       try {
         VfsUtil.createDirectoryIfMissing(it, sqlFile.parentDirPath)
       } catch (e: IOException) {
-        throw IncorrectOperationException(e.getMessage())
+        throw IncorrectOperationException(e)
       }
       val sqlOutputDir = PsiManager.getInstance(project).findDirectory(
           VfsUtil.findRelativeFile(it, *sqlFile.parentDirSplitPaths)!!)
@@ -63,7 +63,7 @@ class CreateSqlFileQuickFix(
     init {
       val f = File(sqlFilePath)
       fileName = f.name
-      parentDirPath = f.parentFile.path
+      parentDirPath = f.parentFile.path.replace('\\', '/')
       parentDirSplitPaths = StringUtil.split(parentDirPath, "/").toTypedArray()
     }
   }
