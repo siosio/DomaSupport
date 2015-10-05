@@ -5,7 +5,6 @@ import com.intellij.openapi.module.Module
 import com.intellij.openapi.module.ResourceFileUtil
 import com.intellij.openapi.roots.ProjectRootManager
 import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiAnnotation
 import com.intellij.psi.PsiMethod
 import com.intellij.psi.search.GlobalSearchScope
 import siosio.doma.DaoType
@@ -19,16 +18,16 @@ public class PsiDaoMethod(val psiMethod: PsiMethod, val daoType: DaoType) : PsiM
   }
 
   fun getModule(): Module {
-    val module = ProjectRootManager.getInstance(this.getProject())
-        .getFileIndex()
-        .getModuleForFile(this.getContainingFile().getVirtualFile())!!
+    val module = ProjectRootManager.getInstance(project)
+        .fileIndex
+        .getModuleForFile(this.containingFile.virtualFile)!!
     return module
   }
 
   fun getSqlFilePath(): String {
     return ("META-INF/"
-        + this.getContainingClass()!!.getQualifiedName()!!.replace('.', '/')
-        + '/' + this.getName()
+        + this.containingClass!!.qualifiedName!!.replace('.', '/')
+        + '/' + name
         + '.' + daoType.extension
         )
   }
@@ -42,6 +41,6 @@ public class PsiDaoMethod(val psiMethod: PsiMethod, val daoType: DaoType) : PsiM
    */
   fun findSqlFile(): VirtualFile? {
     val scope = GlobalSearchScope.moduleRuntimeScope(getModule(), false)
-    return ResourceFileUtil.findResourceFileInScope(getSqlFilePath(), this.getProject(), scope)
+    return ResourceFileUtil.findResourceFileInScope(getSqlFilePath(), project, scope)
   }
 }
