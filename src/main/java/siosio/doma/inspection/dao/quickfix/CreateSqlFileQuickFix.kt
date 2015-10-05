@@ -32,7 +32,7 @@ class CreateSqlFileQuickFix(
   override fun getFamilyName() = DomaBundle.message("quick-fix.create-sql-file")
 
   override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
-    val roots = ModuleRootManager.getInstance(module).getSourceRoots()
+    val roots = ModuleRootManager.getInstance(module).sourceRoots
 
     val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.toTypedArray()
 
@@ -40,7 +40,7 @@ class CreateSqlFileQuickFix(
         psiDirectories, null, project, HashMap<PsiDirectory, String>())
 
     rootDir?.let {
-      it.getVirtualFile()
+      it.virtualFile
     }?.let {
       val sqlFile = SqlFile(sqlFilePath)
       try {
@@ -51,7 +51,7 @@ class CreateSqlFileQuickFix(
       val sqlOutputDir = PsiManager.getInstance(project).findDirectory(
           VfsUtil.findRelativeFile(it, *sqlFile.parentDirSplitPaths)!!)
       FileEditorManager.getInstance(project)
-          .openFile(sqlOutputDir!!.createFile(sqlFile.fileName).getVirtualFile(), true)
+          .openFile(sqlOutputDir!!.createFile(sqlFile.fileName).virtualFile, true)
     }
   }
 
@@ -62,8 +62,8 @@ class CreateSqlFileQuickFix(
 
     init {
       val f = File(sqlFilePath)
-      fileName = f.getName()
-      parentDirPath = f.getParentFile().getPath()
+      fileName = f.name
+      parentDirPath = f.parentFile.path
       parentDirSplitPaths = StringUtil.split(parentDirPath, "/").toTypedArray()
     }
   }
