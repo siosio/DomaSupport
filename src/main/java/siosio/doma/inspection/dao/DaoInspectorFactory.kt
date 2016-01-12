@@ -14,7 +14,7 @@ val selectMethodRule =
         val selectOptions = filter {
           "org.seasar.doma.jdbc.SelectOptions".equals(it.getType().getCanonicalText())
         }
-        if (selectOptions.size() !in 0..1) {
+        if (selectOptions.size !in 0..1) {
           selectOptions.forEach {
             problemsHolder.registerProblem(
                 it,
