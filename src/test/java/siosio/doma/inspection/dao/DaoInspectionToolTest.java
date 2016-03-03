@@ -1,10 +1,6 @@
 package siosio.doma.inspection.dao;
 
-import com.intellij.testFramework.LightProjectDescriptor;
-import com.intellij.testFramework.fixtures.LightCodeInsightFixtureTestCase;
-import org.jetbrains.annotations.NotNull;
 import siosio.doma.DaoTestCase;
-import siosio.doma.DomaProjectDescriptor;
 
 public class DaoInspectionToolTest extends DaoTestCase {
 
@@ -13,7 +9,6 @@ public class DaoInspectionToolTest extends DaoTestCase {
         final String path = super.getTestDataPath();
         return path + "/testData/siosio/doma/inspection/dao/";
     }
-
 
     @Override
     protected void setUp() {
@@ -24,6 +19,9 @@ public class DaoInspectionToolTest extends DaoTestCase {
                 "SelectDao/selectOptionsなし.sql",
                 "SelectDao/selectOptions1つ.sql",
                 "SelectDao/selectOptions2つ.sql",
+                "SelectDao/引数にFunctionなし.sql",
+                "SelectDao/引数にFunction複数.sql",
+                "SelectDao/引数にFunctionあり.sql",
                 "InsertDao/SQLファイルあり.sql",
                 "UpdateDao/SQLファイルあり.sql",
                 "DeleteDao/SQLファイルあり.sql",

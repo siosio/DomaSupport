@@ -2,14 +2,12 @@ package siosio.doma
 
 import com.intellij.openapi.module.*
 import com.intellij.openapi.vfs.*
-import com.intellij.openapi.vfs.newvfs.impl.*
 import com.intellij.psi.search.*
 import com.intellij.testFramework.*
 import com.intellij.testFramework.fixtures.*
 
-internal abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
+abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
   override fun setUp() {
-    VfsRootAccess.SHOULD_PERFORM_ACCESS_CHECK = false
     super.setUp();
     createDomaClass()
   }
@@ -18,15 +16,15 @@ internal abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
     return DomaProjectDescriptor()
   }
 
-  internal fun createSqlFile(vararg sqlFileNames: String) {
+  fun createSqlFile(vararg sqlFileNames: String) {
     for (name in sqlFileNames) {
-      myFixture.addFileToProject("META-INF/dao/${name}", "");
+      myFixture.addFileToProject("META-INF/dao/$name", "");
     }
   }
 
-  internal fun findSqlFile(sqlFileName: String): VirtualFile? {
+  fun findSqlFile(sqlFileName: String): VirtualFile? {
     val scope = GlobalSearchScope.moduleRuntimeScope(myModule, false)
-    return ResourceFileUtil.findResourceFileInScope("META-INF/dao/${sqlFileName}", myFixture.getProject(), scope)
+    return ResourceFileUtil.findResourceFileInScope("META-INF/dao/$sqlFileName", myFixture.project, scope)
   }
 
   /**
@@ -40,9 +38,18 @@ internal abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
     myFixture.addClass("package org.seasar.doma;"
         + "@Target(ElementType.METHOD)"
         + "@Retention(RetentionPolicy.RUNTIME)"
-        + "public @interface Select {}");
+        + "public @interface Select {" +
+        "SelectType strategy() default org.seasar.doma.SelectType.RETURN" +
+        "}");
     myFixture.addClass("package org.seasar.doma.jdbc;"
         + "public class SelectOptions {}");
+    myFixture.addClass("package org.seasar.doma;"
+        + "public enum SelectType {COLLECT, STREAM}");
+    myFixture.addClass("package java.lang; public class String {}")
+    myFixture.addClass("""package java.util.function; @FunctionalInterface public interface Function<T, R> {
+    R apply(T t);
+      """)
+    myFixture.addClass("""package java.util.stream; @FunctionalInterface public interface Stream<T> {}""")
 
     createUpdateAnnotation("Insert");
     createUpdateAnnotation("Update");
@@ -55,7 +62,7 @@ internal abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
     myFixture.addClass("""package org.seasar.doma;
         @Target(ElementType.METHOD)
         @Retention(RetentionPolicy.RUNTIME)
-        public @interface ${className} {
+        public @interface $className {
           boolean sqlFile() default false;
         }""");
   }
