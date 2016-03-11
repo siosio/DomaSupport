@@ -23,10 +23,12 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <inspectionToolProvider implementation="siosio.doma.inspection.dao.DaoInspectionToolProvider" />
-    <codeInsight.lineMarkerProvider language="JAVA"
-        implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
+    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
     <defaultLiveTemplatesProvider implementation="siosio.doma.livetemplate.DaoLiveTemplatesProvider" />
+
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoMethodRenameProcessor" order="first" />
+
+    <completion.contributor language="SQL" implementationClass="siosio.doma.sql.ParameterCompletionContributor" order="first" />
   </extensions>
 
   <application-components>
