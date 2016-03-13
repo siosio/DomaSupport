@@ -2,6 +2,8 @@ package siosio.doma.inspection.dao
 
 import com.intellij.codeInspection.*
 import com.intellij.codeInspection.compiler.*
+import com.intellij.psi.util.*
+import com.intellij.spring.model.utils.*
 import siosio.doma.*
 
 val selectMethodRule =
@@ -32,8 +34,7 @@ val selectMethodRule =
             return@parameterRule;
           }
           val function = filter {
-            val type = it.type
-            type.canonicalText == "java.util.function.Function"
+            PsiTypesUtil.getPsiClass(it.type)?.qualifiedName == "java.util.function.Function" ?: false
           }
           if (function.size != 1) {
             problemsHolder.registerProblem(
