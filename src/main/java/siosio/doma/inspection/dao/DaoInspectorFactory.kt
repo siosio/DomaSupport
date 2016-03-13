@@ -33,7 +33,7 @@ val selectMethodRule =
           }
           val function = filter {
             val type = it.type
-            type.canonicalText == "java.util.Function"
+            type.canonicalText == "java.util.function.Function"
           }
           if (function.size != 1) {
             problemsHolder.registerProblem(
