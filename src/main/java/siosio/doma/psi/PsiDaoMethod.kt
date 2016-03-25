@@ -14,12 +14,12 @@ import siosio.doma.extension.*
  */
 class PsiDaoMethod(
     psiMethod: PsiMethod,
-    private val daoType: DaoType) : PsiMethod by psiMethod {
+    val daoType: DaoType) : PsiMethod by psiMethod {
 
-  val daoAnnotation: PsiDaoAnnotation
+  val daoAnnotation: PsiAnnotation
 
   init {
-    daoAnnotation = PsiDaoAnnotation(AnnotationUtil.findAnnotation(this, daoType.annotationName)!!)
+    daoAnnotation = AnnotationUtil.findAnnotation(this, daoType.annotationName)!!
   }
 
   /**
@@ -28,6 +28,11 @@ class PsiDaoMethod(
   fun getModule(): Module {
     return project.findModule(this.containingFile.virtualFile)!!
   }
+
+  /**
+   * このDaoメソッドがSQLファイルを必要とするかどうか
+   */
+  fun useSqlFile(): Boolean = daoAnnotation.useSqlFile()
 
   fun getSqlFilePath(): String {
     return "META-INF/${fqcnToFilePath()}/$name.${daoType.extension}"
