@@ -1,15 +1,20 @@
 package siosio.doma.psi
 
-import com.intellij.codeInsight.AnnotationUtil
-import com.intellij.openapi.module.Module
-import com.intellij.openapi.module.ResourceFileUtil
-import com.intellij.openapi.roots.ProjectRootManager
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiMethod
-import com.intellij.psi.search.GlobalSearchScope
-import siosio.doma.DaoType
+import com.intellij.codeInsight.*
+import com.intellij.openapi.module.*
+import com.intellij.openapi.vfs.*
+import com.intellij.psi.*
+import siosio.doma.*
+import siosio.doma.extension.*
 
-public class PsiDaoMethod(val psiMethod: PsiMethod, val daoType: DaoType) : PsiMethod by psiMethod {
+/**
+ * [PsiMethod]のDaoメソッド表現。
+ *
+ * @author siosio
+ */
+class PsiDaoMethod(
+    psiMethod: PsiMethod,
+    private val daoType: DaoType) : PsiMethod by psiMethod {
 
   val daoAnnotation: PsiDaoAnnotation
 
@@ -17,21 +22,23 @@ public class PsiDaoMethod(val psiMethod: PsiMethod, val daoType: DaoType) : PsiM
     daoAnnotation = PsiDaoAnnotation(AnnotationUtil.findAnnotation(this, daoType.annotationName)!!)
   }
 
+  /**
+   * このDaoメソッドが存在しているメソッド
+   */
   fun getModule(): Module {
-    val module = ProjectRootManager.getInstance(project)
-        .fileIndex
-        .getModuleForFile(this.containingFile.virtualFile)!!
-    return module
+    return project.findModule(this.containingFile.virtualFile)!!
   }
 
   fun getSqlFilePath(): String {
-    return ("META-INF/"
-        + this.containingClass!!.qualifiedName!!.replace('.', '/')
-        + '/' + name
-        + '.' + daoType.extension
-        )
+    return "META-INF/${fqcnToFilePath()}/$name.${daoType.extension}"
   }
 
+
+  /**
+   * SQLファイルの存在有無
+   *
+   * @return 存在している場合`true`
+   */
   fun containsSqlFile(): Boolean {
     return findSqlFile() != null
   }
@@ -40,7 +47,13 @@ public class PsiDaoMethod(val psiMethod: PsiMethod, val daoType: DaoType) : PsiM
    * SQLファイルを検索する。
    */
   fun findSqlFile(): VirtualFile? {
-    val scope = GlobalSearchScope.moduleRuntimeScope(getModule(), false)
-    return ResourceFileUtil.findResourceFileInScope(getSqlFilePath(), project, scope)
+    return getModule().findSqlFileFromRuntimeScope(getSqlFilePath())
+  }
+
+  /**
+   * このメソッドを持つクラスをパス形式の文字列で取得する
+   */
+  private fun fqcnToFilePath(): String {
+    return containingClass!!.qualifiedName!!.replace(',', '/')
   }
 }
