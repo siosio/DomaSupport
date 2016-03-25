@@ -34,7 +34,7 @@ val selectMethodRule =
             return@parameterRule;
           }
           val function = filter {
-            PsiTypesUtil.getPsiClass(it.type)?.qualifiedName == "java.util.function.Function" ?: false
+            PsiTypesUtil.getPsiClass(it.type)?.qualifiedName == "java.util.function.Function"
           }
           if (function.size != 1) {
             problemsHolder.registerProblem(
