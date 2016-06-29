@@ -1,17 +1,10 @@
 package siosio.doma.inspection.dao
 
-import com.intellij.codeInsight.AnnotationUtil
-import com.intellij.codeInspection.BaseJavaLocalInspectionTool
-
-import com.intellij.codeInspection.ProblemsHolder
-import com.intellij.psi.JavaElementVisitor
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiElementVisitor
-import com.intellij.psi.PsiMethod
-import siosio.doma.DaoType
-import siosio.doma.DomaBundle
-import siosio.doma.inspection.*
-import siosio.doma.psi.PsiDaoMethod
+import com.intellij.codeInsight.*
+import com.intellij.codeInspection.*
+import com.intellij.psi.*
+import siosio.doma.*
+import siosio.doma.psi.*
 
 /**
  * DomaのDAOのチェックを行うクラス。

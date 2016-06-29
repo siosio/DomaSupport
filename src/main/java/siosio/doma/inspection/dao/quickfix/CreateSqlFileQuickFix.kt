@@ -1,24 +1,18 @@
 package siosio.doma.inspection.dao.quickfix
 
-import com.intellij.codeInspection.LocalQuickFix
-import com.intellij.codeInspection.ProblemDescriptor
-import com.intellij.ide.util.DirectoryChooserUtil
-import com.intellij.openapi.fileEditor.FileEditorManager
-import com.intellij.openapi.module.Module
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.roots.ModuleRootManager
-import com.intellij.openapi.util.io.FileUtil
-import com.intellij.openapi.util.text.StringUtil
-import com.intellij.openapi.vfs.VfsUtil
-import com.intellij.psi.PsiDirectory
-import com.intellij.psi.PsiManager
-import com.intellij.util.ArrayUtil
-import com.intellij.util.IncorrectOperationException
-import siosio.doma.DomaBundle
-import java.io.File
-import java.io.IOException
-import java.util.Collections
-import java.util.HashMap
+import com.intellij.codeInspection.*
+import com.intellij.ide.util.*
+import com.intellij.openapi.fileEditor.*
+import com.intellij.openapi.module.*
+import com.intellij.openapi.project.*
+import com.intellij.openapi.roots.*
+import com.intellij.openapi.util.text.*
+import com.intellij.openapi.vfs.*
+import com.intellij.psi.*
+import com.intellij.util.*
+import siosio.doma.*
+import java.io.*
+import java.util.*
 
 /**
  * SQLファイルを作成するクィックフィックス実装。

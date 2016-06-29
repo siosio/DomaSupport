@@ -3,7 +3,6 @@ package siosio.doma.inspection.dao
 import com.intellij.codeInspection.*
 import com.intellij.codeInspection.compiler.*
 import com.intellij.psi.util.*
-import com.intellij.spring.model.utils.*
 import siosio.doma.*
 
 val selectMethodRule =

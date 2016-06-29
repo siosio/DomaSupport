@@ -2,7 +2,6 @@ package dao;
 
 import org.seasar.doma.Dao;
 import org.seasar.doma.Insert;
-import org.seasar.doma.Script;
 import org.seasar.doma.Select;
 import siosio.entity.UserEntity;
 

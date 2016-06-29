@@ -1,6 +1,6 @@
 package siosio.doma.livetemplate
 
-import com.intellij.codeInsight.template.impl.DefaultLiveTemplatesProvider
+import com.intellij.codeInsight.template.impl.*
 
 /**
  * DAOメソッド用のテンプレートを提供する。

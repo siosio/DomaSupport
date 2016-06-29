@@ -1,8 +1,7 @@
 package dao;
 
-import java.lang.*;
-import java.util.function.*;
-import java.util.stream.*;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import org.seasar.doma.*;
 import org.seasar.doma.jdbc.*;
