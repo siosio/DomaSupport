@@ -21,7 +21,7 @@ open class ParameterCompletionContributor : CompletionContributor() {
       val originalFile = parameters.originalFile
       parameters.originalPosition?.text?.let {
         val text = it.replace("/*", "").replace("*/", "")
-        if (!text.trim().isEmpty() && originalFile.text.get(parameters.offset - 1).isWhitespace()) {
+        if (!text.trim().isEmpty() && text.last().isWhitespace() || text.trim().split(" ").size != 1) {
           result.stopHere()
           return
         }
