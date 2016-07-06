@@ -41,6 +41,12 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
     rules.add(parameterRule)
     return parameterRule
   }
+
+  fun returnRule(rule: PsiTypeElement.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit): ReturnRule {
+    val returnTypeRule = ReturnRule(rule)
+    rules.add(returnTypeRule)
+    return returnTypeRule
+  }
 }
 
 /**
@@ -64,10 +70,19 @@ class Sql(val required: Boolean) : DaoRule {
 /**
  * パラメータの検査を行うクラス
  */
-class ParameterRule(val rule: List<PsiParameter>.(problemsHolder: ProblemsHolder, daoMethod:PsiDaoMethod) -> Unit) : DaoRule {
+class ParameterRule(val rule: List<PsiParameter>.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit) : DaoRule {
   override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
-    val params = daoMethod.getParameterList().getParameters().toList()
+    val params = daoMethod.parameterList.parameters.toList()
     params.rule(problemsHolder, daoMethod)
+  }
+}
+
+/**
+ * 戻り値の検査を行うクラス
+ */
+class ReturnRule(val rule: PsiTypeElement.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit) : DaoRule {
+  override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
+    daoMethod.returnTypeElement?.rule(problemsHolder, daoMethod)
   }
 }
 
