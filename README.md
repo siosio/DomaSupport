@@ -14,23 +14,18 @@ IntelliJ上で、[Doma](http://doma.seasar.org/)を使った開発を少しだ�
   このアイコンをクリックすることで、関連するSQLへ移動できます。
   
 * SQLファイルの存在チェック
+  以下のメソッドのSQLファイル存在チェックを行います。
+  SQLファイルが存在しない場合、QuickFixによりSQLファイルを作成できます。
  
   * Selectメソッド
-  
-    SQLファイルが存在しているかのチェックが行われます。
-    SQLファイルが存在していない場合、Quick Fixで空のSQLファイルの作成が行えます。
-    
-  * 更新(Insert、Update、Delete)メソッド
+  * 更新(Insert、Update、Delete、BatchInsert、BatchUpdate、BatchDelete)メソッド
+    ※SQLファイルが必要な場合のみ(sqlFile=trueの場合のみ)
 
-    UpdateアノテーションのsqlFile属性がtrueの場合、SQLファイルが存在しているかのチェックが行われます。
-    SQLファイルが存在していない場合、Quick Fixで空のSQLファイルの作成が行えます。
-
-* Selectメソッド
-    
-  * 引数のチェック
-  
-    SelectOptions型の引数が最大でも1つであることのチェックが行われます。
-    Quick Fixで、引数を削除することが出来ます。
+* 引数のチェック
+  * Selectメソッド
+    * SelectOptions型の引数が最大でも1つであることのチェックが行われます。
+       Quick Fixで、引数を削除することが出来ます。
+    * strategyにSelectType.STREAMを指定時に引数にFunctionが定義されているかチェックします。
 
 
 # ライセンス
