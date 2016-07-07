@@ -20,6 +20,7 @@ enum class DaoType(
   DELETE("org.seasar.doma.Delete", deleteMethodRule),
   BATCH_INSERT("org.seasar.doma.BatchInsert", batchInsertMethodRule),
   BATCH_UPDATE("org.seasar.doma.BatchUpdate", batchUpdateMethodRule),
+  BATCH_DELETE("org.seasar.doma.BatchDelete", batchDeleteMethodRule),
   SCRIPT("org.seasar.doma.Script", scriptMethodRule, "script");
 
   companion object {

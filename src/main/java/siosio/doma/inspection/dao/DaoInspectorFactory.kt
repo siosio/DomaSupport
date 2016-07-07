@@ -30,6 +30,11 @@ val batchUpdateMethodRule =
       sql(false)
     }
 
+val batchDeleteMethodRule =
+    rule {
+      sql(false)
+    }
+
 val scriptMethodRule =
     rule {
       sql(true)
