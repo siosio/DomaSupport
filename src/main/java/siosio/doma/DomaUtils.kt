@@ -4,7 +4,7 @@ import com.intellij.openapi.module.*
 import com.intellij.openapi.project.*
 import com.intellij.openapi.roots.*
 import com.intellij.psi.*
-
+import com.intellij.psi.search.*
 
 fun toDaoClass(sqlFile: PsiFile): PsiClass? {
   val parent = sqlFile.parent
@@ -29,7 +29,7 @@ fun toMethodName(sqlFile: PsiFile): String {
   }
 }
 
-private fun getModule(project: Project, element: PsiElement): Module {
+fun getModule(project: Project, element: PsiElement): Module {
   val module = ProjectRootManager.getInstance(project)
       .fileIndex
       .getModuleForFile(element.containingFile.virtualFile)!!
@@ -48,4 +48,10 @@ private fun toDaoClassName(dir: PsiDirectory?, className: String): String {
             "." + className
           }
   )
+}
+
+fun findPsiClass(project: Project, module: Module, className: String): PsiClass? {
+  val domainManager = JavaPsiFacade.getInstance(project).findClasses(
+      className, GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module))
+  return domainManager.firstOrNull()
 }

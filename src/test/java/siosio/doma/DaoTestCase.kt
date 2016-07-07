@@ -48,13 +48,15 @@ abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
     myFixture.addClass("package java.lang; public class String {}")
     myFixture.addClass("""package java.util.function; @FunctionalInterface public interface Function<T, R> {
     R apply(T t);
-      """)
+    }  """)
     myFixture.addClass("""package java.util.stream; @FunctionalInterface public interface Stream<T> {}""")
 
     createUpdateAnnotation("Insert");
     createUpdateAnnotation("Update");
     createUpdateAnnotation("Delete");
     createUpdateAnnotation("BatchInsert");
+    createUpdateAnnotation("BatchUpdate");
+    createUpdateAnnotation("BatchDelete");
     createUpdateAnnotation("Script");
   }
 
