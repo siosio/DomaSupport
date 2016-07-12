@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>siosio.DomaSupport</id>
   <name>Doma Support</name>
-  <version>0.6</version>
+  <version>0.7</version>
   <vendor email="siosio12@gmail.com" url="https://github.com/siosio/DomaSupport">siosio</vendor>
 
   <description><![CDATA[
