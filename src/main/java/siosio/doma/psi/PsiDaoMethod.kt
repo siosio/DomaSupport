@@ -59,6 +59,6 @@ class PsiDaoMethod(
    * このメソッドを持つクラスをパス形式の文字列で取得する
    */
   private fun fqcnToFilePath(): String {
-    return containingClass!!.qualifiedName!!.replace(',', '/')
+    return containingClass!!.qualifiedName!!.replace('.', '/')
   }
 }

@@ -49,9 +49,3 @@ private fun toDaoClassName(dir: PsiDirectory?, className: String): String {
           }
   )
 }
-
-fun findPsiClass(project: Project, module: Module, className: String): PsiClass? {
-  val domainManager = JavaPsiFacade.getInstance(project).findClasses(
-      className, GlobalSearchScope.moduleWithDependenciesAndLibrariesScope(module))
-  return domainManager.firstOrNull()
-}
