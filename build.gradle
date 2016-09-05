@@ -1,0 +1,48 @@
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+    maven {
+      url 'http://dl.bintray.com/jetbrains/intellij-plugin-service'
+    }
+
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.0.3"
+  }
+}
+
+plugins {
+  id "org.jetbrains.intellij" version "0.1.10"
+}
+
+apply plugin: 'java'
+apply plugin: "kotlin"
+
+intellij {
+  pluginName 'Doma Support'
+  version = "IU-2016.2"
+  plugins = ['DatabaseTools']
+}
+
+sourceCompatibility = JavaVersion.VERSION_1_6
+targetCompatibility = JavaVersion.VERSION_1_6
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.3"
+  testCompile 'org.jmockit:jmockit:1.21'
+  testCompile 'junit:junit:4.12'
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '3.0'
+}

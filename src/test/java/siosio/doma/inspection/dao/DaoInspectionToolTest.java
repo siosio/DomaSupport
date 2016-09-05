@@ -6,8 +6,7 @@ public class DaoInspectionToolTest extends DaoTestCase {
 
     @Override
     protected String getTestDataPath() {
-        final String path = super.getTestDataPath();
-        return path + "/testData/siosio/doma/inspection/dao/";
+        return "testData/siosio/doma/inspection/dao/";
     }
 
     @Override

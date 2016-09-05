@@ -2,11 +2,10 @@ package siosio.doma.refactoring
 
 import siosio.doma.*
 
-public class DaoMethodRenameProcessorTest : DaoTestCase() {
+class DaoMethodRenameProcessorTest : DaoTestCase() {
 
   override fun getTestDataPath(): String? {
-    val path = super.getTestDataPath();
-    return "${path}/testData/siosio/doma/refactoring/rename/";
+    return "testData/siosio/doma/refactoring/rename/"
   }
 
   fun test_daoメソッド名変更() {
