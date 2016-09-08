@@ -32,9 +32,7 @@ class DaoInspectionTool : BaseJavaLocalInspectionTool() {
       override fun visitMethod(method: PsiMethod) {
         super.visitMethod(method)
 
-        val daoType = DaoType.values().firstOrNull {
-          AnnotationUtil.isAnnotated(method, it.annotationName, false)
-        }
+        val daoType = DaoType.valueOf(method)
 
         daoType?.let {
           val psiDaoMethod = PsiDaoMethod(method, it)

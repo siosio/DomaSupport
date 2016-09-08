@@ -27,6 +27,7 @@
     <defaultLiveTemplatesProvider implementation="siosio.doma.livetemplate.DaoLiveTemplatesProvider" />
 
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoMethodRenameProcessor" order="first" />
+    <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoClassNameRenameProcessor" order="first" />
 
     <completion.contributor language="SQL" implementationClass="siosio.doma.sql.ParameterCompletionContributor" order="first" />
   </extensions>
