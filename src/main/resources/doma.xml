@@ -19,4 +19,11 @@
       <option name="COMPLETION" value="false" />
     </context>
   </template>
+  <template name="doma_if" value="/*%if $confition$ */&#10;$END$&#10;/*%end*/" toReformat="false"
+      toShortenFQNames="true">
+    <variable name="confition" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="SQL" value="true" />
+    </context>
+  </template>
 </templateSet>
