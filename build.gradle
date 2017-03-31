@@ -21,9 +21,10 @@ apply plugin: 'java'
 apply plugin: "kotlin"
 
 intellij {
-  pluginName 'Doma Support'
+  pluginName 'DomaSupport'
   version = "IU-2016.2"
   plugins = ['DatabaseTools']
+  updateSinceUntilBuild = false
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_6
@@ -38,11 +39,11 @@ repositories {
 }
 
 dependencies {
-  compile "org.jetbrains.kotlin:kotlin-stdlib:1.0.3"
+  compile "org.jetbrains.kotlin:kotlin-stdlib:1.1.1"
   testCompile 'org.jmockit:jmockit:1.21'
   testCompile 'junit:junit:4.12'
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '3.0'
+  gradleVersion = '3.4'
 }
