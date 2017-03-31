@@ -25,6 +25,7 @@ intellij {
   version = "IU-2016.2"
   plugins = ['DatabaseTools']
   updateSinceUntilBuild = false
+  intellij.type = 'IU'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_6

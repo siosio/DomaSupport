@@ -20,7 +20,9 @@ open class ParameterCompletionContributor : CompletionContributor() {
     override fun addCompletions(parameters: CompletionParameters, p1: ProcessingContext?, result: CompletionResultSet) {
       val originalFile = parameters.originalFile
       parameters.originalPosition?.text?.let {
-        val text = it.replace("/*", "").replace("*/", "")
+        val text = it.substringBefore("/*if")
+            .substringBefore("/*")
+            .substringAfter("*/")
         if (!text.trim().isEmpty() && text.last().isWhitespace() || text.trim().split(" ").size != 1) {
           result.stopHere()
           return
