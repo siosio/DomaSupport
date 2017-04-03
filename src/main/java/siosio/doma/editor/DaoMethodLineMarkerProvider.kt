@@ -35,7 +35,8 @@ class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
             val psiFile = element.project.findFile(it)
             PsiTreeUtil.findChildrenOfType(element, PsiAnnotation::class.java).firstOrNull()?.let {
                 val builder = NavigationGutterIconBuilder.create(SQL_FILE_ICON)
-                    .setTargets(psiFile).setTooltipText(DomaBundle.message("editor.goto-sql-file"))
+                    .setTargets(psiFile)
+                    .setTooltipText(DomaBundle.message("editor.goto-sql-file"))
                 result.add(builder.createLineMarkerInfo(it))
             }
         }
