@@ -22,14 +22,18 @@
   <depends>com.intellij.database</depends>
 
   <extensions defaultExtensionNs="com.intellij">
+    
     <inspectionToolProvider implementation="siosio.doma.inspection.dao.DaoInspectionToolProvider" />
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
+    
+    
     <defaultLiveTemplatesProvider implementation="siosio.doma.livetemplate.DaoLiveTemplatesProvider" />
 
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoMethodRenameProcessor" order="first" />
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoClassNameRenameProcessor" order="first" />
 
     <completion.contributor language="SQL" implementationClass="siosio.doma.sql.ParameterCompletionContributor" order="first" />
+    
   </extensions>
 
   <application-components>
@@ -39,6 +43,7 @@
   </project-components>
 
   <actions>
+    <action class="siosio.doma.editor.GotoSqlFile" id="Doma.GotoSqlFile" use-shortcut-of="GotoRelated" text="Go to SQL"/>
   </actions>
 
 </idea-plugin>
