@@ -34,13 +34,11 @@
 
     <completion.contributor language="SQL" implementationClass="siosio.doma.sql.ParameterCompletionContributor" order="first" />
     
+    
   </extensions>
 
   <application-components>
   </application-components>
-
-  <project-components>
-  </project-components>
 
   <actions>
     <action class="siosio.doma.editor.GotoSqlFile" id="Doma.GotoSqlFile" use-shortcut-of="GotoRelated" text="Go to SQL"/>
