@@ -12,7 +12,7 @@ public class DaoInspectionToolTest extends DaoTestCase {
     @Override
     protected void setUp() {
         super.setUp();
-        myFixture.enableInspections(DaoInspectionTool.class);
+        myFixture.enableInspections(new DaoInspectionTool());
         createSqlFile(
                 "SelectDao/SQLファイルあり.sql",
                 "SelectDao/selectOptionsなし.sql",

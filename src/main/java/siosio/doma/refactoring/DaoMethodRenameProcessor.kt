@@ -29,9 +29,7 @@ class DaoMethodRenameProcessor : RenameJavaMethodProcessor() {
     super.renameElement(element, newName, p2, p3)
   }
 
-  private fun createPsiDaoMethod(method: PsiMethod): PsiDaoMethod? {
-    return DaoType.valueOf(method)?.let {
-      PsiDaoMethod(method, it)
-    } ?: null
+  private fun createPsiDaoMethod(method: PsiMethod): PsiDaoMethod? = DaoType.valueOf(method)?.let {
+    PsiDaoMethod(method, it)
   }
 }

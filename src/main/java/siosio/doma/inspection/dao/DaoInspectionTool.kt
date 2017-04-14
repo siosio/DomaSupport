@@ -1,6 +1,5 @@
 package siosio.doma.inspection.dao
 
-import com.intellij.codeInsight.*
 import com.intellij.codeInspection.*
 import com.intellij.psi.*
 import siosio.doma.*

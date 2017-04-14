@@ -3,7 +3,7 @@ package siosio.doma.inspection.dao.quickfix
 import com.intellij.codeInspection.*
 import com.intellij.ide.util.*
 import com.intellij.openapi.application.*
-import com.intellij.openapi.editor.*
+import com.intellij.openapi.command.*
 import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.module.*
 import com.intellij.openapi.project.*
@@ -23,33 +23,33 @@ class CreateSqlFileQuickFix(
     private val module: Module,
     private val sqlFilePath: String) : LocalQuickFix {
 
-    override fun getName() = getFamilyName()
+    override fun getName(): String = familyName
 
-    override fun getFamilyName() = DomaBundle.message("quick-fix.create-sql-file")
+    override fun getFamilyName(): String = DomaBundle.message("quick-fix.create-sql-file")
 
     override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
         val roots = ModuleRootManager.getInstance(module).getSourceRoots(false)
 
         val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.toTypedArray()
 
-        val rootDir = DirectoryChooserUtil.chooseDirectory(
-            psiDirectories, null, project, HashMap<PsiDirectory, String>())
+        ApplicationManager.getApplication().invokeLater {
+            val rootDir = DirectoryChooserUtil.chooseDirectory(
+                psiDirectories, null, project, HashMap<PsiDirectory, String>())
+            WriteCommandAction.runWriteCommandAction(project, {
+                rootDir?.virtualFile?.let {
+                    val sqlFile = SqlFile(sqlFilePath)
+                    try {
+                        VfsUtil.createDirectoryIfMissing(it, sqlFile.parentDirPath)
+                    } catch (e: IOException) {
+                        throw IncorrectOperationException(e)
+                    }
+                    val sqlOutputDir = PsiManager.getInstance(project).findDirectory(
+                        VfsUtil.findRelativeFile(it, *sqlFile.parentDirSplitPaths)!!)
 
-        rootDir?.virtualFile?.let {
-            val sqlFile = SqlFile(sqlFilePath)
-            try {
-                VfsUtil.createDirectoryIfMissing(it, sqlFile.parentDirPath)
-            } catch (e: IOException) {
-                throw IncorrectOperationException(e)
-            }
-            val sqlOutputDir = PsiManager.getInstance(project).findDirectory(
-                VfsUtil.findRelativeFile(it, *sqlFile.parentDirSplitPaths)!!)
-            
-            val application = ApplicationManager.getApplication()
-            application.runWriteAction {
-                FileEditorManager.getInstance(project)
-                    .openFile(sqlOutputDir!!.createFile(sqlFile.fileName).virtualFile, true)
-            }
+                    FileEditorManager.getInstance(project)
+                        .openFile(sqlOutputDir!!.createFile(sqlFile.fileName).virtualFile, true)
+                }
+            })
         }
     }
 

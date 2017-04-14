@@ -4,9 +4,8 @@ import com.intellij.openapi.module.*
 import com.intellij.openapi.project.*
 import com.intellij.openapi.roots.*
 import com.intellij.psi.*
-import com.intellij.psi.search.*
 
-fun toSqlFilePath(path: String) = "META-INF/${path}"
+fun toSqlFilePath(path: String) = "META-INF/$path"
 
 fun toDaoClass(sqlFile: PsiFile): PsiClass? {
   val parent = sqlFile.parent

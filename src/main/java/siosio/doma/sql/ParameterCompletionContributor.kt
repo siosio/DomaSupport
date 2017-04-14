@@ -30,11 +30,15 @@ open class ParameterCompletionContributor : CompletionContributor() {
       }
 
       toDaoClass(originalFile)?.let {
-        it.findMethodsByName(toMethodName(originalFile), false).firstOrNull()?.parameterList?.parameters?.map {
-          VariableLookupItem(it)
-        }?.toList()?.let {list ->
-          result.addAllElements(list)
-        }
+          it.findMethodsByName(toMethodName(originalFile), false)
+              .firstOrNull()
+              ?.parameterList
+              ?.parameters
+              ?.map(::VariableLookupItem)
+              ?.toList()
+              ?.let { list ->
+                  result.addAllElements(list)
+              }
       }
       result.stopHere()
     }

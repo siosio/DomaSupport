@@ -2,7 +2,7 @@ package siosio.doma.inspection.dao
 
 import com.intellij.codeInspection.*
 
-public class DaoInspectionToolProvider : InspectionToolProvider {
+class DaoInspectionToolProvider : InspectionToolProvider {
 
   override fun getInspectionClasses(): Array<Class<Any>> {
     @Suppress("CAST_NEVER_SUCCEEDS")

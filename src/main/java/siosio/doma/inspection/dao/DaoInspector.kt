@@ -59,7 +59,7 @@ class Sql(val required: Boolean) : DaoRule {
     }
     if (!daoMethod.containsSqlFile()) {
       problemsHolder.registerProblem(
-          daoMethod.getNameIdentifier()!!,
+          daoMethod.nameIdentifier!!,
           DomaBundle.message("inspection.dao.sql-not-found"),
           ProblemHighlightType.ERROR,
           CreateSqlFileQuickFix(daoMethod.getModule(), daoMethod.getSqlFilePath()))

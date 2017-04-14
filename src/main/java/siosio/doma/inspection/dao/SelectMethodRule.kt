@@ -1,7 +1,7 @@
 package siosio.doma.inspection.dao
 
+import com.intellij.codeInsight.intention.*
 import com.intellij.codeInspection.*
-import com.intellij.codeInspection.compiler.*
 import com.intellij.psi.util.*
 import siosio.doma.*
 
@@ -12,7 +12,7 @@ val selectMethodRule =
       // SelectOptionsの検査
       parameterRule { problemsHolder, method ->
         val selectOptions = filter {
-          "org.seasar.doma.jdbc.SelectOptions".equals(it.getType().getCanonicalText())
+            "org.seasar.doma.jdbc.SelectOptions" == it.type.canonicalText
         }
         if (selectOptions.size !in 0..1) {
           selectOptions.forEach {
@@ -20,7 +20,8 @@ val selectMethodRule =
                 it,
                 DomaBundle.message("inspection.dao.multi-SelectOptions"),
                 ProblemHighlightType.ERROR,
-                RemoveElementQuickFix(DomaBundle.message("quick-fix.remove", it.getName())))
+                QuickFixFactory.getInstance().createDeleteFix(
+                    it, DomaBundle.message("quick-fix.remove", it.name)))
           }
         }
       }
@@ -30,7 +31,7 @@ val selectMethodRule =
         val daoAnnotation = method.daoAnnotation
         daoAnnotation.findAttributeValue("strategy")?.let { strategy ->
           if (!strategy.text.contains("STREAM")) {
-            return@parameterRule;
+            return@parameterRule
           }
           val function = filter {
             PsiTypesUtil.getPsiClass(it.type)?.qualifiedName == "java.util.function.Function"

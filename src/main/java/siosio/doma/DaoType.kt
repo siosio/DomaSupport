@@ -33,7 +33,7 @@ enum class DaoType(
      * @return タイプ
      */
     fun valueOf(method: PsiMethod): DaoType? {
-      return values().firstOrNull() {
+      return values().firstOrNull {
         AnnotationUtil.isAnnotated(method, it.annotationName, false)
       }
     }
