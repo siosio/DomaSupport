@@ -9,38 +9,70 @@ import siosio.doma.*
 
 open class ParameterCompletionContributor : CompletionContributor() {
 
-  init {
-    extend(CompletionType.BASIC,
-        PlatformPatterns.psiElement(PsiComment::class.java)
-            .inFile(PlatformPatterns.psiFile().withName(StandardPatterns.string().endsWith(".sql"))),
-        SqlParameterCompletionProvider())
-  }
-
-  private class SqlParameterCompletionProvider : CompletionProvider<CompletionParameters>() {
-    override fun addCompletions(parameters: CompletionParameters, p1: ProcessingContext?, result: CompletionResultSet) {
-      val originalFile = parameters.originalFile
-      parameters.originalPosition?.text?.let {
-        val text = it.substringBefore("/*if")
-            .substringBefore("/*")
-            .substringAfter("*/")
-        if (!text.trim().isEmpty() && text.last().isWhitespace() || text.trim().split(" ").size != 1) {
-          result.stopHere()
-          return
-        }
-      }
-
-      toDaoClass(originalFile)?.let {
-          it.findMethodsByName(toMethodName(originalFile), false)
-              .firstOrNull()
-              ?.parameterList
-              ?.parameters
-              ?.map(::VariableLookupItem)
-              ?.toList()
-              ?.let { list ->
-                  result.addAllElements(list)
-              }
-      }
-      result.stopHere()
+    init {
+        extend(CompletionType.BASIC,
+            PlatformPatterns.psiElement(PsiComment::class.java)
+                .inFile(PlatformPatterns.psiFile().withName(StandardPatterns.string().endsWith(".sql"))),
+            SqlParameterCompletionProvider())
     }
-  }
+
+    private class SqlParameterCompletionProvider : CompletionProvider<CompletionParameters>() {
+
+        private val buildInFunctionList = listOf(
+            "escape",
+            "prefix",
+            "infix",
+            "suffix",
+            "roundDownTimePart",
+            "roundDownTimePart",
+            "roundDownTimePart",
+            "roundUpTimePart",
+            "roundUpTimePart",
+            "roundUpTimePart",
+            "isEmpty",
+            "isNotEmpty",
+            "isBlank",
+            "isNotBlank"
+        )
+
+        private val buildInFunctionLookupList = run {
+            buildInFunctionList.map {
+                LookupElementBuilder.create(it)
+                    .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
+            }
+        }
+
+        override fun addCompletions(parameters: CompletionParameters,
+                                    p1: ProcessingContext?,
+                                    result: CompletionResultSet) {
+            val originalFile = parameters.originalFile
+            val text = parameters.originalPosition?.text?.let {
+                val text = it.substringAfter("/*%if")
+                    .substringAfter("/*")
+                    .substringBefore("*/")
+                    .trim()
+                text
+            } ?: ""
+
+            if (isBuiltInFunction(text)) {
+                result.addAllElements(buildInFunctionLookupList)
+            } else {
+                toDaoClass(originalFile)?.let {
+                    it.findMethodsByName(toMethodName(originalFile), false)
+                        .firstOrNull()
+                        ?.parameterList
+                        ?.parameters
+                        ?.map(::VariableLookupItem)
+                        ?.toList()
+                        ?.let { list ->
+                            result.addAllElements(list)
+                        }
+                }
+            }
+            result.stopHere()
+        }
+
+        private fun isBuiltInFunction(text: String): Boolean = text.startsWith("@") && !text.contains('(')
+    }
+
 }
