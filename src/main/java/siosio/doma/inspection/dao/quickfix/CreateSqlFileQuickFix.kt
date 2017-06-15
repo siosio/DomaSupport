@@ -13,6 +13,7 @@ import com.intellij.openapi.vfs.*
 import com.intellij.psi.*
 import com.intellij.util.*
 import siosio.doma.*
+import siosio.doma.extension.*
 import java.io.*
 import java.util.*
 
@@ -21,14 +22,15 @@ import java.util.*
  */
 class CreateSqlFileQuickFix(
     private val module: Module,
-    private val sqlFilePath: String) : LocalQuickFix {
+    private val sqlFilePath: String,
+    private val isInTest: Boolean) : LocalQuickFix {
 
     override fun getName(): String = familyName
 
     override fun getFamilyName(): String = DomaBundle.message("quick-fix.create-sql-file")
 
     override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
-        val roots = ModuleRootManager.getInstance(module).getSourceRoots(false)
+        val roots = ModuleRootManager.getInstance(module).getSourceRoots(isInTest)
 
         val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.toTypedArray()
 

@@ -10,7 +10,7 @@ val selectMethodRule =
       sql(true)
 
       // SelectOptionsの検査
-      parameterRule { problemsHolder, method ->
+      parameterRule { problemsHolder, _ ->
         val selectOptions = filter {
             "org.seasar.doma.jdbc.SelectOptions" == it.type.canonicalText
         }

@@ -48,7 +48,7 @@ class PsiDaoMethod(
      * SQLファイルを検索する。
      */
     fun findSqlFile(): VirtualFile? {
-        return getModule().findSqlFileFromRuntimeScope(getSqlFilePath())
+        return getModule().findSqlFileFromRuntimeScope(getSqlFilePath(), this.containingClass!!)
     }
 
     /**

@@ -10,22 +10,27 @@ import siosio.doma.extension.*
 
 class DaoClassNameRenameProcessor : RenameJavaClassProcessor() {
 
-  override fun canProcessElement(element: PsiElement): Boolean {
-    return if (super.canProcessElement(element)) {
-      return AnnotationUtil.isAnnotated(element as PsiClass, "org.seasar.doma.Dao", false)
-    } else {
-      false
+    override fun canProcessElement(element: PsiElement): Boolean {
+        return if (super.canProcessElement(element)) {
+            return AnnotationUtil.isAnnotated(element as PsiClass, "org.seasar.doma.Dao", false)
+        } else {
+            false
+        }
     }
-  }
 
-  override fun renameElement(element: PsiElement, newName: String, usages: Array<out UsageInfo>?, listener: RefactoringElementListener?) {
-    val psiClass = element as PsiClass
-    getModule(element.project, element).findSqlFileFromRuntimeScope(
-        toSqlFilePath(element.qualifiedName!!.replace(".", "/")))?.let { sqlDir ->
-      if (sqlDir.name == psiClass.name) {
-        sqlDir.rename(sqlDir, newName)
-      }
+    override fun renameElement(element: PsiElement,
+                               newName: String,
+                               usages: Array<out UsageInfo>?,
+                               listener: RefactoringElementListener?) {
+        val psiClass = element as PsiClass
+
+        getModule(element.project, element)
+            .findSqlFileFromRuntimeScope(toSqlFilePath(element.qualifiedName!!.replace(".", "/")), psiClass)
+            ?.let { sqlDir ->
+                if (sqlDir.name == psiClass.name) {
+                    sqlDir.rename(sqlDir, newName)
+                }
+            }
+        super.renameElement(element, newName, usages, listener)
     }
-    super.renameElement(element, newName, usages, listener)
-  }
 }
