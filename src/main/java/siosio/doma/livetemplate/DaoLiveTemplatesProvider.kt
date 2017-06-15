@@ -7,7 +7,7 @@ import com.intellij.codeInsight.template.impl.*
  */
 class DaoLiveTemplatesProvider : DefaultLiveTemplatesProvider {
 
-  override fun getDefaultLiveTemplateFiles(): Array<String> = arrayOf("doma")
+    override fun getDefaultLiveTemplateFiles(): Array<String> = arrayOf("doma")
 
-  override fun getHiddenLiveTemplateFiles(): Array<String>? = emptyArray()
+    override fun getHiddenLiveTemplateFiles(): Array<String>? = emptyArray()
 }

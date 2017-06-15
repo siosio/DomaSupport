@@ -57,17 +57,16 @@ open class ParameterCompletionContributor : CompletionContributor() {
             if (isBuiltInFunction(text)) {
                 result.addAllElements(buildInFunctionLookupList)
             } else {
-                toDaoClass(originalFile)?.let {
-                    it.findMethodsByName(toMethodName(originalFile), false)
-                        .firstOrNull()
-                        ?.parameterList
-                        ?.parameters
-                        ?.map(::VariableLookupItem)
-                        ?.toList()
-                        ?.let { list ->
-                            result.addAllElements(list)
-                        }
-                }
+                toDaoClass(originalFile)
+                    ?.findMethodsByName(toMethodName(originalFile), false)
+                    ?.firstOrNull()
+                    ?.parameterList
+                    ?.parameters
+                    ?.map(::VariableLookupItem)
+                    ?.toList()
+                    ?.let { list ->
+                        result.addAllElements(list)
+                    }
             }
             result.stopHere()
         }

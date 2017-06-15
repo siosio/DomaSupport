@@ -9,9 +9,9 @@ import com.intellij.psi.*
  *
  * このアノテーションの`sqlFile`属性が`true`の場合は必要
  */
-fun PsiAnnotation.useSqlFile() :Boolean = AnnotationUtil.getBooleanAttributeValue(this, "sqlFile") ?: false
+fun PsiAnnotation.useSqlFile(): Boolean = AnnotationUtil.getBooleanAttributeValue(this, "sqlFile") ?: false
 
 /**
  * このクラスがテストスコープにあるかどうか
  */
-fun PsiClass.isInTest():Boolean = ProjectFileIndex.SERVICE.getInstance(project).isInTestSourceContent(this.containingFile.virtualFile)
+fun PsiClass.isInTest(): Boolean = ProjectFileIndex.SERVICE.getInstance(project).isInTestSourceContent(this.containingFile.virtualFile)

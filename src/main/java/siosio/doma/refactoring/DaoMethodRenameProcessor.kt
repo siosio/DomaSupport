@@ -14,22 +14,25 @@ import siosio.doma.psi.*
  */
 class DaoMethodRenameProcessor : RenameJavaMethodProcessor() {
 
-  override fun canProcessElement(element: PsiElement): Boolean {
-    return if (super.canProcessElement(element)) {
-      createPsiDaoMethod(element as PsiMethod)?.findSqlFile() != null
-    } else {
-      false
+    override fun canProcessElement(element: PsiElement): Boolean {
+        return if (super.canProcessElement(element)) {
+            createPsiDaoMethod(element as PsiMethod)?.findSqlFile() != null
+        } else {
+            false
+        }
     }
-  }
 
-  override fun renameElement(element: PsiElement, newName: String, p2: Array<out UsageInfo>?, p3: RefactoringElementListener?) {
-    createPsiDaoMethod(element as PsiMethod)?.findSqlFile()?.let {sqlFile ->
-      sqlFile.rename(sqlFile, "$newName.${sqlFile.extension}")
+    override fun renameElement(element: PsiElement,
+                               newName: String,
+                               p2: Array<out UsageInfo>?,
+                               p3: RefactoringElementListener?) {
+        createPsiDaoMethod(element as PsiMethod)?.findSqlFile()?.let { sqlFile ->
+            sqlFile.rename(sqlFile, "$newName.${sqlFile.extension}")
+        }
+        super.renameElement(element, newName, p2, p3)
     }
-    super.renameElement(element, newName, p2, p3)
-  }
 
-  private fun createPsiDaoMethod(method: PsiMethod): PsiDaoMethod? = DaoType.valueOf(method)?.let {
-    PsiDaoMethod(method, it)
-  }
+    private fun createPsiDaoMethod(method: PsiMethod): PsiDaoMethod? = DaoType.valueOf(method)?.let {
+        PsiDaoMethod(method, it)
+    }
 }
