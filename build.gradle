@@ -1,15 +1,14 @@
 buildscript {
   repositories {
     mavenCentral()
-    maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
   }
   dependencies {
-    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.3"
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.1.3-2"
   }
 }
 
 plugins {
-  id "org.jetbrains.intellij" version "0.2.7"
+  id "org.jetbrains.intellij" version "0.2.16"
 }
 
 apply plugin: 'java'
@@ -17,7 +16,7 @@ apply plugin: "kotlin"
 
 intellij {
   pluginName 'DomaSupport'
-  version = "IU-2017.1"
+  version  "IU-172.3757.29"
   plugins = ['DatabaseTools']
   updateSinceUntilBuild = false
   intellij.type = 'IU'
@@ -35,11 +34,13 @@ repositories {
 }
 
 dependencies {
-  compile "org.jetbrains.kotlin:kotlin-stdlib:1.1.1"
+  compile "org.jetbrains.kotlin:kotlin-stdlib:1.1.3-2"
   testCompile 'org.jmockit:jmockit:1.21'
   testCompile 'junit:junit:4.12'
+
+  testCompile 'org.seasar.doma:doma:2.16.1'
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.0'
+  gradleVersion = '4.1'
 }

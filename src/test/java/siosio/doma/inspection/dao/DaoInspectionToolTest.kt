@@ -1,18 +1,14 @@
-package siosio.doma.inspection.dao;
+package siosio.doma.inspection.dao
 
-import siosio.doma.DaoTestCase;
+import siosio.doma.DaoTestCase
 
-public class DaoInspectionToolTest extends DaoTestCase {
+class DaoInspectionToolTest : DaoTestCase() {
 
-    @Override
-    protected String getTestDataPath() {
-        return "testData/siosio/doma/inspection/dao/";
-    }
+    override fun getTestDataPath(): String = "testData/siosio/doma/inspection/dao/"
 
-    @Override
-    protected void setUp() {
-        super.setUp();
-        myFixture.enableInspections(new DaoInspectionTool());
+    override fun setUp() {
+        super.setUp()
+        myFixture.enableInspections(DaoInspectionTool())
         createSqlFile(
                 "SelectDao/SQLファイルあり.sql",
                 "SelectDao/selectOptionsなし.sql",
@@ -28,62 +24,62 @@ public class DaoInspectionToolTest extends DaoTestCase {
                 "BatchUpdateDao/SQLファイルあり.sql",
                 "BatchDeleteDao/SQLファイルあり.sql",
                 "ScriptDao/SQLファイルあり.script"
-        );
+        )
     }
 
     /**
      * selectメソッドのテストを行う。
      */
-    public void test_selectメソッド() {
-        myFixture.testHighlighting("SelectDao.java");
+    fun test_selectメソッド() {
+        myFixture.testHighlighting("SelectDao.java")
     }
 
     /**
      * insertメソッドのテストを行う。
      */
-    public void test_insertメソッド() {
-        myFixture.testHighlighting("InsertDao.java");
+    fun test_insertメソッド() {
+        myFixture.testHighlighting("InsertDao.java")
     }
 
     /**
      * updateメソッドのテストを行う。
      */
-    public void test_updateメソッド() {
-        myFixture.testHighlighting("UpdateDao.java");
+    fun test_updateメソッド() {
+        myFixture.testHighlighting("UpdateDao.java")
     }
 
     /**
      * deleteメソッドのテストを行う。
      */
-    public void test_deleteメソッド() {
-        myFixture.testHighlighting("DeleteDao.java");
+    fun test_deleteメソッド() {
+        myFixture.testHighlighting("DeleteDao.java")
     }
 
     /**
      * batchInsertメソッドのテストを行う。
      */
-    public void test_batchInsertメソッド() {
-        myFixture.testHighlighting("BatchInsertDao.java");
+    fun test_batchInsertメソッド() {
+        myFixture.testHighlighting("BatchInsertDao.java")
     }
 
     /**
      * batchUpdateメソッドのテストを行う。
      */
-    public void test_batchUpdateメソッド() {
-        myFixture.testHighlighting("BatchUpdateDao.java");
+    fun test_batchUpdateメソッド() {
+        myFixture.testHighlighting("BatchUpdateDao.java")
     }
 
     /**
      * batchDeleteメソッドのテストを行う。
      */
-    public void test_batchDeleteメソッド() {
-        myFixture.testHighlighting("BatchDeleteDao.java");
+    fun test_batchDeleteメソッド() {
+        myFixture.testHighlighting("BatchDeleteDao.java")
     }
 
     /**
      * scriptメソッドのテストを行う。
      */
-    public void test_scriptメソッド() {
-        myFixture.testHighlighting("ScriptDao.java");
+    fun test_scriptメソッド() {
+        myFixture.testHighlighting("ScriptDao.java")
     }
 }
