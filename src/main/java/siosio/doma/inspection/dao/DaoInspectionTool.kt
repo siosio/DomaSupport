@@ -10,21 +10,13 @@ import siosio.doma.psi.*
  */
 class DaoInspectionTool : BaseJavaLocalInspectionTool() {
 
-    override fun getDisplayName(): String {
-        return DomaBundle.message("inspection.dao-inspection")
-    }
+    override fun getDisplayName(): String = DomaBundle.message("inspection.dao-inspection")
 
-    override fun isEnabledByDefault(): Boolean {
-        return true
-    }
+    override fun isEnabledByDefault(): Boolean = true
 
-    override fun getGroupDisplayName(): String {
-        return "Doma"
-    }
+    override fun getGroupDisplayName(): String = "Doma"
 
-    override fun getShortName(): String {
-        return "DaoInspection"
-    }
+    override fun getShortName(): String = "DaoInspection"
 
     override fun buildVisitor(problemsHolder: ProblemsHolder, isOnTheFly: Boolean): PsiElementVisitor {
         return object : JavaElementVisitor() {

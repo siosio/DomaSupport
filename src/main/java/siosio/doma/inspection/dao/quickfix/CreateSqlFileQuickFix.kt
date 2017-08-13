@@ -23,20 +23,22 @@ import java.util.*
 class CreateSqlFileQuickFix(
     private val module: Module,
     private val sqlFilePath: String,
-    private val isInTest: Boolean) : LocalQuickFix {
+    private val isInTest: Boolean,
+    private val chooser: DirectoryChooser = DirectoryChooser()) : LocalQuickFix {
 
     override fun getName(): String = familyName
 
     override fun getFamilyName(): String = DomaBundle.message("quick-fix.create-sql-file")
 
     override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
-        val roots = ModuleRootManager.getInstance(module).getSourceRoots(isInTest)
-
-        val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.toTypedArray()
+//        val roots = ModuleRootManager.getInstance(module).getSourceRoots(isInTest)
+//
+//        val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.toTypedArray()
 
         ApplicationManager.getApplication().invokeLater {
-            val rootDir = DirectoryChooserUtil.chooseDirectory(
-                psiDirectories, null, project, HashMap<PsiDirectory, String>())
+//            val rootDir = DirectoryChooserUtil.chooseDirectory(
+//                psiDirectories, null, project, HashMap<PsiDirectory, String>())
+            val rootDir = chooser.chooseDirectory(project, module, isInTest)
             WriteCommandAction.runWriteCommandAction(project, {
                 rootDir?.virtualFile?.let {
                     val sqlFile = SqlFile(sqlFilePath)
