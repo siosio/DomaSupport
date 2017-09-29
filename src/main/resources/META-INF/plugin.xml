@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>siosio.DomaSupport</id>
   <name>Doma Support</name>
-  <version>0.10</version>
+  <version>0.11</version>
   <vendor email="siosio12@gmail.com" url="https://github.com/siosio/DomaSupport">siosio</vendor>
 
   <description><![CDATA[
@@ -37,10 +37,17 @@
 
   <application-components>
   </application-components>
+  
+  <project-components>
+    <component>
+      
+      <implementation-class>siosio.doma.DomaProjectComponent</implementation-class>
+    </component>
+  </project-components>
+  
 
   <actions>
-    <action class="siosio.doma.editor.GotoSqlFile" id="Doma.GotoSqlFile" use-shortcut-of="GotoRelated"
-        text="Go to SQL" />
+    <action class="siosio.doma.editor.GotoSqlFile" id="Doma.GotoSqlFile" use-shortcut-of="GotoRelated" text="Go to SQL" />
   </actions>
 
 </idea-plugin>
