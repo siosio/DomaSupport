@@ -17,29 +17,26 @@ import siosio.doma.psi.*
 class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
 
     override fun collectNavigationMarkers(
-        elements: List<PsiElement>,
-        result: MutableCollection<in RelatedItemLineMarkerInfo<PsiElement>>,
-        forNavigation: Boolean) {
-        super.collectNavigationMarkers(elements, result, forNavigation)
-    }
-
-    override fun collectNavigationMarkers(element: PsiElement,
-                                          result: MutableCollection<in RelatedItemLineMarkerInfo<PsiElement>>?) {
+        element: PsiElement,
+        result: MutableCollection<in RelatedItemLineMarkerInfo<PsiElement>>?) {
+        
         if (element !is PsiMethod || result == null) {
             return
         }
 
-        DaoType.valueOf(element)?.let {
+        val sqlFile = DaoType.valueOf(element)?.let {
             PsiDaoMethod(element, it).findSqlFile()
-        }?.let {
-            val psiFile = element.project.findFile(it)
-            PsiTreeUtil.findChildrenOfType(element, PsiAnnotation::class.java).firstOrNull()?.let {
-                val builder = NavigationGutterIconBuilder.create(SQL_FILE_ICON)
-                    .setTargets(psiFile)
-                    .setTooltipText(DomaBundle.message("editor.goto-sql-file"))
-                result.add(builder.createLineMarkerInfo(it))
-            }
-        }
+        } ?: return
+
+        val psiFile = element.project.findFile(sqlFile)
+        val annotation = PsiTreeUtil.findChildrenOfType(element, PsiAnnotation::class.java).firstOrNull() ?: return
+
+        result.add(
+            NavigationGutterIconBuilder.create(SQL_FILE_ICON)
+                .setTargets(psiFile)
+                .setTooltipText(DomaBundle.message("editor.goto-sql-file"))
+                .createLineMarkerInfo(annotation)
+        )
     }
 
     companion object {
