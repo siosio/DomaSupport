@@ -34,7 +34,6 @@ class PsiDaoMethod(
         return "META-INF/${fqcnToFilePath()}/$name.${daoType.extension}"
     }
 
-
     /**
      * SQLファイルの存在有無
      *

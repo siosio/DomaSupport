@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    kotlinVersion = "1.1.4-3"
+    kotlinVersion = "1.1.51"
   }
   repositories {
     mavenCentral()
@@ -19,7 +19,7 @@ apply plugin: "kotlin"
 
 intellij {
   pluginName 'DomaSupport'
-  version  "IU-2017.2.2"
+  version  "IU-2017.2.5"
   plugins = ['DatabaseTools']
   updateSinceUntilBuild = false
   intellij.type = 'IU'
@@ -44,5 +44,5 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '4.1'
+  gradleVersion = '4.3.1'
 }
