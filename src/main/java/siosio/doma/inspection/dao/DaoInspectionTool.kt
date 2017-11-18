@@ -1,5 +1,6 @@
 package siosio.doma.inspection.dao
 
+import com.intellij.codeHighlighting.*
 import com.intellij.codeInspection.*
 import com.intellij.psi.*
 import siosio.doma.*
@@ -13,6 +14,8 @@ class DaoInspectionTool : BaseJavaLocalInspectionTool() {
     override fun getDisplayName(): String = DomaBundle.message("inspection.dao-inspection")
 
     override fun isEnabledByDefault(): Boolean = true
+
+    override fun getDefaultLevel(): HighlightDisplayLevel = HighlightDisplayLevel.ERROR
 
     override fun getGroupDisplayName(): String = "Doma"
 

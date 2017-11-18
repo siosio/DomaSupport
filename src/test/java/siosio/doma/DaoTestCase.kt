@@ -10,6 +10,7 @@ import com.intellij.testFramework.fixtures.*
 import com.intellij.util.*
 import org.seasar.doma.*
 import org.seasar.doma.jdbc.*
+import siosio.doma.inspection.dao.entity.*
 import java.util.function.Function
 import java.util.stream.*
 
@@ -47,12 +48,13 @@ abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
         addLibrary<Script>()
         addLibrary<SelectOptions>()
         addLibrary<SelectType>()
+        addLibrary<MutableEntity>()
 
         addLibrary<Function<*, *>>()
         addLibrary<Stream<*>>()
     }
 
-    private inline fun <reified T:Any> addLibrary()  {
+    private inline fun <reified T : Any> addLibrary() {
         PsiTestUtil.addLibrary(myModule, PathUtil.getJarPathForClass(T::class.java))
     }
 }

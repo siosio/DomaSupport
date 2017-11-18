@@ -19,7 +19,6 @@ val selectMethodRule =
                     problemsHolder.registerProblem(
                         it,
                         DomaBundle.message("inspection.dao.multi-SelectOptions"),
-                        ProblemHighlightType.ERROR,
                         QuickFixFactory.getInstance().createDeleteFix(
                             it, DomaBundle.message("quick-fix.remove", it.name)))
                 }
@@ -39,8 +38,7 @@ val selectMethodRule =
                 if (function.size != 1) {
                     problemsHolder.registerProblem(
                         daoAnnotation.originalElement,
-                        DomaBundle.message("inspection.dao.function-strategy"),
-                        ProblemHighlightType.ERROR)
+                        DomaBundle.message("inspection.dao.function-strategy"))
                 }
             }
         }

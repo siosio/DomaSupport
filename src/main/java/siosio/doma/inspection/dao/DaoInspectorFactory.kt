@@ -1,8 +1,18 @@
 package siosio.doma.inspection.dao
 
+import siosio.doma.*
+
 val insertMethodRule =
     rule {
         sql(false)
+        
+        // 引数チェック
+        parameterRule { problemsHolder, daoMethod ->
+            if (daoMethod.parameterList.parametersCount != 1) {
+                problemsHolder.registerProblem(
+                        daoMethod.parameterList, DomaBundle.message("inspection.dao.entity-param-not-found"))
+            }
+        }
     }
 
 val updateMethodRule =
