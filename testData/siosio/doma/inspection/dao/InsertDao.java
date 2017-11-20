@@ -25,5 +25,13 @@ public interface InsertDao {
     
     // 引数がないの場合
     @Insert
-    int パラメータなし<error descr="引数にEntityを指定してください。">()</error>;
+    int パラメータなし<error descr="引数にEntityを1つ指定してください。">()</error>;
+    
+    // 引数が複数の場合
+    @Insert
+    int パラメータなし<error descr="引数にEntityを1つ指定してください。">(MutableEntity entity1, MutableEntity entity2)</error>;
+    
+    // 引数が非Entityの場合
+    @Insert
+    int パラメータなし<error descr="引数にEntityを1つ指定してください。">(String entity)</error>;
 }

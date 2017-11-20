@@ -3,7 +3,6 @@ package siosio.doma.inspection.dao
 import com.intellij.codeInspection.*
 import com.intellij.psi.*
 import siosio.doma.*
-import siosio.doma.extension.*
 import siosio.doma.inspection.*
 import siosio.doma.inspection.dao.quickfix.*
 import siosio.doma.psi.*
@@ -37,10 +36,12 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
         rules.add(sql)
     }
 
-    fun parameterRule(rule: List<PsiParameter>.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit): ParameterRule {
-        val parameterRule = ParameterRule(rule)
+    fun parameterRule(init: ParameterRule.() -> Unit) {
+        val parameterRule = ParameterRule().apply(init)
+        if (parameterRule.message == null) {
+            throw IllegalArgumentException("message must be set")
+        }
         rules.add(parameterRule)
-        return parameterRule
     }
 
     fun returnRule(rule: PsiTypeElement.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit): ReturnRule {
@@ -53,7 +54,7 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
 /**
  * SQLファイルの検査を行うクラス。
  */
-class Sql(val required: Boolean) : DaoRule {
+class Sql(private val required: Boolean) : DaoRule {
     override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
         if (!required && !daoMethod.useSqlFile()) {
             return
@@ -71,10 +72,22 @@ class Sql(val required: Boolean) : DaoRule {
 /**
  * パラメータの検査を行うクラス
  */
-class ParameterRule(val rule: List<PsiParameter>.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit) : DaoRule {
+class ParameterRule : DaoRule {
+    var message: String? = null
+    var errorElement: (PsiDaoMethod) -> PsiElement = { psiDaoMethod -> psiDaoMethod.parameterList }
+    var errorElements: (PsiDaoMethod) -> List<PsiElement> = { psiDaoMethod -> listOf(errorElement.invoke(psiDaoMethod)) }
+    var rule: List<PsiParameter>.(PsiDaoMethod) -> Boolean = { _ -> true }
+    var quickFix: ((PsiElement) -> LocalQuickFix)? = null
     override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
         val params = daoMethod.parameterList.parameters.toList()
-        params.rule(problemsHolder, daoMethod)
+        if (!params.rule(daoMethod)) {
+            val register: (PsiElement) -> Unit = when (quickFix) {
+                null -> { el -> problemsHolder.registerProblem(el, DomaBundle.message(message!!)) }
+                else -> { el -> problemsHolder.registerProblem(el, DomaBundle.message(message!!), quickFix!!.invoke(el)) }
+            }
+            errorElements.invoke(daoMethod)
+                    .forEach(register)
+        }
     }
 }
 
