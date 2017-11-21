@@ -3,35 +3,42 @@ package siosio.doma.inspection.dao
 import com.intellij.codeInsight.*
 import com.intellij.psi.util.*
 
+val parameterTypeCheck: ParameterRule.() -> Unit = {
+    message = "inspection.dao.entity-param-not-found"
+    rule = {
+        when (size) {
+            1 -> {
+                PsiTypesUtil.getPsiClass(first().type)?.let {
+                    AnnotationUtil.isAnnotated(it, "org.seasar.doma.Entity", false)
+                } ?: false
+            }
+            else -> false
+        }
+    }
+}
+
 val insertMethodRule =
         rule {
             sql(false)
             
             // 引数チェック
-            parameterRule {
-                message = "inspection.dao.entity-param-not-found"
-                rule = {
-                    when (size) {
-                        1 -> {
-                            val type = first().type
-                            PsiTypesUtil.getPsiClass(type)?.let {
-                                AnnotationUtil.isAnnotated(it, "org.seasar.doma.Entity", false)
-                            } ?: false
-                        }
-                        else -> false
-                    }
-                }
-            }
+            parameterRule(parameterTypeCheck)
         }
 
 val updateMethodRule =
         rule {
             sql(false)
+            
+            // 引数チェック
+            parameterRule(parameterTypeCheck)
         }
 
 val deleteMethodRule =
         rule {
             sql(false)
+            
+            // 引数チェック
+            parameterRule(parameterTypeCheck)
         }
 
 val batchInsertMethodRule =
