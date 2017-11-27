@@ -5,14 +5,18 @@ import com.intellij.psi.util.*
 
 val parameterTypeCheck: ParameterRule.() -> Unit = {
     message = "inspection.dao.entity-param-not-found"
-    rule = {
-        when (size) {
-            1 -> {
-                PsiTypesUtil.getPsiClass(first().type)?.let {
-                    AnnotationUtil.isAnnotated(it, "org.seasar.doma.Entity", false)
-                } ?: false
+    rule = { dao ->
+        if (dao.useSqlFile()) {
+            true
+        } else {
+            when (size) {
+                1 -> {
+                    PsiTypesUtil.getPsiClass(first().type)?.let {
+                        AnnotationUtil.isAnnotated(it, "org.seasar.doma.Entity", false)
+                    } ?: false
+                }
+                else -> false
             }
-            else -> false
         }
     }
 }
