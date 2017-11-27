@@ -34,4 +34,8 @@ public interface UpdateDao {
     // 引数が非Entityの場合
     @Update
     int パラメータなし<error descr="引数にEntityを1つ指定してください。">(String entity)</error>;
+    
+    // SQLファイルありの場合は引数はEntity以外もOK
+    @Update(sqlFile = true)
+    int SQLファイルあり(String name, Long version);
 }
