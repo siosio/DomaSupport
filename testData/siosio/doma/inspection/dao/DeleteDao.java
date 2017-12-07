@@ -2,7 +2,7 @@ package dao;
 
 import org.seasar.doma.*;
 import org.seasar.doma.jdbc.*;
-import siosio.doma.inspection.dao.entity.*;
+import entity.*;
 
 @Dao
 public interface DeleteDao {

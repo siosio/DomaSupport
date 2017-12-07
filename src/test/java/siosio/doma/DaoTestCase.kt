@@ -2,15 +2,18 @@ package siosio.doma
 
 import com.intellij.openapi.module.*
 import com.intellij.openapi.roots.*
+import com.intellij.openapi.util.io.*
 import com.intellij.openapi.vfs.*
 import com.intellij.pom.java.*
 import com.intellij.psi.search.*
+import com.intellij.psi.util.*
 import com.intellij.testFramework.*
 import com.intellij.testFramework.fixtures.*
 import com.intellij.util.*
 import org.seasar.doma.*
 import org.seasar.doma.jdbc.*
 import siosio.doma.inspection.dao.entity.*
+import java.io.*
 import java.util.function.Function
 import java.util.stream.*
 
@@ -37,21 +40,19 @@ abstract class DaoTestCase : LightCodeInsightFixtureTestCase() {
      * テストで必要となるDoma関連クラスを作成する。
      */
     private fun createDomaClass() {
+        // doma
         addLibrary<Dao>()
-        addLibrary<Select>()
-        addLibrary<Insert>()
-        addLibrary<BatchInsert>()
-        addLibrary<Update>()
-        addLibrary<BatchUpdate>()
-        addLibrary<Delete>()
-        addLibrary<BatchDelete>()
-        addLibrary<Script>()
-        addLibrary<SelectOptions>()
-        addLibrary<SelectType>()
-        addLibrary<MutableEntity>()
+        // jre
+        addLibrary<java.lang.Object>()
+        
+        addClassFromJavaFile("testData/siosio/doma/entity/ImmutableEntity.java")
+        addClassFromJavaFile("testData/siosio/doma/entity/MutableEntity.java")
 
-        addLibrary<Function<*, *>>()
-        addLibrary<Stream<*>>()
+    }
+    
+    private infix fun addClassFromJavaFile(path: String) {
+        val file = File(path)
+        myFixture.addClass(file.readText())
     }
 
     private inline fun <reified T : Any> addLibrary() {

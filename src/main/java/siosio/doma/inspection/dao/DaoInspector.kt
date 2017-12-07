@@ -44,10 +44,10 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
         rules.add(parameterRule)
     }
 
-    fun returnRule(rule: PsiTypeElement.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit): ReturnRule {
-        val returnTypeRule = ReturnRule(rule)
+    fun returnRule(init: ReturnRule.() -> Unit) {
+        val returnTypeRule = ReturnRule()
+                .apply(init)
         rules.add(returnTypeRule)
-        return returnTypeRule
     }
 }
 
@@ -94,9 +94,16 @@ class ParameterRule : DaoRule {
 /**
  * 戻り値の検査を行うクラス
  */
-class ReturnRule(val rule: PsiTypeElement.(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) -> Unit) : DaoRule {
+class ReturnRule() : DaoRule {
+    var message: String? = null
+    var errorElement: (PsiDaoMethod) -> PsiElement = { psiDaoMethod -> psiDaoMethod.returnTypeElement!! }
+    var rule: PsiTypeElement.(PsiDaoMethod) -> Boolean = { _ -> true }
+
     override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
-        daoMethod.returnTypeElement?.rule(problemsHolder, daoMethod)
+        val returnTypeElement = daoMethod.returnTypeElement ?: return
+        if (!returnTypeElement.rule(daoMethod)) {
+            problemsHolder.registerProblem(errorElement.invoke(daoMethod), DomaBundle.message(message!!))
+        }
     }
 }
 

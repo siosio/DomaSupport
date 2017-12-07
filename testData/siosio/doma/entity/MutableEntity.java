@@ -1,4 +1,4 @@
-package siosio.doma.inspection.dao.entity;
+package entity;
 
 import org.seasar.doma.Entity;
 import org.seasar.doma.Id;
