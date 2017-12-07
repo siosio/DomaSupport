@@ -31,33 +31,27 @@ class CreateSqlFileQuickFix(
     override fun getFamilyName(): String = DomaBundle.message("quick-fix.create-sql-file")
 
     override fun applyFix(project: Project, problemDescriptor: ProblemDescriptor) {
-//        val roots = ModuleRootManager.getInstance(module).getSourceRoots(isInTest)
-//
-//        val psiDirectories = roots.map { PsiManager.getInstance(project).findDirectory(it) }.toTypedArray()
-
-        ApplicationManager.getApplication().invokeLater {
-//            val rootDir = DirectoryChooserUtil.chooseDirectory(
-//                psiDirectories, null, project, HashMap<PsiDirectory, String>())
-            val rootDir = chooser.chooseDirectory(project, module, isInTest)
+        ApplicationManager.getApplication().invokeLater block@ {
+            val rootDir = chooser.chooseDirectory(project, module, isInTest) ?: return@block
+            
             WriteCommandAction.runWriteCommandAction(project, {
-                rootDir?.virtualFile?.let {
-                    val sqlFile = SqlFile(sqlFilePath)
-                    try {
-                        VfsUtil.createDirectoryIfMissing(it, sqlFile.parentDirPath)
-                    } catch (e: IOException) {
-                        throw IncorrectOperationException(e)
-                    }
-                    val sqlOutputDir = PsiManager.getInstance(project).findDirectory(
-                        VfsUtil.findRelativeFile(it, *sqlFile.parentDirSplitPaths)!!)
-
-                    FileEditorManager.getInstance(project)
-                        .openFile(sqlOutputDir!!.createFile(sqlFile.fileName).virtualFile, true)
+                val rootDirVirtualFile = rootDir.virtualFile
+                val sqlFile = SqlFile(sqlFilePath)
+                try {
+                    VfsUtil.createDirectoryIfMissing(rootDirVirtualFile, sqlFile.parentDirPath)
+                } catch (e: IOException) {
+                    throw IncorrectOperationException(e)
                 }
+                val sqlOutputDir = PsiManager.getInstance(project).findDirectory(
+                    VfsUtil.findRelativeFile(rootDirVirtualFile, *sqlFile.parentDirSplitPaths)!!)
+
+                FileEditorManager.getInstance(project)
+                    .openFile(sqlOutputDir!!.createFile(sqlFile.fileName).virtualFile, true)
             })
         }
     }
 
-    class SqlFile(val sqlFilePath: String) {
+    private class SqlFile(val sqlFilePath: String) {
         val fileName: String
         val parentDirPath: String
         val parentDirSplitPaths: Array<String>
