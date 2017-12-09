@@ -1,8 +1,8 @@
 package siosio.doma.inspection.dao
 
 import com.intellij.psi.*
-import com.intellij.psi.util.*
 import siosio.doma.extension.*
+import siosio.doma.inspection.dao.quickfix.*
 
 val parameterTypeCheck: ParameterRule.() -> Unit = {
     message = "inspection.dao.entity-param-not-found"
@@ -34,6 +34,8 @@ val insertMethodRule =
                         when {
                             firstParam?.isEntity() == true && firstParam.isImmutableEntity() -> {
                                 message = "inspection.dao.immutable-insert-return-type"
+                                quickFix = ImmutableEntityReturnTypeQuickFix()
+                                
                                 // 引数がvalidじゃない場合はOKとする
                                 type.isAssignableFrom(PsiType.getTypeByName("org.seasar.doma.jdbc.Result", daoMethod.project, resolveScope))
                             }

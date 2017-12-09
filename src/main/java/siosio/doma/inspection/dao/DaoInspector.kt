@@ -2,6 +2,7 @@ package siosio.doma.inspection.dao
 
 import com.intellij.codeInspection.*
 import com.intellij.psi.*
+import groovy.xml.Entity.*
 import siosio.doma.*
 import siosio.doma.inspection.*
 import siosio.doma.inspection.dao.quickfix.*
@@ -98,11 +99,16 @@ class ReturnRule() : DaoRule {
     var message: String? = null
     var errorElement: (PsiDaoMethod) -> PsiElement = { psiDaoMethod -> psiDaoMethod.returnTypeElement!! }
     var rule: PsiTypeElement.(PsiDaoMethod) -> Boolean = { _ -> true }
+    var quickFix: LocalQuickFix? = null
 
     override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
         val returnTypeElement = daoMethod.returnTypeElement ?: return
         if (!returnTypeElement.rule(daoMethod)) {
-            problemsHolder.registerProblem(errorElement.invoke(daoMethod), DomaBundle.message(message!!))
+            when(quickFix) {
+                null -> problemsHolder.registerProblem(errorElement.invoke(daoMethod), DomaBundle.message(message!!))
+                else -> problemsHolder.registerProblem(errorElement.invoke(daoMethod), DomaBundle.message(message!!), quickFix)
+            }
+            
         }
     }
 }
