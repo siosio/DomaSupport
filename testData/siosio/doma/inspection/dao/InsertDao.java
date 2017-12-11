@@ -49,6 +49,22 @@ public interface InsertDao {
     
     // ImmutableEntityの戻り値NG
     @Insert
-    <error descr="戻り値はResult<ENTITY>にしてください。">int</error> ImmutableEntityの戻り値がNG(ImmutableEntity entity);
+    <error descr="戻り値はResult<entity.ImmutableEntity>にしてください。">int</error> ImmutableEntityの戻り値がNG(ImmutableEntity entity);
+    
+    // ImmutableEntityの戻り値の型パラメータがNG
+    @Insert
+    <error descr="戻り値はResult<entity.ImmutableEntity>にしてください。">Result<String></error> ImmutableEntityの戻り値の型パラメータがNG(ImmutableEntity entity);
+    
+    // sqlファイルありの場合でMutableEntityの場合の戻り値OK
+    @Insert(sqlFile = true)
+    int SQLファイルありのMutableEntity(int num, MutableEntity entity);
+    
+    // sqlファイルありの場合でMutableEntityの場合の戻り値NG
+    @Insert(sqlFile = true)
+    <error descr="戻り値は更新件数を示すintにしてください。">String</error> SQLファイルありのMutableEntity(String name, MutableEntity entity);
+
+    // sqlファイルありの場合でMutableEntityの場合の戻り値OK
+    @Insert(sqlFile = true)
+    <error descr="戻り値はResult<entity.ImmutableEntity>にしてください。">int</error> SQLファイルありのImmutableEntity(int num, ImmutableEntity entity);
     
 }

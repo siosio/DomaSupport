@@ -18,6 +18,8 @@ class DaoInspectionToolTest : DaoTestCase() {
                 "SelectDao/引数にFunction複数.sql",
                 "SelectDao/引数にFunctionあり.sql",
                 "InsertDao/SQLファイルあり.sql",
+                "InsertDao/SQLファイルありのMutableEntity.sql",
+                "InsertDao/SQLファイルありのImmutableEntity.sql",
                 "UpdateDao/SQLファイルあり.sql",
                 "DeleteDao/SQLファイルあり.sql",
                 "BatchInsertDao/SQLファイルあり.sql",
