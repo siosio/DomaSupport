@@ -33,11 +33,10 @@ val insertMethodRule =
                         else -> daoMethod.parameterList.parameters.firstOrNull()
                     } ?: return@block true
 
-                if (entityParameter.isEntity() == true && entityParameter.isImmutableEntity()) {
+                if (entityParameter.isEntity() && entityParameter.isImmutableEntity()) {
                     message = "inspection.dao.immutable-insert-return-type"
                     quickFix = ImmutableEntityReturnTypeQuickFix()
                     messageArgs = arrayOf(entityParameter.type.canonicalText)
-                    
                     // Resultの型パラメータまでチェックする
                     if (type.isAssignableFrom(PsiType.getTypeByName("org.seasar.doma.jdbc.Result", daoMethod.project, resolveScope))) {
                         daoMethod.returnTypeElement?.innermostComponentReferenceElement?.typeParameters?.let { 
@@ -46,11 +45,11 @@ val insertMethodRule =
                     } else {
                         false
                     }
-                } else if (entityParameter.isEntity() == true && entityParameter.isImmutableEntity().not()) {
+                } else if (entityParameter.isEntity() && entityParameter.isImmutableEntity().not()) {
                     message = "inspection.dao.mutable-insert-return-type"
                     type.isAssignableFrom(PsiType.INT)
                 } else {
-                    // 引数がまともじゃない場合はOK
+                    // 引数がまともじゃない場合はとりあえずOKにする
                     true
                 }
             }
