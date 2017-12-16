@@ -19,7 +19,7 @@ apply plugin: "kotlin"
 
 intellij {
   pluginName 'DomaSupport'
-  version  "IU-2017.2.5"
+  version  "IU-2017.3"
   plugins = ['DatabaseTools']
   updateSinceUntilBuild = false
   intellij.type = 'IU'

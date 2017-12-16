@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>siosio.DomaSupport</id>
   <name>Doma Support</name>
-  <version>0.13</version>
+  <version>0.14</version>
   <vendor email="siosio12@gmail.com" url="https://github.com/siosio/DomaSupport">siosio</vendor>
 
   <description><![CDATA[
@@ -15,7 +15,7 @@
   </change-notes>
 
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="139.225" />
+  <idea-version since-build="173.0" />
 
   <depends>com.intellij.modules.java</depends>
   <depends>com.intellij.modules.ultimate</depends>

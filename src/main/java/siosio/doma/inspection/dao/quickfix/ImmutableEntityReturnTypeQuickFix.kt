@@ -13,7 +13,7 @@ import siosio.doma.*
 import siosio.doma.extension.*
 
 class ImmutableEntityReturnTypeQuickFix : LocalQuickFix {
-    
+
     override fun getFamilyName(): String {
         return DomaBundle.message("quick-fix.immutable-return-type")
     }
@@ -21,19 +21,19 @@ class ImmutableEntityReturnTypeQuickFix : LocalQuickFix {
     override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
         val returnElement = descriptor.psiElement
         val method = PsiTreeUtil.getParentOfType(returnElement, PsiMethod::class.java) ?: return
-        val firstParam = method.parameterList.parameters.firstOrNull() ?: return
+        val firstParam = method.parameterList.parameters.firstOrNull { it.isEntity() } ?: return
         if (!firstParam.isImmutableEntity()) {
             return
         }
-        ApplicationManager.getApplication().runWriteAction { 
+        ApplicationManager.getApplication().runWriteAction {
             val instance = PsiElementFactory.SERVICE.getInstance(project)
             returnElement.replace(instance.createTypeElement(
-                instance.createTypeByFQClassName("org.seasar.doma.jdbc.Result<${firstParam.type.canonicalText}>")
+                    instance.createTypeByFQClassName("org.seasar.doma.jdbc.Result<${firstParam.type.canonicalText}>")
             ))
             JavaCodeStyleManager.getInstance(project)
-                .shortenClassReferences(method)
+                    .shortenClassReferences(method)
         }
-        
+
     }
 
 }

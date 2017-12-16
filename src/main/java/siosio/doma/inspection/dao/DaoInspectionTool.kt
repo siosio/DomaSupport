@@ -9,7 +9,7 @@ import siosio.doma.psi.*
 /**
  * DomaのDAOのチェックを行うクラス。
  */
-class DaoInspectionTool : BaseJavaLocalInspectionTool() {
+class DaoInspectionTool : AbstractBaseJavaLocalInspectionTool() {
 
     override fun getDisplayName(): String = DomaBundle.message("inspection.dao-inspection")
 
