@@ -21,10 +21,7 @@ class ImmutableEntityReturnTypeQuickFix : LocalQuickFix {
     override fun applyFix(project: Project, descriptor: ProblemDescriptor) {
         val returnElement = descriptor.psiElement
         val method = PsiTreeUtil.getParentOfType(returnElement, PsiMethod::class.java) ?: return
-        val firstParam = method.parameterList.parameters.firstOrNull { it.isEntity() } ?: return
-        if (!firstParam.isImmutableEntity()) {
-            return
-        }
+        val firstParam = method.parameterList.parameters.firstOrNull { it.isEntity() }?.takeIf { it.isImmutableEntity() } ?: return
         ApplicationManager.getApplication().runWriteAction {
             val instance = PsiElementFactory.SERVICE.getInstance(project)
             returnElement.replace(instance.createTypeElement(
