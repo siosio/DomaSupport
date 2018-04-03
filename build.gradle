@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    kotlinVersion = "1.2.10"
+    kotlinVersion = "1.2.31"
   }
   repositories {
     mavenCentral()
