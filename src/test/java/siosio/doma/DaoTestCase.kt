@@ -16,8 +16,9 @@ abstract class DaoTestCase : JavaCodeInsightFixtureTestCase() {
         addClassFromJavaFile("testData/siosio/doma/entity/ImmutableEntity.java")
         addClassFromJavaFile("testData/siosio/doma/entity/MutableEntity.java")
     }
-
+    
     override fun tuneFixture(moduleBuilder: JavaModuleFixtureBuilder<*>) {
+        moduleBuilder.addContentRoot(File(PathUtil.getJarPathForClass(Dao::class.java)).parentFile.absolutePath)
         moduleBuilder.addLibrary("jre", PathUtil.getJarPathForClass(java.lang.Object::class.java))
         moduleBuilder.addLibrary("doma", PathUtil.getJarPathForClass(Dao::class.java))
     }
