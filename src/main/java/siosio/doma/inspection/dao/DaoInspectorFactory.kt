@@ -46,6 +46,7 @@ val insertMethodRule =
                         false
                     }
                 } else if (entityParameter.isEntity() && entityParameter.isImmutableEntity().not()) {
+                    quickFix = null
                     message = "inspection.dao.mutable-insert-return-type"
                     type.isAssignableFrom(PsiType.INT)
                 } else {
