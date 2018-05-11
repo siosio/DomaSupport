@@ -20,17 +20,17 @@ class DaoClassNameRenameProcessor : RenameJavaClassProcessor() {
 
     override fun renameElement(element: PsiElement,
                                newName: String,
-                               usages: Array<out UsageInfo>?,
+                               usages: Array<out UsageInfo>,
                                listener: RefactoringElementListener?) {
         val psiClass = element as PsiClass
 
         getModule(element.project, element)
-            .findSqlFileFromRuntimeScope(toSqlFilePath(element.qualifiedName!!.replace(".", "/")), psiClass)
-            ?.let { sqlDir ->
-                if (sqlDir.name == psiClass.name) {
-                    sqlDir.rename(sqlDir, newName)
+                .findSqlFileFromRuntimeScope(toSqlFilePath(element.qualifiedName!!.replace(".", "/")), psiClass)
+                ?.let { sqlDir ->
+                    if (sqlDir.name == psiClass.name) {
+                        sqlDir.rename(sqlDir, newName)
+                    }
                 }
-            }
         super.renameElement(element, newName, usages, listener)
     }
 }

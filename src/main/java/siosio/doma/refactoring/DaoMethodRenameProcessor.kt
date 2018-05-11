@@ -24,7 +24,7 @@ class DaoMethodRenameProcessor : RenameJavaMethodProcessor() {
 
     override fun renameElement(element: PsiElement,
                                newName: String,
-                               p2: Array<out UsageInfo>?,
+                               p2: Array<out UsageInfo>,
                                p3: RefactoringElementListener?) {
         createPsiDaoMethod(element as PsiMethod)?.findSqlFile()?.let { sqlFile ->
             sqlFile.rename(sqlFile, "$newName.${sqlFile.extension}")
