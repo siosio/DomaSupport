@@ -17,37 +17,37 @@ val parameterTypeCheck: ParameterRule.() -> Unit = {
 }
 
 val updateMethodRule =
-    rule {
-        sql(false)
+        rule {
+            sql(false)
 
-        // 引数チェック
-        parameterRule(parameterTypeCheck)
-    }
+            // 引数チェック
+            parameterRule(parameterTypeCheck)
+        }
 
 val deleteMethodRule =
-    rule {
-        sql(false)
+        rule {
+            sql(false)
 
-        // 引数チェック
-        parameterRule(parameterTypeCheck)
-    }
+            // 引数チェック
+            parameterRule(parameterTypeCheck)
+        }
 
 val batchInsertMethodRule =
-    rule {
-        sql(false)
-    }
+        rule {
+            sql(false)
+        }
 
 val batchUpdateMethodRule =
-    rule {
-        sql(false)
-    }
+        rule {
+            sql(false)
+        }
 
 val batchDeleteMethodRule =
-    rule {
-        sql(false)
-    }
+        rule {
+            sql(false)
+        }
 
 val scriptMethodRule =
-    rule {
-        sql(true)
-    }
+        rule {
+            sql(true)
+        }
