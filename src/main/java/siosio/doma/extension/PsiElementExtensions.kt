@@ -23,7 +23,7 @@ fun PsiClass.isInTest(): Boolean = ProjectFileIndex.SERVICE.getInstance(project)
  */
 fun PsiParameter.isEntity(): Boolean {
     return PsiTypesUtil.getPsiClass(this.type)?.let {
-        AnnotationUtil.isAnnotated(it, "org.seasar.doma.Entity", false)
+        AnnotationUtil.isAnnotated(it, "org.seasar.doma.Entity", AnnotationUtil.CHECK_TYPE)
     } ?: false
 }
 

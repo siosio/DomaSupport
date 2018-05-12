@@ -32,11 +32,6 @@ val deleteMethodRule =
             parameterRule(parameterTypeCheck)
         }
 
-val batchInsertMethodRule =
-        rule {
-            sql(false)
-        }
-
 val batchUpdateMethodRule =
         rule {
             sql(false)
