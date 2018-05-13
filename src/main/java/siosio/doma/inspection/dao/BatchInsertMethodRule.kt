@@ -2,23 +2,52 @@ package siosio.doma.inspection.dao
 
 import com.intellij.openapi.project.*
 import com.intellij.psi.*
+import com.intellij.psi.impl.source.*
 import com.intellij.psi.search.*
-import com.intellij.psi.util.*
+import siosio.doma.extension.*
 
 
 val batchInsertMethodRule =
         rule {
             sql(false)
+
+            // check parameter count
+            parameterRule {
+                message = "inspection.dao.batch-insert.param-size-error"
+                rule = {
+                    when (size) {
+                        1 -> true
+                        else -> false
+                    }
+                }
+            }
+
+            // check parameter type(sqlなし)
             parameterRule {
                 message = "inspection.dao.batch-insert.param-error"
-                rule = { dao ->
-                    when (size) {
-                        1 -> {
-                            first().type.let {
-                                isIterableType(dao.project, it)
-                            }
-                        }
-                        else -> false
+                rule = { daoMethod ->
+                    if (size == 1 && daoMethod.useSqlFile().not()) {
+                        firstOrNull()?.let {
+                            val type = it.type as PsiClassReferenceType
+                            isIterableType(daoMethod.project, type)
+                                    && type.reference.typeParameters.first().isEntity()
+                        } ?: true
+                    } else {
+                        true
+                    }
+                }
+            }
+
+            // check parameter type(sqlあり)
+            parameterRule {
+                message = "inspection.dao.batch-insert.use-sql.param-error"
+                rule = { daoMethod ->
+                    if (size == 1 && daoMethod.useSqlFile()) {
+                        firstOrNull()?.type?.let {
+                            isIterableType(daoMethod.project, it)
+                        } ?: true
+                    } else {
+                        true
                     }
                 }
             }

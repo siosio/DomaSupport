@@ -22,17 +22,29 @@ fun PsiClass.isInTest(): Boolean = ProjectFileIndex.SERVICE.getInstance(project)
  * このパラメータがEntityかどうか
  */
 fun PsiParameter.isEntity(): Boolean {
-    return PsiTypesUtil.getPsiClass(this.type)?.let {
-        AnnotationUtil.isAnnotated(it, "org.seasar.doma.Entity", AnnotationUtil.CHECK_TYPE)
-    } ?: false
+    return this.type.isEntity()
 }
 
 /**
  * このパラメータがImmutableEntityかどうか
  */
 fun PsiParameter.isImmutableEntity(): Boolean {
-    return PsiTypesUtil.getPsiClass(this.type)?.let {
-        val annotation = AnnotationUtil.findAnnotation(it, "org.seasar.doma.Entity") ?: return false
-        AnnotationUtil.getBooleanAttributeValue(annotation, "immutable")
-    } ?: false
+    return this.type.isImmutableEntity()
+}
+
+/**
+ * このTypeがEntityかどうか
+ */
+fun PsiType.isEntity(): Boolean {
+    return PsiTypesUtil.getPsiClass(this)?.let {
+        AnnotationUtil.isAnnotated(it, "org.seasar.doma.Entity", AnnotationUtil.CHECK_TYPE)
+    } == true
+}
+
+/**
+ * このTypeがImmutableEntityかどうか
+ */
+fun PsiType.isImmutableEntity(): Boolean {
+    val annotation = AnnotationUtil.findAnnotation(PsiTypesUtil.getPsiClass(this), "org.seasar.doma.Entity") ?: return false
+    return AnnotationUtil.getBooleanAttributeValue(annotation, "immutable") == true
 }

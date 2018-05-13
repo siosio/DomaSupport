@@ -28,8 +28,14 @@ public interface BatchInsertDao {
     List<MutableEntity> entities);
 
     @BatchInsert
+    int[] パラメータ数不正＿ゼロ<error descr="指定できるパラメータ数は1つです。">()</error>;
 
-    int[] 引数がIterableではない<error descr="引数にはIterableのサブタイプで要素にEntityを指定してください。">(
-
-    String error)</error>;
+    @BatchInsert
+    int[] パラメータ数不正＿複数<error descr="指定できるパラメータ数は1つです。">(List<String> p1, List<String>p2)</error>; 
+    
+    @BatchInsert
+    int[] 引数がIterableではない<error descr="引数にはIterableのサブタイプで要素にEntityを指定してください。">(String error)</error>; 
+    
+    @BatchInsert
+    int[] 引数のListの型パラメータがEntityでない<error descr="引数にはIterableのサブタイプで要素にEntityを指定してください。">(List<String> error)</error>;
 }
