@@ -38,4 +38,10 @@ public interface BatchInsertDao {
     
     @BatchInsert
     int[] 引数のListの型パラメータがEntityでない<error descr="引数にはIterableのサブタイプで要素にEntityを指定してください。">(List<String> error)</error>;
+    
+    @BatchInsert(sqlFile = true)
+    int[] SQLファイルありで引数がIterableではない<error descr="引数にはIterableのサブタイプを指定してください。">(String error)</error>;
+    
+    @BatchInsert(sqlFile = true)
+    int[] SQLファイルありで引数がIterableではないその２<error descr="引数にはIterableのサブタイプを指定してください。">(Map error)</error>;
 }

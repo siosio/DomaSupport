@@ -23,6 +23,8 @@ class DaoInspectionToolTest : DaoTestCase() {
                 "UpdateDao/SQLファイルあり.sql",
                 "DeleteDao/SQLファイルあり.sql",
                 "BatchInsertDao/SQLファイルあり.sql",
+                "BatchInsertDao/SQLファイルありで引数がIterableではない.sql",
+                "BatchInsertDao/SQLファイルありで引数がIterableではないその２.sql",
                 "BatchUpdateDao/SQLファイルあり.sql",
                 "BatchDeleteDao/SQLファイルあり.sql",
                 "ScriptDao/SQLファイルあり.script"
