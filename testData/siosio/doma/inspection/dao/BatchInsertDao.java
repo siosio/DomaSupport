@@ -44,4 +44,7 @@ public interface BatchInsertDao {
     
     @BatchInsert(sqlFile = true)
     int[] SQLファイルありで引数がIterableではないその２<error descr="引数にはIterableのサブタイプを指定してください。">(Map error)</error>;
+    
+    @BatchInsert()
+    <error descr="戻り値は更新件数を示すint[]にしてください。">BatchResult<MutableEntity></error> MutableEntityを引数に取る場合の戻り値の型がint配列でない場合(List<MutableEntity> entities);
 }

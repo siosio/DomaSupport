@@ -29,8 +29,7 @@ val batchInsertMethodRule =
                     if (size == 1 && daoMethod.useSqlFile().not()) {
                         firstOrNull()?.let {
                             val type = it.type as PsiClassReferenceType
-                            isIterableType(daoMethod.project, type)
-                                    && type.reference.typeParameters.first().isEntity()
+                            isIterableType(daoMethod.project, type) && type.reference.typeParameters.first().isEntity()
                         } ?: true
                     } else {
                         true
