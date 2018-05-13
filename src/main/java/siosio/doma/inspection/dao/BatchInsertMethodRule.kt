@@ -50,6 +50,23 @@ val batchInsertMethodRule =
                     }
                 }
             }
+
+            // return type(not immutable entity)
+            returnRule {
+                message = "inspection.dao.batch-insert.mutable-insert-return-type"
+                rule = { daoMethod ->
+                    if (daoMethod.parameters.size == 1) {
+                        if (daoMethod.parameterList.parameters.first().type.isImmutableEntity().not()) {
+                            daoMethod.returnType?.isAssignableFrom(PsiType.INT.createArrayType()) == true
+                        } else {
+                            true
+                        }
+                    } else {
+                        true
+                    }
+                }
+            }
+            
         }
 
 fun isIterableType(project: Project, psiType: PsiType): Boolean {
