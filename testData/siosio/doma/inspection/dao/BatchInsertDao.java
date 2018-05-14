@@ -47,4 +47,10 @@ public interface BatchInsertDao {
     
     @BatchInsert()
     <error descr="戻り値は更新件数を示すint[]にしてください。">BatchResult<MutableEntity></error> MutableEntityを引数に取る場合の戻り値の型がint配列でない場合(List<MutableEntity> entities);
+    
+    @BatchInsert()
+    BatchResult<ImmutableEntity> ImmutableEntityが引数で戻りがBatchResultの場合(List<ImmutableEntity> entities);
+    
+    @BatchInsert()
+    <error descr="戻り値はBatchResult<entity.ImmutableEntity>にしてください。">int[]</error> ImmutableEntityが引数で戻りがBatchResultではない場合(List<ImmutableEntity> entities);
 }

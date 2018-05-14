@@ -54,10 +54,13 @@ val batchInsertMethodRule =
             // return type(not immutable entity)
             returnRule {
                 message = "inspection.dao.batch-insert.mutable-insert-return-type"
-                rule = { daoMethod ->
+                rule = block@{ daoMethod ->
                     if (daoMethod.parameters.size == 1) {
-                        if (daoMethod.parameterList.parameters.first().type.isImmutableEntity().not()) {
-                            daoMethod.returnType?.isAssignableFrom(PsiType.INT.createArrayType()) == true
+                        // 最初のパラメータの型パラメータを取得してチェックする
+                        val parameterType = daoMethod.parameterList.parameters.first().type as PsiClassReferenceType
+                        val typeParameter = parameterType.reference.typeParameters.firstOrNull() ?: return@block true
+                        if (typeParameter.isImmutableEntity().not()) {
+                            type.isAssignableFrom(PsiType.INT.createArrayType()) == true
                         } else {
                             true
                         }
@@ -67,9 +70,28 @@ val batchInsertMethodRule =
                 }
             }
             
+            // return type( immutable entity)
+            returnRule {
+                message = "inspection.dao.batch-insert.immutable-insert-return-type"
+                rule = block@{ daoMethod ->
+                    if (daoMethod.parameters.size == 1) {
+                        // 最初のパラメータの型パラメータを取得してチェックする
+                        val parameterType = daoMethod.parameterList.parameters.first().type as PsiClassReferenceType
+                        val typeParameter = parameterType.reference.typeParameters.firstOrNull() ?: return@block true
+                        if (typeParameter.isImmutableEntity()) {
+                            messageArgs = arrayOf(typeParameter.canonicalText)
+                            type.isAssignableFrom(PsiType.getTypeByName("org.seasar.doma.jdbc.BatchResult", daoMethod.project, resolveScope))
+                        } else {
+                            true
+                        }
+                    } else {
+                        true
+                    }
+                }
+            }
         }
 
-fun isIterableType(project: Project, psiType: PsiType): Boolean {
+private fun isIterableType(project: Project, psiType: PsiType): Boolean {
     val iterableType = PsiType.getTypeByName("java.lang.Iterable", project, GlobalSearchScope.allScope(project))
     return psiType.superTypes.any { iterableType.isAssignableFrom(it) }
 }
