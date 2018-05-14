@@ -8,6 +8,6 @@ import entity.*;
 interface ImmutableEntitiの戻り値QuickFix {
     
     @Insert
-    <caret>void insert(MutableEntity entity);
+    int insert(MutableEntity entity);
     
 }

@@ -43,6 +43,10 @@ public interface InsertDao {
     @Insert
     <error descr="戻り値は更新件数を示すintにしてください。">String</error> MutableEntityの戻りが不正(MutableEntity entity);
     
+    // MutableEntityの戻り値不正
+    @Insert
+    <error descr="戻り値は更新件数を示すintにしてください。">void</error> MutableEntityの戻りが不正_void(MutableEntity entity);
+    
     // ImmutableEntityの戻り値OK
     @Insert
     Result<ImmutableEntity> ImmutableEntityの戻り値がOK(ImmutableEntity entity);
