@@ -13,7 +13,7 @@ import siosio.doma.extension.*
  * @author siosio
  */
 class PsiDaoMethod(
-    psiMethod: PsiMethod,
+    val psiMethod: PsiMethod,
     val daoType: DaoType) : PsiMethod by psiMethod {
 
     val daoAnnotation: PsiAnnotation = AnnotationUtil.findAnnotation(this, daoType.annotationName)!!

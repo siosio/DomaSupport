@@ -100,15 +100,15 @@ class ReturnRule() : DaoRule {
     var message: String? = null
     var errorElement: (PsiDaoMethod) -> PsiElement = { psiDaoMethod -> psiDaoMethod.returnTypeElement!! }
     var rule: PsiTypeElement.(PsiDaoMethod) -> Boolean = { _ -> true }
-    var quickFix: LocalQuickFix? = null
+    var quickFix: (() -> LocalQuickFix)? = null
     var messageArgs: Array<String> = emptyArray()
 
     override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
         val returnTypeElement = daoMethod.returnTypeElement ?: return
-        if (!returnTypeElement.rule(daoMethod)) {
+        if (returnTypeElement.rule(daoMethod).not()) {
             when(quickFix) {
                 null -> problemsHolder.registerProblem(errorElement.invoke(daoMethod), DomaBundle.message(message!!, *messageArgs))
-                else -> problemsHolder.registerProblem(errorElement.invoke(daoMethod), DomaBundle.message(message!!, *messageArgs), quickFix)
+                else -> problemsHolder.registerProblem(errorElement.invoke(daoMethod), DomaBundle.message(message!!, *messageArgs), quickFix!!.invoke())
             }
             
         }

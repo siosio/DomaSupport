@@ -1,11 +1,12 @@
 package siosio.doma.inspection.dao
 
+import com.intellij.codeInsight.daemon.impl.quickfix.*
 import com.intellij.openapi.project.*
 import com.intellij.psi.*
 import com.intellij.psi.impl.source.*
 import com.intellij.psi.search.*
 import siosio.doma.extension.*
-
+import siosio.doma.psi.*
 
 val batchInsertMethodRule =
         rule {
@@ -55,10 +56,11 @@ val batchInsertMethodRule =
             returnRule {
                 message = "inspection.dao.batch-insert.mutable-insert-return-type"
                 rule = block@{ daoMethod ->
+                    quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT.createArrayType(), false) }
                     if (daoMethod.parameters.size == 1) {
                         // 最初のパラメータの型パラメータを取得してチェックする
-                        val parameterType = daoMethod.parameterList.parameters.first().type as PsiClassReferenceType
-                        val typeParameter = parameterType.reference.typeParameters.firstOrNull() ?: return@block true
+                        val typeParameter = getFirstParametersTypeParameter(daoMethod) ?: return@block true
+
                         if (typeParameter.isImmutableEntity().not()) {
                             type.isAssignableFrom(PsiType.INT.createArrayType()) == true
                         } else {
@@ -69,15 +71,19 @@ val batchInsertMethodRule =
                     }
                 }
             }
-            
+
             // return type( immutable entity)
             returnRule {
                 message = "inspection.dao.batch-insert.immutable-insert-return-type"
                 rule = block@{ daoMethod ->
                     if (daoMethod.parameters.size == 1) {
                         // 最初のパラメータの型パラメータを取得してチェックする
-                        val parameterType = daoMethod.parameterList.parameters.first().type as PsiClassReferenceType
-                        val typeParameter = parameterType.reference.typeParameters.firstOrNull() ?: return@block true
+                        val typeParameter = getFirstParametersTypeParameter(daoMethod) ?: return@block true
+
+                        quickFix = {
+                            MethodReturnTypeFix(daoMethod.psiMethod, PsiType.getTypeByName("org.seasar.doma.jdbc.BatchResult<${typeParameter.canonicalText}>", project, resolveScope), false)
+                        }
+
                         if (typeParameter.isImmutableEntity()) {
                             messageArgs = arrayOf(typeParameter.canonicalText)
                             type.isAssignableFrom(PsiType.getTypeByName("org.seasar.doma.jdbc.BatchResult", daoMethod.project, resolveScope))
@@ -90,6 +96,11 @@ val batchInsertMethodRule =
                 }
             }
         }
+
+private fun getFirstParametersTypeParameter(daoMethod: PsiDaoMethod): PsiType? {
+    val parameterType = daoMethod.parameterList.parameters.first().type as PsiClassReferenceType
+    return parameterType.reference.typeParameters.firstOrNull()
+}
 
 private fun isIterableType(project: Project, psiType: PsiType): Boolean {
     val iterableType = PsiType.getTypeByName("java.lang.Iterable", project, GlobalSearchScope.allScope(project))
