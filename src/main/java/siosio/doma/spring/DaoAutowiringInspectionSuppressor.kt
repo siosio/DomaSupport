@@ -27,8 +27,8 @@ class DaoAutowiringInspectionSuppressor : InspectionSuppressor {
         return when (type) {
             is PsiClassReferenceType ->
                 type.rawType().resolve()?.let {
-                    AnnotationUtil.isAnnotated(it, "org.seasar.doma.Dao", false)
-                            && AnnotationUtil.isAnnotated(it, "org.seasar.doma.boot.ConfigAutowireable", false)
+                    AnnotationUtil.isAnnotated(it, "org.seasar.doma.Dao", AnnotationUtil.CHECK_TYPE)
+                            && AnnotationUtil.isAnnotated(it, "org.seasar.doma.boot.ConfigAutowireable", AnnotationUtil.CHECK_TYPE)
                 } ?: false
             else -> false
         }

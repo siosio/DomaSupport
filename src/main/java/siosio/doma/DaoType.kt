@@ -34,7 +34,7 @@ enum class DaoType(
          */
         fun valueOf(method: PsiMethod): DaoType? {
             return values().firstOrNull {
-                AnnotationUtil.isAnnotated(method, it.annotationName, false)
+                AnnotationUtil.isAnnotated(method, it.annotationName, AnnotationUtil.CHECK_TYPE)
             }
         }
     }

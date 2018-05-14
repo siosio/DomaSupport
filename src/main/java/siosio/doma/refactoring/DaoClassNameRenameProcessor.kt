@@ -12,7 +12,7 @@ class DaoClassNameRenameProcessor : RenameJavaClassProcessor() {
 
     override fun canProcessElement(element: PsiElement): Boolean {
         return if (super.canProcessElement(element)) {
-            return AnnotationUtil.isAnnotated(element as PsiClass, "org.seasar.doma.Dao", false)
+            return AnnotationUtil.isAnnotated(element as PsiClass, "org.seasar.doma.Dao", AnnotationUtil.CHECK_TYPE)
         } else {
             false
         }
