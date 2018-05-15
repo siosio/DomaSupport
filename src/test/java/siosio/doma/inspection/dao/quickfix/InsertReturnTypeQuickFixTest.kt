@@ -26,7 +26,6 @@ class InsertReturnTypeQuickFixTest: DaoTestCase() {
     }
     
     private fun getFixReturnTypeIntention(): IntentionAction? {
-        println("myFixture.availableIntentions = ${myFixture.availableIntentions}")
         return myFixture.availableIntentions.firstOrNull {
             println("it = ${it}")
             it.familyName == "Fix return type"
