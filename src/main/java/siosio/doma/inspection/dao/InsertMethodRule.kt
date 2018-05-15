@@ -39,15 +39,28 @@ val insertMethodRule =
 
             // return type check(mutable entity)
             returnRule {
+                message = "inspection.dao.mutable-insert-return-type"
                 rule = block@{ daoMethod ->
-                    val parameteType = getEntityParameterType(daoMethod) ?: return@block true
-
-                    if (parameteType.isEntity() && parameteType.isImmutableEntity().not()) {
-                        quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT, false) }
-                        message = "inspection.dao.mutable-insert-return-type"
+                    quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT, false) }
+                    
+                    val parameterType = getEntityParameterType(daoMethod) ?: return@block true
+                    if (parameterType.isEntity() && parameterType.isImmutableEntity().not()) {
                         type.isAssignableFrom(PsiType.INT)
                     } else {
                         // 引数がまともじゃない場合はとりあえずOKにする
+                        true
+                    }
+                }
+            }
+            
+            // return type check(use sql file and without entity parameter)
+            returnRule {
+                rule = block@{ daoMethod ->
+                    message = "inspection.dao.mutable-insert-return-type"
+                    quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT, false) }
+                    if (daoMethod.useSqlFile() && getEntityParameterType(daoMethod) == null) {
+                        type.isAssignableFrom(PsiType.INT)
+                    } else {
                         true
                     }
                 }

@@ -71,4 +71,8 @@ public interface InsertDao {
     @Insert(sqlFile = true)
     <error descr="戻り値はResult<entity.ImmutableEntity>にしてください。">int</error> SQLファイルありのImmutableEntity(int num, ImmutableEntity entity);
     
+    // sqlファイルありの場合で引数にEntityがない場合
+    @Insert(sqlFile = true)
+    <error descr="戻り値は更新件数を示すintにしてください。">void</error> SQLファイルありのEntityなし(int num, String str);
+    
 }

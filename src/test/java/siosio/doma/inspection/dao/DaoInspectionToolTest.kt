@@ -20,6 +20,7 @@ class DaoInspectionToolTest : DaoTestCase() {
                 "InsertDao/SQLファイルあり.sql",
                 "InsertDao/SQLファイルありのMutableEntity.sql",
                 "InsertDao/SQLファイルありのImmutableEntity.sql",
+                "InsertDao/SQLファイルありのEntityなし.sql",
                 "UpdateDao/SQLファイルあり.sql",
                 "DeleteDao/SQLファイルあり.sql",
                 "BatchInsertDao/SQLファイルあり.sql",
