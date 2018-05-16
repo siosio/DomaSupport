@@ -24,10 +24,10 @@ val selectMethodRule =
                 errorElement = { psiDaoMethod -> psiDaoMethod.daoAnnotation.originalElement }
                 rule = { psiDaoMethod ->
                     psiDaoMethod.daoAnnotation.run {
-                        if (findAttributeValue("strategy")?.text?.contains("STREAM") != true) {
-                            true
-                        } else {
+                        if (findAttributeValue("strategy")?.text?.contains("STREAM") == true) {
                             filter { PsiTypesUtil.getPsiClass(it.type)?.qualifiedName == "java.util.function.Function" }.size == 1
+                        } else {
+                            true
                         }
                     }
                 }
