@@ -1,0 +1,94 @@
+package siosio.doma.inspection.dao
+
+import com.intellij.codeInsight.daemon.impl.quickfix.*
+import com.intellij.psi.*
+import siosio.doma.extension.*
+import siosio.doma.psi.*
+
+// return type check(immutable entity)
+private val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
+    message = "inspection.dao.immutable-update-return-type"
+    rule = block@{ daoMethod ->
+        val parameterType = getEntityParameterType(daoMethod) ?: return@block true
+
+        messageArgs = arrayOf(parameterType.canonicalText)
+        quickFix = {
+            MethodReturnTypeFix(daoMethod.psiMethod, PsiType.getTypeByName("org.seasar.doma.jdbc.Result<${parameterType.canonicalText}>", project, resolveScope), false)
+        }
+
+        // parameterがentity && immutableの場合だけチェックを行う
+        // @formatter:off
+        if (parameterType.isEntity() && parameterType.isImmutableEntity()) {
+            type.isAssignableFrom(PsiType.getTypeByName("org.seasar.doma.jdbc.Result", daoMethod.project, resolveScope))
+                    && (daoMethod.returnTypeElement?.innermostComponentReferenceElement?.typeParameters?.let {
+                        it.firstOrNull()?.isAssignableFrom(parameterType)
+                    } == true)
+        } else {
+            true
+        }
+        // @formatter:on
+    }
+}
+
+private val updateMethodWithMutableEntityReturnRule: ReturnRule.() -> Unit = {
+    message = "inspection.dao.mutable-update-return-type"
+    rule = block@{ daoMethod ->
+        quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT, false) }
+
+        val parameterType = getEntityParameterType(daoMethod) ?: return@block true
+        if (parameterType.isEntity() && parameterType.isImmutableEntity().not()) {
+            type.isAssignableFrom(PsiType.INT)
+        } else {
+            // 引数がまともじゃない場合はとりあえずOKにする
+            true
+        }
+    }
+}
+
+
+private fun getEntityParameterType(daoMethod: PsiDaoMethod): PsiType? {
+    return when {
+        daoMethod.useSqlFile() -> daoMethod.parameterList.parameters.firstOrNull { it.isEntity() }
+        else -> daoMethod.parameterList.parameters.firstOrNull()
+    }?.type
+}
+
+private val commonRule: DaoInspectionRule.() -> Unit = {
+    sql(false)
+
+    // 引数チェック
+    parameterRule(parameterTypeCheck)
+
+    // return type check(immutable entity)
+    returnRule(updateMethodWithImmutableEntityReturnRule)
+
+    // return type check(mutable entity)
+    returnRule(updateMethodWithMutableEntityReturnRule)
+}
+
+
+val updateMethodRule =
+        rule {
+            commonRule.invoke(this)
+        }
+
+
+val insertMethodRule =
+        rule {
+            commonRule.invoke(this)
+
+            // return type check(use sql file and without entity parameter)
+            returnRule {
+                rule = block@{ daoMethod ->
+                    message = "inspection.dao.mutable-update-return-type"
+                    quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT, false) }
+                    if (daoMethod.useSqlFile() && getEntityParameterType(daoMethod) == null) {
+                        type.isAssignableFrom(PsiType.INT)
+                    } else {
+                        true
+                    }
+                }
+            }
+        }
+
+

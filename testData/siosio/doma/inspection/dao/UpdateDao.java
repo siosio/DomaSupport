@@ -38,4 +38,24 @@ public interface UpdateDao {
     // SQLファイルありの場合は引数はEntity以外もOK
     @Update(sqlFile = true)
     int SQLファイルあり(String name, Long version);
+
+    // MutableEntityの戻り値不正
+    @Update
+    <error descr="戻り値は更新件数を示すintにしてください。">String</error> MutableEntityの戻りが不正(MutableEntity entity);
+
+    // MutableEntityの戻り値不正
+    @Update
+    <error descr="戻り値は更新件数を示すintにしてください。">void</error> MutableEntityの戻りが不正_void(MutableEntity entity);
+
+    // ImmutableEntityの戻り値OK
+    @Update
+    Result<ImmutableEntity> ImmutableEntityの戻り値がOK(ImmutableEntity entity);
+
+    // ImmutableEntityの戻り値NG
+    @Update
+    <error descr="戻り値はResult<entity.ImmutableEntity>にしてください。">int</error> ImmutableEntityの戻り値がNG(ImmutableEntity entity);
+
+    // ImmutableEntityの戻り値の型パラメータがNG
+    @Update
+    <error descr="戻り値はResult<entity.ImmutableEntity>にしてください。">Result<String></error> ImmutableEntityの戻り値の型パラメータがNG(ImmutableEntity entity);
 }
