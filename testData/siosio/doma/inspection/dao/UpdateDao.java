@@ -58,4 +58,20 @@ public interface UpdateDao {
     // ImmutableEntityの戻り値の型パラメータがNG
     @Update
     <error descr="戻り値はResult<entity.ImmutableEntity>にしてください。">Result<String></error> ImmutableEntityの戻り値の型パラメータがNG(ImmutableEntity entity);
+    
+    // sqlファイルありの場合でMutableEntityの場合の戻り値OK
+    @Update(sqlFile = true)
+    int SQLファイルありのMutableEntity(int num, MutableEntity entity);
+
+    // sqlファイルありの場合でMutableEntityの場合の戻り値NG
+    @Update(sqlFile = true)
+    <error descr="戻り値は更新件数を示すintにしてください。">String</error> SQLファイルありのMutableEntity(String name, MutableEntity entity);
+
+    // sqlファイルありの場合でMutableEntityの場合の戻り値OK
+    @Update(sqlFile = true)
+    <error descr="戻り値はResult<entity.ImmutableEntity>にしてください。">int</error> SQLファイルありのImmutableEntity(int num, ImmutableEntity entity);
+
+    // sqlファイルありの場合で引数にEntityがない場合
+    @Update(sqlFile = true)
+    <error descr="戻り値は更新件数を示すintにしてください。">void</error> SQLファイルありのEntityなし(int num, String str);
 }
