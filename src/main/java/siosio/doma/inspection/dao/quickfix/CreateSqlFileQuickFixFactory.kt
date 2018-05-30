@@ -6,15 +6,16 @@ import siosio.doma.psi.*
 object CreateSqlFileQuickFixFactory {
 
     fun create(daoMethod: PsiDaoMethod): CreateSqlFileQuickFix {
+        val module = daoMethod.getModule()!!
         return System.getProperty("DirectoryChooser.className")?.let {
             val directoryChooser = Class.forName(it).newInstance() as DirectoryChooser
             CreateSqlFileQuickFix(
-                    daoMethod.getModule(),
+                    module,
                     daoMethod.getSqlFilePath(),
                     daoMethod.containingClass!!.isInTest(),
                     directoryChooser)
         } ?: CreateSqlFileQuickFix(
-                daoMethod.getModule(),
+                module,
                 daoMethod.getSqlFilePath(),
                 daoMethod.containingClass!!.isInTest())
     }

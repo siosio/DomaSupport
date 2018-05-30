@@ -58,7 +58,7 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
  */
 class Sql(private val required: Boolean) : DaoRule {
     override fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod) {
-        if (!required && !daoMethod.useSqlFile()) {
+        if (!required && !daoMethod.useSqlFile() || daoMethod.getModule() == null) {
             return
         }
         if (!daoMethod.containsSqlFile()) {

@@ -21,8 +21,8 @@ class PsiDaoMethod(
     /**
      * このDaoメソッドが存在しているモジュール
      */
-    fun getModule(): Module {
-        return project.findModule(this.containingFile.virtualFile)!!
+    fun getModule(): Module? {
+        return project.findModule(this.containingFile.virtualFile)
     }
 
     /**
@@ -47,7 +47,7 @@ class PsiDaoMethod(
      * SQLファイルを検索する。
      */
     fun findSqlFile(): VirtualFile? {
-        return getModule().findSqlFileFromRuntimeScope(getSqlFilePath(), this.containingClass!!)
+        return getModule()?.findSqlFileFromRuntimeScope(getSqlFilePath(), this.containingClass!!)
     }
 
     /**
