@@ -8,7 +8,7 @@ import com.intellij.psi.impl.source.*
 class DaoAutowiringInspectionSuppressor : InspectionSuppressor {
 
     override fun isSuppressedFor(element: PsiElement, toolId: String): Boolean {
-        if (toolId !== "SpringJavaAutowiringInspection") {
+        if (toolId != "SpringJavaAutowiringInspection" && toolId != "SpringJavaInjectionPointsAutowiringInspection") {
             return false
         }
         val context = element.context
