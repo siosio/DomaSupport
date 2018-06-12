@@ -9,7 +9,7 @@ fun toSqlFilePath(path: String) = "META-INF/$path"
 
 fun toDaoClass(sqlFile: PsiFile): PsiClass? {
     val parent = sqlFile.parent
-    if (parent?.let { !it.isPhysical } ?: false) {
+    if (parent?.let { !it.isPhysical } == true) {
         return null
     }
 
@@ -17,7 +17,7 @@ fun toDaoClass(sqlFile: PsiFile): PsiClass? {
     val project = sqlFile.project
     val module = getModule(project, sqlFile)
     return JavaPsiFacade.getInstance(project)
-        .findClasses(className, module.moduleScope).first()
+        .findClasses(className, module.moduleScope).firstOrNull()
 }
 
 fun toMethodName(sqlFile: PsiFile): String {
@@ -43,7 +43,7 @@ private fun toDaoClassName(dir: PsiDirectory?, className: String): String {
         if (className.isEmpty()) {
             className
         } else {
-            "." + className
+            ".$className"
         }
     )
 }

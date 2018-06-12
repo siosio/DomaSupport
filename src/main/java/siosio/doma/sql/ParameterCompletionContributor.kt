@@ -35,12 +35,22 @@ open class ParameterCompletionContributor : CompletionContributor() {
                 "isNotBlank"
         )
 
-        private val buildInFunctionLookupList = run {
-            buildInFunctionList.map {
-                LookupElementBuilder.create(it)
-                        .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
-            }
+        private val buildInFunctionLookupList = buildInFunctionList.map {
+            LookupElementBuilder.create(it)
+                    .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
         }
+
+        private val percentCommentList = listOf(
+                "expand",
+                "if",
+                "end"
+        )
+
+        private val percentCommentLookupList = percentCommentList.map {
+            LookupElementBuilder.create(it)
+                    .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
+        }
+
 
         override fun addCompletions(parameters: CompletionParameters,
                                     p1: ProcessingContext?,
@@ -56,6 +66,8 @@ open class ParameterCompletionContributor : CompletionContributor() {
 
             if (isBuiltInFunction(text)) {
                 result.addAllElements(buildInFunctionLookupList)
+            } else if (isPercentComment(text)) {
+                result.addAllElements(percentCommentLookupList)
             } else {
                 val paramList = toDaoClass(originalFile)
                         ?.findMethodsByName(toMethodName(originalFile), false)
@@ -86,6 +98,7 @@ open class ParameterCompletionContributor : CompletionContributor() {
         }
 
         private fun isBuiltInFunction(text: String): Boolean = text.startsWith("@") && !text.contains('(')
+        private fun isPercentComment(text: String): Boolean = text.startsWith("%")
     }
 
 }
