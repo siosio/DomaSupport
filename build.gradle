@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-  id "org.jetbrains.intellij" version "0.3.5"
+  id "org.jetbrains.intellij" version "0.3.11"
 }
 
 apply plugin: 'java'
@@ -19,7 +19,7 @@ apply plugin: "kotlin"
 
 intellij {
   pluginName 'DomaSupport'
-  version "IU-2018.1.5"
+  version "IU-2018.2.4"
   plugins = ['DatabaseTools']
   updateSinceUntilBuild = false
   intellij.type = 'IU'
@@ -40,9 +40,9 @@ dependencies {
   compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
   testCompile 'junit:junit:4.12'
 
-  testCompile 'org.seasar.doma:doma:2.19.2'
+  testCompile 'org.seasar.doma:doma:2.19.3'
 }
 
-task wrapper(type: Wrapper) {
-  gradleVersion = '4.9'
+wrapper {
+  gradleVersion = '4.10.2'
 }
