@@ -1,0 +1,28 @@
+version: 2
+jobs:
+  test:
+    working_directory: ~/workspace
+    docker:
+      - image: circleci/openjdk:8-jdk-browsers
+    steps:
+      - checkout
+      - restore_cache: 
+          key: gradle-{{ checksum "build.gradle" }}
+      - run:
+          name: test
+          command: |
+            chmod +x ./gradlew
+            export _JAVA_OPTIONS="-Duser.language=ja"
+            ./gradlew test
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: gradle-{{ checksum "build.gradle" }}
+      - store_test_results: 
+          path: build/test-results/test
+          
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
