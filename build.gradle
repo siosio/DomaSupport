@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    kotlinVersion = "1.2.51"
+    kotlinVersion = "1.2.71"
   }
   repositories {
     mavenCentral()
@@ -41,6 +41,11 @@ dependencies {
   testCompile 'junit:junit:4.12'
 
   testCompile 'org.seasar.doma:doma:2.19.3'
+  testAnnotationProcessor 'org.seasar.doma:doma:2.19.3'
+}
+
+test {
+  systemProperty 'user.language', 'ja'
 }
 
 wrapper {

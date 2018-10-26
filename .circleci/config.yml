@@ -12,7 +12,6 @@ jobs:
           name: test
           command: |
             chmod +x ./gradlew
-            export _JAVA_OPTIONS="-Duser.language=ja"
             ./gradlew test
       - save_cache:
           paths:
