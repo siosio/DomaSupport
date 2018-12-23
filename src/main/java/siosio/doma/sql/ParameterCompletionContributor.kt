@@ -18,7 +18,7 @@ open class ParameterCompletionContributor : CompletionContributor() {
 
     private class SqlParameterCompletionProvider : CompletionProvider<CompletionParameters>() {
 
-        private val buildInFunctionList = listOf(
+        private val buildInFunctionLookupList = listOf(
                 "escape",
                 "prefix",
                 "infix",
@@ -33,20 +33,16 @@ open class ParameterCompletionContributor : CompletionContributor() {
                 "isNotEmpty",
                 "isBlank",
                 "isNotBlank"
-        )
-
-        private val buildInFunctionLookupList = buildInFunctionList.map {
+        ).map {
             LookupElementBuilder.create(it)
                     .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
         }
 
-        private val percentCommentList = listOf(
+        private val percentCommentLookupList = listOf(
                 "expand",
                 "if",
                 "end"
-        )
-
-        private val percentCommentLookupList = percentCommentList.map {
+        ).map {
             LookupElementBuilder.create(it)
                     .withAutoCompletionPolicy(AutoCompletionPolicy.ALWAYS_AUTOCOMPLETE)
         }
