@@ -1,6 +1,10 @@
 # IntelliJ IDEAのDomaサポートプラグイン
 IntelliJ上で、[Doma](http://doma.seasar.org/)を使った開発を少しだけ便利にすることができるプラグイン
 
+| master   | develop |
+| -------- | -------- |
+| [![CircleCI](https://circleci.com/gh/siosio/DomaSupport/tree/master.svg?style=svg)](https://circleci.com/gh/siosio/DomaSupport/tree/master) | [![CircleCI](https://circleci.com/gh/siosio/DomaSupport/tree/develop.svg?style=svg)](https://circleci.com/gh/siosio/DomaSupport/tree/develop)|
+
 
 ## 機能
 このプラグインで実装できている機能について。
