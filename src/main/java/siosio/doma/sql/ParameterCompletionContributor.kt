@@ -49,7 +49,7 @@ open class ParameterCompletionContributor : CompletionContributor() {
 
 
         override fun addCompletions(parameters: CompletionParameters,
-                                    p1: ProcessingContext?,
+                                    p1: ProcessingContext,
                                     result: CompletionResultSet) {
             val originalFile = parameters.originalFile
             val text = parameters.originalPosition?.text?.let {

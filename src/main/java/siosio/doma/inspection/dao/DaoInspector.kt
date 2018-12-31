@@ -1,9 +1,7 @@
 package siosio.doma.inspection.dao
 
 import com.intellij.codeInspection.*
-import com.intellij.database.scripting.*
 import com.intellij.psi.*
-import groovy.xml.Entity.*
 import siosio.doma.*
 import siosio.doma.inspection.*
 import siosio.doma.inspection.dao.quickfix.*
