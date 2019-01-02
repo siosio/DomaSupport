@@ -26,4 +26,11 @@
       <option name="SQL" value="true" />
     </context>
   </template>
+  <template name="doma_expand" value="select /*%expand*/* from $name$" toReformat="false"
+      toShortenFQNames="true">
+    <variable name="name" expression="" defaultValue="" alwaysStopAt="true" />
+    <context>
+      <option name="SQL" value="true" />
+    </context>
+  </template>
 </templateSet>
