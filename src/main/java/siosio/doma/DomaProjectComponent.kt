@@ -12,13 +12,13 @@ import com.intellij.notification.NotificationGroup
 import com.intellij.openapi.options.*
 
 
-class DomaProjectComponent(val project: Project) : AbstractProjectComponent(project) {
+class DomaProjectComponent(val project: Project) : ProjectComponent {
 
     companion object {
         val GROUP_DISPLAY_ID_INFO = NotificationGroup("doma support", NotificationDisplayType.BALLOON, true)
     }
 
-    val annotationProcessorsConfigName = AnnotationProcessorsConfigurable(project).getDisplayName()
+    private val annotationProcessorsConfigName = AnnotationProcessorsConfigurable(project).getDisplayName()
 
     override fun projectOpened() {
         if (JavaPsiFacade.getInstance(project).findPackage("org.seasar.doma") == null) {
@@ -31,14 +31,13 @@ class DomaProjectComponent(val project: Project) : AbstractProjectComponent(proj
                     | annotation processorsを有効にしてください。<br/>
                     | <a href='#'>設定画面へ</a>
                 """.trimMargin(),
-                NotificationType.ERROR,
-                { _, _ ->
-                    if (!project.isDisposed) {
-                        ShowSettingsUtil.getInstance().showSettingsDialog(project, annotationProcessorsConfigName)
-                    }
-                })
+                NotificationType.ERROR
+            ) { _, _ ->
+                if (!project.isDisposed) {
+                    ShowSettingsUtil.getInstance().showSettingsDialog(project, annotationProcessorsConfigName)
+                }
+            }
             Notifications.Bus.notify(notification, project)
-
         }
     }
 
@@ -47,8 +46,8 @@ class DomaProjectComponent(val project: Project) : AbstractProjectComponent(proj
         val moduleManager = ModuleManager.getInstance(project)
         return moduleManager.modules
             .asSequence()
-            .firstOrNull {
+            .any() {
                 config.getAnnotationProcessingConfiguration(it).isEnabled
-            } != null
+            }
     }
 }
