@@ -4,6 +4,8 @@ import com.intellij.codeInsight.*
 import com.intellij.openapi.roots.*
 import com.intellij.psi.*
 import com.intellij.psi.util.*
+import org.jetbrains.kotlin.psi.KtAnnotation
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 
 /**
  * SQLファイルを必要とするかどうか

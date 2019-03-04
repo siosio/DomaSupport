@@ -2,6 +2,10 @@ package siosio.doma
 
 import com.intellij.codeInsight.*
 import com.intellij.psi.*
+import org.jetbrains.kotlin.idea.util.findAnnotation
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtAnnotation
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import siosio.doma.inspection.dao.*
 
 /**
@@ -35,6 +39,12 @@ enum class DaoType(
         fun valueOf(method: PsiMethod): DaoType? {
             return values().firstOrNull {
                 AnnotationUtil.isAnnotated(method, it.annotationName, AnnotationUtil.CHECK_TYPE)
+            }
+        }
+
+        fun valueOf(function: KtNamedFunction): DaoType? {
+            return values().firstOrNull {
+                function.findAnnotation(FqName(it.annotationName)) != null
             }
         }
     }

@@ -3,6 +3,9 @@ package siosio.doma.inspection.dao
 import com.intellij.codeHighlighting.*
 import com.intellij.codeInspection.*
 import com.intellij.psi.*
+import org.jetbrains.kotlin.idea.inspections.AbstractKotlinInspection
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtVisitorVoid
 import siosio.doma.*
 import siosio.doma.psi.*
 
@@ -38,3 +41,31 @@ class DaoInspectionTool : AbstractBaseJavaLocalInspectionTool() {
     }
 }
 
+class KotlinDaoInspectionTool: AbstractKotlinInspection() {
+
+    override fun getDisplayName(): String = DomaBundle.message("inspection.kotlin-dao-inspection")
+    
+    override fun isEnabledByDefault(): Boolean = true
+
+    override fun getDefaultLevel(): HighlightDisplayLevel = HighlightDisplayLevel.ERROR
+
+    override fun getGroupDisplayName(): String = "Doma"
+
+    override fun getShortName(): String = "DaoInspection"
+
+    override fun buildVisitor(holder: ProblemsHolder,
+                              isOnTheFly: Boolean,
+                              session: LocalInspectionToolSession): PsiElementVisitor {
+        return object: KtVisitorVoid() {
+            override fun visitNamedFunction(function: KtNamedFunction) {
+                super.visitNamedFunction(function)
+                val daoType = DaoType.valueOf(function)
+
+                daoType?.let {
+                    val psiDaoMethod = PsiDaoFunction(function, it)
+                    val rule = psiDaoMethod.daoType.rule
+                }
+            }
+        }
+    }
+}
