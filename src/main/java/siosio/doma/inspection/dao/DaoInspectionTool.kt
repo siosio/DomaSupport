@@ -62,8 +62,11 @@ class KotlinDaoInspectionTool: AbstractKotlinInspection() {
                 val daoType = DaoType.valueOf(function)
 
                 daoType?.let {
-                    val psiDaoMethod = PsiDaoFunction(function, it)
-                    val rule = psiDaoMethod.daoType.rule
+                    val psiDaoFunction = PsiDaoFunction(function, it)
+
+                    if (it == DaoType.SELECT) {
+                        kotlinSelectMethodRule.inspect(holder, psiDaoFunction)
+                    }
                 }
             }
         }

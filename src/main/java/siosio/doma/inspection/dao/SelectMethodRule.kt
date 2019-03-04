@@ -1,6 +1,8 @@
 package siosio.doma.inspection.dao
 
+import b.a.it
 import com.intellij.codeInsight.intention.*
+import com.intellij.psi.impl.PsiImplUtil.*
 import com.intellij.psi.util.*
 import siosio.doma.*
 
@@ -32,4 +34,9 @@ val selectMethodRule =
                     }
                 }
             }
+        }
+
+val kotlinSelectMethodRule = 
+        kotlinRule { 
+            sql(true)
         }

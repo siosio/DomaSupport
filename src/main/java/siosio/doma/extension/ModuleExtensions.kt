@@ -6,6 +6,7 @@ import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiClass
 import com.intellij.psi.search.GlobalSearchScope
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.resolve.lazy.data.KtClassInfoUtil
 
 /**
  * モジュールの実行スコープ配下からSQLファイルを検索する。
