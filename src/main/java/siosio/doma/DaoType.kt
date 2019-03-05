@@ -16,16 +16,17 @@ import siosio.doma.inspection.dao.*
 enum class DaoType(
     val annotationName: String,
     val rule: DaoInspectionRule,
+    val kotlinRule: KotlinDaoInspectionRule = kotlinRule{},
     val extension: String = "sql") {
 
-    SELECT("org.seasar.doma.Select", selectMethodRule),
+    SELECT("org.seasar.doma.Select", selectMethodRule, kotlinSelectMethodRule),
     UPDATE("org.seasar.doma.Update", updateMethodRule),
     INSERT("org.seasar.doma.Insert", insertMethodRule),
     DELETE("org.seasar.doma.Delete", deleteMethodRule),
     BATCH_INSERT("org.seasar.doma.BatchInsert", batchInsertMethodRule),
     BATCH_UPDATE("org.seasar.doma.BatchUpdate", batchUpdateMethodRule),
     BATCH_DELETE("org.seasar.doma.BatchDelete", batchDeleteMethodRule),
-    SCRIPT("org.seasar.doma.Script", scriptMethodRule, "script");
+    SCRIPT("org.seasar.doma.Script", scriptMethodRule, extension = "script");
 
     companion object {
         /**

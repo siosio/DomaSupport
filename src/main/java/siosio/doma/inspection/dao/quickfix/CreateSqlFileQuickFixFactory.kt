@@ -29,11 +29,11 @@ object CreateSqlFileQuickFixFactory {
             CreateSqlFileQuickFix(
                     module,
                     daoFunction.getSqlFilePath(),
-                    false,
+                    daoFunction.containingClass()!!.isInTest(),
                     directoryChooser)
         } ?: CreateSqlFileQuickFix(
                 module,
                 daoFunction.getSqlFilePath(),
-                false)
+                daoFunction.containingClass()!!.isInTest())
     }
 }

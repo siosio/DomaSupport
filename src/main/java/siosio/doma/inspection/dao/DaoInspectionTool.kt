@@ -6,6 +6,7 @@ import com.intellij.psi.*
 import org.jetbrains.kotlin.idea.inspections.AbstractKotlinInspection
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtVisitorVoid
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import siosio.doma.*
 import siosio.doma.psi.*
 
@@ -59,14 +60,13 @@ class KotlinDaoInspectionTool: AbstractKotlinInspection() {
         return object: KtVisitorVoid() {
             override fun visitNamedFunction(function: KtNamedFunction) {
                 super.visitNamedFunction(function)
-                val daoType = DaoType.valueOf(function)
 
-                daoType?.let {
-                    val psiDaoFunction = PsiDaoFunction(function, it)
+                if (function.containingClass() == null) {
+                    return
+                }
 
-                    if (it == DaoType.SELECT) {
-                        kotlinSelectMethodRule.inspect(holder, psiDaoFunction)
-                    }
+                DaoType.valueOf(function)?.let {
+                    it.kotlinRule.inspect(holder, PsiDaoFunction(function, it))
                 }
             }
         }

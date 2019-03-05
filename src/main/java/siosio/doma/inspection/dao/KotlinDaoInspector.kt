@@ -1,6 +1,8 @@
 package siosio.doma.inspection.dao
 
 import com.intellij.codeInspection.*
+import org.jetbrains.kotlin.idea.util.findAnnotation
+import org.jetbrains.kotlin.name.FqName
 import siosio.doma.*
 import siosio.doma.inspection.*
 import siosio.doma.inspection.dao.quickfix.*
@@ -40,7 +42,9 @@ class KotlinDaoInspectionRule : Rule<PsiDaoFunction> {
  */
 class KotlinSql(private val required: Boolean) : KotlinDaoRule {
     override fun inspect(problemsHolder: ProblemsHolder, daoFunction: PsiDaoFunction) {
-        if (!required && !daoFunction.useSqlFile() || daoFunction.getModule() == null) {
+        if ((!required && !daoFunction.useSqlFile())
+            || daoFunction.getModule() == null 
+            || daoFunction.psiFunction.findAnnotation(FqName("org.seasar.doma.experimental.Sql")) != null) {
             return
         }
         if (!daoFunction.containsSqlFile()) {
