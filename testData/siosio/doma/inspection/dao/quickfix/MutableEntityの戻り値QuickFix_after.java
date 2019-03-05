@@ -1,7 +1,6 @@
 package dao.quickfix;
 
 import org.seasar.doma.*;
-import org.seasar.doma.jdbc.*;
 import entity.*;
 
 @Dao
