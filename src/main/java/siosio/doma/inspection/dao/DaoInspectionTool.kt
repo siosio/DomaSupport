@@ -52,7 +52,7 @@ class KotlinDaoInspectionTool: AbstractKotlinInspection() {
 
     override fun getGroupDisplayName(): String = "Doma"
 
-    override fun getShortName(): String = "DaoInspection"
+    override fun getShortName(): String = "KotlinDaoInspection"
 
     override fun buildVisitor(holder: ProblemsHolder,
                               isOnTheFly: Boolean,
