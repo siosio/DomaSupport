@@ -20,9 +20,9 @@ enum class DaoType(
     val extension: String = "sql") {
 
     SELECT("org.seasar.doma.Select", selectMethodRule, kotlinSelectMethodRule),
-    UPDATE("org.seasar.doma.Update", updateMethodRule),
-    INSERT("org.seasar.doma.Insert", insertMethodRule),
-    DELETE("org.seasar.doma.Delete", deleteMethodRule),
+    UPDATE("org.seasar.doma.Update", updateMethodRule, kotlinUpdateMethodRule),
+    INSERT("org.seasar.doma.Insert", insertMethodRule, kotlinInsertMethodRule),
+    DELETE("org.seasar.doma.Delete", deleteMethodRule, kotlinDeleteMethodRule),
     BATCH_INSERT("org.seasar.doma.BatchInsert", batchInsertMethodRule),
     BATCH_UPDATE("org.seasar.doma.BatchUpdate", batchUpdateMethodRule),
     BATCH_DELETE("org.seasar.doma.BatchDelete", batchDeleteMethodRule),

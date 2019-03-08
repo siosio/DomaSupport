@@ -7,7 +7,6 @@ import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.idea.util.findAnnotation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.psiUtil.getValueParameters
 import siosio.doma.DomaBundle
 import siosio.doma.inspection.Rule
 import siosio.doma.inspection.dao.quickfix.CreateSqlFileQuickFixFactory
@@ -30,9 +29,9 @@ class KotlinDaoInspectionRule : Rule<PsiDaoFunction> {
 
     val rules: MutableList<KotlinDaoRule> = ArrayList()
 
-    override fun inspect(problemsHolder: ProblemsHolder, element: PsiDaoFunction) {
+    override fun inspect(problemsHolder: ProblemsHolder, psiFunction: PsiDaoFunction) {
         rules.forEach {
-            it.inspect(problemsHolder, element)
+            it.inspect(problemsHolder, psiFunction)
         }
     }
 

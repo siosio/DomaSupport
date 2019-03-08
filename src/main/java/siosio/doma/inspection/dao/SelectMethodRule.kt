@@ -1,13 +1,10 @@
 package siosio.doma.inspection.dao
 
-import b.a.it
 import com.intellij.codeInsight.intention.QuickFixFactory
 import com.intellij.psi.util.PsiTypesUtil
-import com.intellij.sql.type
 import org.jetbrains.kotlin.idea.intentions.SpecifyTypeExplicitlyIntention
 import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
 import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtUserType
 import siosio.doma.DomaBundle
 
 val selectMethodRule =

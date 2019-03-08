@@ -13,14 +13,29 @@ class KotlinDaoInspectionToolTest : DaoTestCase() {
                 "SelectDaoKotlin/SQLファイルあり.sql",
                 "SelectDaoKotlin/selectOptionsなし.sql",
                 "SelectDaoKotlin/selectOptions1つ.sql",
-                "SelectDaoKotlin/selectOptions2つ.sql"
+                "SelectDaoKotlin/selectOptions2つ.sql",
+                
+                "InsertDaoKotlin/SQLファイルあり.sql",
+        
+                "UpdateDaoKotlin/SQLファイルあり.sql",
+
+                "DeleteDaoKotlin/SQLファイルあり.sql"
         )
     }
 
-    /**
-     * selectメソッドのテストを行う。
-     */
     fun test_selectメソッド() {
         myFixture.testHighlighting("SelectDaoKotlin.kt")
+    }
+    
+    fun test_insertメソッド() {
+        myFixture.testHighlighting("InsertDaoKotlin.kt")
+    }
+    
+    fun test_updateメソッド() {
+        myFixture.testHighlighting("UpdateDaoKotlin.kt")
+    }
+    
+    fun test_deleteメソッド() {
+        myFixture.testHighlighting("DeleteDaoKotlin.kt")
     }
 }
