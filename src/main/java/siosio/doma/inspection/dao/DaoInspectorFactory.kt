@@ -1,9 +1,6 @@
 package siosio.doma.inspection.dao
 
-import com.intellij.codeInsight.daemon.impl.quickfix.*
-import com.intellij.psi.*
-import siosio.doma.extension.*
-import siosio.doma.psi.*
+import siosio.doma.extension.isEntity
 
 val parameterTypeCheck: ParameterRule.() -> Unit = {
     message = "inspection.dao.entity-param-not-found"

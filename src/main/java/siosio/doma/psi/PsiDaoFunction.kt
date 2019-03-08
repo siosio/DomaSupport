@@ -1,25 +1,24 @@
 package siosio.doma.psi
 
-import com.intellij.codeInsight.AnnotationUtil
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiAnnotation
-import com.intellij.psi.PsiMethod
+import org.jetbrains.kotlin.asJava.toLightAnnotation
+import org.jetbrains.kotlin.idea.util.findAnnotation
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtFunction
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import siosio.doma.DaoType
 import siosio.doma.extension.findModule
 import siosio.doma.extension.findSqlFileFromRuntimeScope
 import siosio.doma.extension.useSqlFile
 
-/**
- * [PsiMethod]のDaoメソッド表現。
- *
- * @author siosio
- */
-class PsiDaoMethod(
-    val psiMethod: PsiMethod,
-    val daoType: DaoType) : PsiMethod by psiMethod {
+class PsiDaoFunction(
+        val psiFunction: KtNamedFunction,
+        val daoType: DaoType) : KtFunction by psiFunction {
 
-    val daoAnnotation: PsiAnnotation = AnnotationUtil.findAnnotation(this, daoType.annotationName)!!
+    val daoAnnotation: PsiAnnotation = psiFunction.findAnnotation(FqName(daoType.annotationName))!!.toLightAnnotation()!!
 
     /**
      * このDaoメソッドが存在しているモジュール
@@ -50,14 +49,13 @@ class PsiDaoMethod(
      * SQLファイルを検索する。
      */
     fun findSqlFile(): VirtualFile? {
-        return getModule()?.findSqlFileFromRuntimeScope(getSqlFilePath(), this.containingClass!!)
+        return getModule()?.findSqlFileFromRuntimeScope(getSqlFilePath(), this.containingClass()!!)
     }
 
     /**
      * このメソッドを持つクラスをパス形式の文字列で取得する
      */
     private fun fqcnToFilePath(): String {
-        return containingClass!!.qualifiedName!!.replace('.', '/')
+        return containingClass()!!.fqName!!.asString().replace('.', '/')
     }
 }
-

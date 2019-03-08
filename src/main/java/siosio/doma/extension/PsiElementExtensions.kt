@@ -1,9 +1,14 @@
 package siosio.doma.extension
 
-import com.intellij.codeInsight.*
-import com.intellij.openapi.roots.*
-import com.intellij.psi.*
-import com.intellij.psi.util.*
+import com.intellij.codeInsight.AnnotationUtil
+import com.intellij.openapi.roots.ProjectFileIndex
+import com.intellij.psi.PsiAnnotation
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiParameter
+import com.intellij.psi.PsiType
+import com.intellij.psi.util.PsiTypesUtil
+import org.jetbrains.kotlin.psi.KtClass
 
 /**
  * SQLファイルを必要とするかどうか
@@ -12,11 +17,7 @@ import com.intellij.psi.util.*
  */
 fun PsiAnnotation.useSqlFile(): Boolean = AnnotationUtil.getBooleanAttributeValue(this, "sqlFile") ?: false
 
-/**
- * このクラスがテストスコープにあるかどうか
- */
-fun PsiClass.isInTest(): Boolean = ProjectFileIndex.SERVICE.getInstance(project).isInTestSourceContent(this.containingFile.virtualFile)
-
+fun PsiElement.isInTest(): Boolean = ProjectFileIndex.SERVICE.getInstance(project).isInTestSourceContent(this.containingFile.virtualFile)
 
 /**
  * このパラメータがEntityかどうか
