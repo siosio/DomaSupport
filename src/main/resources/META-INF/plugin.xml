@@ -1,7 +1,6 @@
 <idea-plugin>
   <id>siosio.DomaSupport</id>
   <name>Doma Support</name>
-  <version>1.0.2-SNAPSHOT</version>
   <vendor email="siosio12@gmail.com" url="https://github.com/siosio/DomaSupport">siosio</vendor>
 
   <description><![CDATA[
@@ -10,21 +9,19 @@
   <a href='https://github.com/siosio/DomaSupport/blob/master/README.md'>features details</a>
   ]]></description>
 
-  <change-notes><![CDATA[
-    ]]>
-  </change-notes>
-
   <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-  <idea-version since-build="173.0" />
+<!--  <idea-version since-build="173.0" />-->
 
   <depends>com.intellij.modules.java</depends>
   <depends>com.intellij.modules.ultimate</depends>
   <depends>com.intellij.database</depends>
+  <depends>org.jetbrains.kotlin</depends>
 
   <extensions defaultExtensionNs="com.intellij">
 
     <inspectionToolProvider implementation="siosio.doma.inspection.dao.DaoInspectionToolProvider" />
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
+    <codeInsight.lineMarkerProvider language="kotlin" implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
 
     <defaultLiveTemplatesProvider implementation="siosio.doma.livetemplate.DaoLiveTemplatesProvider" />
 

@@ -14,15 +14,22 @@ plugins {
   id "org.jetbrains.intellij" version "0.4.4"
 }
 
+version '1.0.2-SNAPSHOT'
+
 apply plugin: 'java'
 apply plugin: "kotlin"
 
 intellij {
   pluginName 'DomaSupport'
   version "IU-2018.3.5"
-  plugins = ['DatabaseTools']
+  plugins = ['DatabaseTools', 'Kotlin']
   updateSinceUntilBuild = false
   intellij.type = 'IU'
+}
+
+patchPluginXml {
+  changeNotes ""
+  sinceBuild "182"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
