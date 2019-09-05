@@ -16,13 +16,6 @@ val parameterTypeCheck: ParameterRule.() -> Unit = {
     }
 }
 
-val deleteMethodRule =
-        rule {
-            sql(false)
-
-            // 引数チェック
-            parameterRule(parameterTypeCheck)
-        }
 
 val batchUpdateMethodRule =
         rule {

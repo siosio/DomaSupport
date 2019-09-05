@@ -30,7 +30,7 @@ abstract class DaoTestCase : JavaCodeInsightFixtureTestCase() {
     }
 
     fun findSqlFile(sqlFileName: String): VirtualFile? {
-        val scope = GlobalSearchScope.moduleRuntimeScope(myModule, false)
+        val scope = GlobalSearchScope.moduleRuntimeScope(module, false)
         return ResourceFileUtil.findResourceFileInScope("META-INF/dao/$sqlFileName", myFixture.project, scope)
     }
 

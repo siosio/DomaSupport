@@ -6,7 +6,7 @@ import siosio.doma.extension.*
 import siosio.doma.psi.*
 
 // return type check(immutable entity)
-private val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
+val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
     message = "inspection.dao.immutable-update-return-type"
     rule = block@{ daoMethod ->
         val parameterType = getEntityParameterType(daoMethod) ?: return@block true
