@@ -4,7 +4,9 @@ import com.intellij.codeInsight.AnnotationUtil
 import com.intellij.openapi.module.Module
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.psi.PsiAnnotation
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiMethod
+import com.intellij.psi.impl.source.PsiMethodImpl
 import siosio.doma.DaoType
 import siosio.doma.extension.findModule
 import siosio.doma.extension.findSqlFileFromRuntimeScope
@@ -16,10 +18,10 @@ import siosio.doma.extension.useSqlFile
  * @author siosio
  */
 class PsiDaoMethod(
-    val psiMethod: PsiMethod,
-    val daoType: DaoType) : PsiMethod by psiMethod {
+        val psiMethod: PsiMethod,
+        val daoType: DaoType) : PsiMethod by psiMethod {
 
-    val daoAnnotation: PsiAnnotation = AnnotationUtil.findAnnotation(this, daoType.annotationName)!!
+    val daoAnnotation: PsiAnnotation = AnnotationUtil.findAnnotation(psiMethod, daoType.annotationName)!!
 
     /**
      * このDaoメソッドが存在しているモジュール
@@ -58,6 +60,16 @@ class PsiDaoMethod(
      */
     private fun fqcnToFilePath(): String {
         return containingClass!!.qualifiedName!!.replace('.', '/')
+    }
+
+    override fun getSourceElement(): PsiElement? {
+        return psiMethod.sourceElement
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is PsiDaoMethod && this.psiMethod === other) return true
+        return false
     }
 }
 

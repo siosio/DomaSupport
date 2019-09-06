@@ -1,7 +1,9 @@
 package siosio.doma
 
 import com.intellij.openapi.module.*
+import com.intellij.openapi.roots.LanguageLevelProjectExtension
 import com.intellij.openapi.vfs.*
+import com.intellij.pom.java.LanguageLevel
 import com.intellij.psi.search.*
 import com.intellij.testFramework.builders.*
 import com.intellij.testFramework.fixtures.*
@@ -12,9 +14,10 @@ import java.io.*
 abstract class DaoTestCase : JavaCodeInsightFixtureTestCase() {
 
     override fun setUp() {
-        super.setUp();
+        super.setUp()
         addClassFromJavaFile("testData/siosio/doma/entity/ImmutableEntity.java")
         addClassFromJavaFile("testData/siosio/doma/entity/MutableEntity.java")
+        LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_8)
     }
     
     override fun tuneFixture(moduleBuilder: JavaModuleFixtureBuilder<*>) {
