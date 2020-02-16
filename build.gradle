@@ -55,6 +55,3 @@ test {
   systemProperty 'user.language', 'ja'
 }
 
-wrapper {
-  gradleVersion = '5.4.1'
-}
