@@ -36,14 +36,6 @@
 
   <application-components>
   </application-components>
-  
-  <project-components>
-    <component>
-      
-      <implementation-class>siosio.doma.DomaProjectComponent</implementation-class>
-    </component>
-  </project-components>
-  
 
   <actions>
     <action class="siosio.doma.editor.GotoSqlFile" id="Doma.GotoSqlFile" use-shortcut-of="GotoRelated" text="Go to SQL" />
