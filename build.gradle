@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    kotlinVersion = "1.3.21"
+    kotlinVersion = "1.3.61"
   }
   repositories {
     mavenCentral()
@@ -11,25 +11,34 @@ buildscript {
 }
 
 plugins {
-  id "org.jetbrains.intellij" version "0.4.4"
+  id "org.jetbrains.intellij" version "0.4.16"
 }
 
-version '1.0.2'
+version '1.0.3'
 
 apply plugin: 'java'
 apply plugin: "kotlin"
 
 intellij {
   pluginName 'DomaSupport'
-  version "IU-2018.3.5"
-  plugins = ['DatabaseTools', 'Kotlin']
+  version "IU-LATEST-EAP-SNAPSHOT"
+  plugins = ['DatabaseTools', 'Kotlin', 'java']
   updateSinceUntilBuild = false
   intellij.type = 'IU'
 }
 
 patchPluginXml {
-  changeNotes ""
-  sinceBuild "182"
+  changeNotes """
+  <ul>
+    <li>1.0.3
+    <ul>
+      <li>org.seasar.doma.experimental.Sqlに指定した文字列をSQLとし自動認識するように対応</li>
+      <li>Kotlinプラグインが必須だった不具合を修正</li>
+      <li>annotation processorsが未設定時のエラーポップアップ機能を削除(Gradleを使ったビルドや実行がデフォルト設定になったので)</li>
+    </ul>
+  </ul>
+  """
+  sinceBuild "201"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -47,14 +56,11 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
   testImplementation 'junit:junit:4.12'
 
-  testImplementation 'org.seasar.doma:doma:2.19.3'
-  testAnnotationProcessor 'org.seasar.doma:doma:2.19.3'
+  testImplementation 'org.seasar.doma:doma:2.27.1'
+  testAnnotationProcessor 'org.seasar.doma:doma:2.27.1'
 }
 
 test {
   systemProperty 'user.language', 'ja'
 }
 
-wrapper {
-  gradleVersion = '5.2.1'
-}

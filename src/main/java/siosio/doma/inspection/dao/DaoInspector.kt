@@ -23,7 +23,7 @@ interface DaoRule {
  */
 class DaoInspectionRule : Rule<PsiDaoMethod> {
 
-    val rules: MutableList<DaoRule> = ArrayList()
+    private val rules: MutableList<DaoRule> = ArrayList()
 
     override fun inspect(problemsHolder: ProblemsHolder, element: PsiDaoMethod) {
         rules.forEach {
@@ -38,9 +38,7 @@ class DaoInspectionRule : Rule<PsiDaoMethod> {
 
     fun parameterRule(init: ParameterRule.() -> Unit) {
         val parameterRule = ParameterRule().apply(init)
-        if (parameterRule.message == null) {
-            throw IllegalArgumentException("message must be set")
-        }
+        requireNotNull(parameterRule.message) { "message must be set" }
         rules.add(parameterRule)
     }
 
@@ -59,6 +57,11 @@ class Sql(private val required: Boolean) : DaoRule {
         if (!required && !daoMethod.useSqlFile() || daoMethod.getModule() == null) {
             return
         }
+
+        if (daoMethod.getAnnotation("org.seasar.doma.experimental.Sql") != null) {
+            return
+        }
+        
         if (!daoMethod.containsSqlFile()) {
             problemsHolder.registerProblem(
                     daoMethod.nameIdentifier!!,
@@ -94,7 +97,7 @@ class ParameterRule : DaoRule {
 /**
  * 戻り値の検査を行うクラス
  */
-class ReturnRule() : DaoRule {
+class ReturnRule : DaoRule {
     var message: String? = null
     var errorElement: (PsiDaoMethod) -> PsiElement = { psiDaoMethod -> psiDaoMethod.returnTypeElement!! }
     var rule: PsiTypeElement.(PsiDaoMethod) -> Boolean = { _ -> true }

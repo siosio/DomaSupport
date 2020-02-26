@@ -3,6 +3,7 @@ package dao;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.seasar.doma.experimental.Sql;
 import org.seasar.doma.*;
 import org.seasar.doma.jdbc.*;
 
@@ -16,6 +17,11 @@ public interface SelectDao {
     // SQLファイルが存在しないメソッド
     @Select
     int <error descr="SQLファイルがありません。">SQLファイルなし</error>();
+    
+    // SQLアノテーションあり
+    @Select
+    @Sql("select id from test")
+    int SQLファイルアノテーションあり();
 
     // SelectOptionsなしはOK
     @Select

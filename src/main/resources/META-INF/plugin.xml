@@ -15,15 +15,12 @@
   <depends>com.intellij.modules.java</depends>
   <depends>com.intellij.modules.ultimate</depends>
   <depends>com.intellij.database</depends>
-  <depends>org.jetbrains.kotlin</depends>
+  <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
 
   <extensions defaultExtensionNs="com.intellij">
 
     <inspectionToolProvider implementation="siosio.doma.inspection.dao.DaoInspectionToolProvider" />
     <codeInsight.lineMarkerProvider language="JAVA" implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
-    <codeInsight.lineMarkerProvider language="kotlin" implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
-
-    <defaultLiveTemplatesProvider implementation="siosio.doma.livetemplate.DaoLiveTemplatesProvider" />
 
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoMethodRenameProcessor" order="first" />
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoClassNameRenameProcessor" order="first" />
@@ -32,18 +29,15 @@
 
     <!-- spring対応 -->
     <lang.inspectionSuppressor language="JAVA" implementationClass="siosio.doma.spring.DaoAutowiringInspectionSuppressor" />
+    
+  </extensions>
+  
+  <extensions defaultExtensionNs="org.intellij.intelliLang">
+    <injectionConfig config="META-INF/domaInjection.xml"/>
   </extensions>
 
   <application-components>
   </application-components>
-  
-  <project-components>
-    <component>
-      
-      <implementation-class>siosio.doma.DomaProjectComponent</implementation-class>
-    </component>
-  </project-components>
-  
 
   <actions>
     <action class="siosio.doma.editor.GotoSqlFile" id="Doma.GotoSqlFile" use-shortcut-of="GotoRelated" text="Go to SQL" />

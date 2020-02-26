@@ -62,7 +62,7 @@ val batchInsertMethodRule =
                         val typeParameter = getFirstParametersTypeParameter(daoMethod) ?: return@block true
 
                         if (typeParameter.isImmutableEntity().not()) {
-                            type.isAssignableFrom(PsiType.INT.createArrayType()) == true
+                            type.isAssignableFrom(PsiType.INT.createArrayType())
                         } else {
                             true
                         }
@@ -81,7 +81,10 @@ val batchInsertMethodRule =
                         val typeParameter = getFirstParametersTypeParameter(daoMethod) ?: return@block true
 
                         quickFix = {
-                            MethodReturnTypeFix(daoMethod.psiMethod, PsiType.getTypeByName("org.seasar.doma.jdbc.BatchResult<${typeParameter.canonicalText}>", project, resolveScope), false)
+                            MethodReturnTypeFix(
+                                    daoMethod.psiMethod,
+                                    PsiType.getTypeByName(
+                                            "org.seasar.doma.jdbc.BatchResult<${typeParameter.canonicalText}>", project, resolveScope), false)
                         }
 
                         if (typeParameter.isImmutableEntity()) {
