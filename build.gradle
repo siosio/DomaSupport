@@ -47,8 +47,8 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
   testImplementation 'junit:junit:4.12'
 
-  testImplementation 'org.seasar.doma:doma:2.19.3'
-  testAnnotationProcessor 'org.seasar.doma:doma:2.19.3'
+  testImplementation 'org.seasar.doma:doma:2.27.1'
+  testAnnotationProcessor 'org.seasar.doma:doma:2.27.1'
 }
 
 test {

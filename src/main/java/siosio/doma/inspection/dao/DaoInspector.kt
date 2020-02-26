@@ -57,6 +57,11 @@ class Sql(private val required: Boolean) : DaoRule {
         if (!required && !daoMethod.useSqlFile() || daoMethod.getModule() == null) {
             return
         }
+
+        if (daoMethod.getAnnotation("org.seasar.doma.experimental.Sql") != null) {
+            return
+        }
+        
         if (!daoMethod.containsSqlFile()) {
             problemsHolder.registerProblem(
                     daoMethod.nameIdentifier!!,
