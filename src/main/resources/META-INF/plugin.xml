@@ -29,6 +29,11 @@
 
     <!-- spring対応 -->
     <lang.inspectionSuppressor language="JAVA" implementationClass="siosio.doma.spring.DaoAutowiringInspectionSuppressor" />
+    
+  </extensions>
+  
+  <extensions defaultExtensionNs="org.intellij.intelliLang">
+    <injectionConfig config="META-INF/domaInjection.xml"/>
   </extensions>
 
   <application-components>
