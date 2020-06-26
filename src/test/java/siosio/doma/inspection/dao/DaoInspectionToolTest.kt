@@ -1,6 +1,6 @@
 package siosio.doma.inspection.dao
 
-import siosio.doma.*
+import siosio.doma.DaoTestCase
 
 class DaoInspectionToolTest : DaoTestCase() {
 

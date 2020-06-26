@@ -1,15 +1,15 @@
 package siosio.doma
 
-import com.intellij.openapi.module.*
-import com.intellij.openapi.roots.LanguageLevelProjectExtension
-import com.intellij.openapi.vfs.*
+import com.intellij.openapi.module.ResourceFileUtil
+import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.pom.java.LanguageLevel
-import com.intellij.psi.search.*
-import com.intellij.testFramework.builders.*
-import com.intellij.testFramework.fixtures.*
-import com.intellij.util.*
-import org.seasar.doma.*
-import java.io.*
+import com.intellij.psi.search.GlobalSearchScope
+import com.intellij.testFramework.IdeaTestUtil
+import com.intellij.testFramework.builders.JavaModuleFixtureBuilder
+import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase
+import com.intellij.util.PathUtil
+import org.seasar.doma.Dao
+import java.io.File
 
 abstract class DaoTestCase : JavaCodeInsightFixtureTestCase() {
 
@@ -17,12 +17,12 @@ abstract class DaoTestCase : JavaCodeInsightFixtureTestCase() {
         super.setUp()
         addClassFromJavaFile("testData/siosio/doma/entity/ImmutableEntity.java")
         addClassFromJavaFile("testData/siosio/doma/entity/MutableEntity.java")
-        LanguageLevelProjectExtension.getInstance(getProject()).setLanguageLevel(LanguageLevel.JDK_1_8)
     }
     
     override fun tuneFixture(moduleBuilder: JavaModuleFixtureBuilder<*>) {
-        moduleBuilder.addContentRoot(File(PathUtil.getJarPathForClass(Dao::class.java)).parentFile.absolutePath)
-        moduleBuilder.addLibrary("jre", PathUtil.getJarPathForClass(java.lang.Object::class.java))
+        super.tuneFixture(moduleBuilder)
+        moduleBuilder.setLanguageLevel(LanguageLevel.JDK_1_8);
+        moduleBuilder.addJdk(IdeaTestUtil.getMockJdk18Path().getPath());
         moduleBuilder.addLibrary("doma", PathUtil.getJarPathForClass(Dao::class.java))
     }
 

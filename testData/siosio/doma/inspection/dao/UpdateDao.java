@@ -3,6 +3,7 @@ package dao;
 import org.seasar.doma.*;
 import org.seasar.doma.jdbc.*;
 import entity.*;
+import java.lang.*;
 
 @Dao
 public interface UpdateDao {
