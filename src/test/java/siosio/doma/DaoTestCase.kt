@@ -1,6 +1,7 @@
 package siosio.doma
 
 import com.intellij.openapi.module.ResourceFileUtil
+import com.intellij.openapi.projectRoots.impl.JavaAwareProjectJdkTableImpl
 import com.intellij.openapi.vfs.VirtualFile
 import com.intellij.pom.java.LanguageLevel
 import com.intellij.psi.search.GlobalSearchScope
@@ -22,7 +23,7 @@ abstract class DaoTestCase : JavaCodeInsightFixtureTestCase() {
     override fun tuneFixture(moduleBuilder: JavaModuleFixtureBuilder<*>) {
         super.tuneFixture(moduleBuilder)
         moduleBuilder.setLanguageLevel(LanguageLevel.JDK_1_8);
-        moduleBuilder.addJdk(IdeaTestUtil.getMockJdk18Path().getPath());
+        moduleBuilder.addJdk("./java/mockJDK-1.8");
         moduleBuilder.addLibrary("doma", PathUtil.getJarPathForClass(Dao::class.java))
     }
 

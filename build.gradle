@@ -21,7 +21,7 @@ apply plugin: "kotlin"
 
 intellij {
   pluginName 'DomaSupport'
-  version "IU-LATEST-EAP-SNAPSHOT"
+  version "IU-2020.1"
   plugins = ['DatabaseTools', 'Kotlin', 'java']
   updateSinceUntilBuild = false
   intellij.type = 'IU'
