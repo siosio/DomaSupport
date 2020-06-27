@@ -56,6 +56,7 @@ class KotlinSql(private val required: Boolean) : KotlinDaoRule {
     override fun inspect(problemsHolder: ProblemsHolder, daoFunction: PsiDaoFunction) {
         if ((!required && !daoFunction.useSqlFile())
             || daoFunction.getModule() == null 
+            || daoFunction.psiFunction.findAnnotation(FqName("org.seasar.doma.Sql")) != null
             || daoFunction.psiFunction.findAnnotation(FqName("org.seasar.doma.experimental.Sql")) != null) {
             return
         }
