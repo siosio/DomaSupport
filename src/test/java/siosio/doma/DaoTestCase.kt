@@ -25,6 +25,8 @@ abstract class DaoTestCase : JavaCodeInsightFixtureTestCase() {
         moduleBuilder.setLanguageLevel(LanguageLevel.JDK_1_8);
         moduleBuilder.addJdk("./java/mockJDK-1.8");
         moduleBuilder.addLibrary("doma", PathUtil.getJarPathForClass(Dao::class.java))
+        moduleBuilder.addLibrary("test-classes-kt", "./build/classes/kotlin/test")
+        moduleBuilder.addLibrary("test-classes-java", "./build/classes/java/test")
     }
 
     fun createSqlFile(vararg sqlFileNames: String) {

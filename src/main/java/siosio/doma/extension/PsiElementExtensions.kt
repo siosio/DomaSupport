@@ -8,7 +8,10 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiParameter
 import com.intellij.psi.PsiType
 import com.intellij.psi.util.PsiTypesUtil
+import org.jetbrains.kotlin.nj2k.postProcessing.type
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.types.KotlinType
 
 /**
  * SQLファイルを必要とするかどうか
@@ -49,3 +52,13 @@ fun PsiType.isImmutableEntity(): Boolean {
     val annotation = AnnotationUtil.findAnnotation(PsiTypesUtil.getPsiClass(this), "org.seasar.doma.Entity") ?: return false
     return AnnotationUtil.getBooleanAttributeValue(annotation, "immutable") == true
 }
+
+fun KtParameter.isEntity(): Boolean {
+    return this.type()?.isEmpty() == true
+}
+
+private fun KotlinType.isEmpty(): Boolean {
+    return true
+}
+
+

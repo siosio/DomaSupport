@@ -1,7 +1,17 @@
 package siosio.doma.inspection.dao
 
+import com.intellij.codeInsight.AnnotationUtil
 import com.intellij.codeInsight.daemon.impl.quickfix.*
 import com.intellij.psi.*
+import com.intellij.psi.util.PsiTreeUtil
+import org.jetbrains.kotlin.idea.debugger.sequence.psi.resolveType
+import org.jetbrains.kotlin.idea.references.resolveMainReferenceToDescriptors
+import org.jetbrains.kotlin.idea.util.findAnnotation
+import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.nj2k.postProcessing.resolve
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import siosio.doma.entityAnnotationName
 import siosio.doma.extension.*
 import siosio.doma.psi.*
 
@@ -98,6 +108,29 @@ val kotlinUpdateMethodRule =
 val kotlinInsertMethodRule =
         kotlinRule {
             sql(false)
+
+            parameterRule {
+                message = "inspection.dao.entity-param-not-found"
+                rule = { dao ->
+                    when {
+                        dao.useSqlFile() -> true
+                        else ->
+                            when (size) {
+                                1 -> {
+                                    val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)?.resolve()
+                                    when (param) {
+                                        is PsiClass -> AnnotationUtil.isAnnotated(param, listOf(entityAnnotationName), AnnotationUtil.CHECK_TYPE)
+                                        is KtClass -> {
+                                            param.findAnnotation(FqName(entityAnnotationName )) != null
+                                        }
+                                        else -> false
+                                    }
+                                }
+                                else -> false
+                            }
+                    }
+                }
+            }
         }
 
 val kotlinDeleteMethodRule =
