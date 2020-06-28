@@ -4,7 +4,7 @@ import siosio.doma.*
 
 class DaoMethodRenameProcessorTest : DaoTestCase() {
 
-    override fun getTestDataPath(): String? = "testData/siosio/doma/refactoring/rename/"
+    override fun getTestDataPath(): String = "testData/siosio/doma/refactoring/rename/"
 
     fun test_daoメソッド名変更() {
         createSqlFile("User/insert.sql")

@@ -58,7 +58,8 @@ class Sql(private val required: Boolean) : DaoRule {
             return
         }
 
-        if (daoMethod.getAnnotation("org.seasar.doma.experimental.Sql") != null) {
+        if (daoMethod.getAnnotation(sqlAnnotationName) != null ||
+            daoMethod.getAnnotation(sqlExternalAnnotationName) != null) {
             return
         }
         

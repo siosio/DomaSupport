@@ -1,8 +1,8 @@
-package dao;
+package dao
 
 import org.seasar.doma.*
 import org.seasar.doma.jdbc.*
-import entity.*
+import siosio.doma.inspection.dao.entity.*
 
 @Dao
 interface InsertDaoKotlin {
@@ -22,5 +22,11 @@ interface InsertDaoKotlin {
     // SQLが必要な場合でSQLファイルがない場合
     @Insert(sqlFile = true)
     fun <error descr="SQLファイルがありません。">SQLファイルなし</error>(entity: MutableEntity ): Int
+
+    // パラメータがEntityの場合
+    @Insert()
+    fun Entityパラメータ(entity: MutableEntity ): Int
+    @Insert()
+    fun EntityパラメータKt(entity: MutableEntityKt ): Int
     
 }

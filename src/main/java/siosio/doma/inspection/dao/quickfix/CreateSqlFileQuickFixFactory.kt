@@ -9,7 +9,7 @@ object CreateSqlFileQuickFixFactory {
     fun create(daoMethod: PsiDaoMethod): CreateSqlFileQuickFix {
         val module = daoMethod.getModule()!!
         return System.getProperty("DirectoryChooser.className")?.let {
-            val directoryChooser = Class.forName(it).newInstance() as DirectoryChooser
+            val directoryChooser = Class.forName(it).getDeclaredConstructor().newInstance() as DirectoryChooser
             CreateSqlFileQuickFix(
                     module,
                     daoMethod.getSqlFilePath(),
@@ -25,7 +25,7 @@ object CreateSqlFileQuickFixFactory {
     fun create(daoFunction: PsiDaoFunction): CreateSqlFileQuickFix {
         val module = daoFunction.getModule()!!
         return System.getProperty("DirectoryChooser.className")?.let {
-            val directoryChooser = Class.forName(it).newInstance() as DirectoryChooser
+            val directoryChooser = Class.forName(it).getDeclaredConstructor().newInstance() as DirectoryChooser
             CreateSqlFileQuickFix(
                     module,
                     daoFunction.getSqlFilePath(),

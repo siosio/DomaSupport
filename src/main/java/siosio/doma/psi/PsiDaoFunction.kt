@@ -13,6 +13,8 @@ import siosio.doma.DaoType
 import siosio.doma.extension.findModule
 import siosio.doma.extension.findSqlFileFromRuntimeScope
 import siosio.doma.extension.useSqlFile
+import siosio.doma.sqlAnnotationName
+import siosio.doma.sqlExternalAnnotationName
 
 class PsiDaoFunction(
         val psiFunction: KtNamedFunction,
@@ -30,7 +32,9 @@ class PsiDaoFunction(
     /**
      * このDaoメソッドがSQLファイルを必要とするかどうか
      */
-    fun useSqlFile(): Boolean = daoAnnotation.useSqlFile()
+    fun useSqlFile(): Boolean = daoAnnotation.useSqlFile() ||
+            psiFunction.findAnnotation(FqName(sqlAnnotationName)) != null ||
+            psiFunction.findAnnotation(FqName(sqlExternalAnnotationName)) != null
 
     fun getSqlFilePath(): String {
         return "META-INF/${fqcnToFilePath()}/$name.${daoType.extension}"

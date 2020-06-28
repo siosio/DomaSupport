@@ -3,16 +3,23 @@ package siosio.doma.sql
 import com.intellij.codeInsight.completion.*
 import com.intellij.codeInsight.lookup.*
 import com.intellij.patterns.*
+import com.intellij.patterns.PlatformPatterns.*
+import com.intellij.patterns.StandardPatterns.*
 import com.intellij.psi.*
 import com.intellij.util.*
+import org.jetbrains.kotlin.idea.completion.or
 import siosio.doma.*
 
 open class ParameterCompletionContributor : CompletionContributor() {
 
     init {
         extend(CompletionType.BASIC,
-                PlatformPatterns.psiElement(PsiComment::class.java)
-                        .inFile(PlatformPatterns.psiFile().withName(StandardPatterns.string().endsWith(".sql"))),
+                psiElement(PsiComment::class.java)
+                        .andOr(
+                                psiElement().inFile(psiFile().withName(StandardPatterns.string().endsWith(".sql"))),
+                                psiElement().inFile(psiFile().withName(StandardPatterns.string().endsWith(".java")))
+                                        .and(psiElement().withParent(PsiAnnotation::class.java).withText(StandardPatterns.string().startsWith("@Sql")))
+                        ),
                 SqlParameterCompletionProvider())
     }
 
@@ -74,7 +81,7 @@ open class ParameterCompletionContributor : CompletionContributor() {
                     val paramText = text.substringAfter("(")
                     paramList
                             ?.filter {
-                                it.name?.startsWith(paramText) ?: false
+                                it.name.startsWith(paramText)
                             }
                             ?.map(::VariableLookupItem)
                             ?.toList()

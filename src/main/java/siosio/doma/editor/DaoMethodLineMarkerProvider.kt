@@ -18,8 +18,9 @@ class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
         private val SQL_FILE_ICON = IconLoader.getIcon("/icons/sql.png")
     }
 
+
     override fun collectNavigationMarkers(element: PsiElement,
-                                          result: MutableCollection<in RelatedItemLineMarkerInfo<PsiElement>>) {
+                                          result: MutableCollection<in RelatedItemLineMarkerInfo<*>>) {
         
         // テストモードは以下の処理は実行しない
         if (ApplicationManager.getApplication().isUnitTestMode) {

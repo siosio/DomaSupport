@@ -47,3 +47,7 @@ private fun toDaoClassName(dir: PsiDirectory?, className: String): String {
         }
     )
 }
+
+const val entityAnnotationName = "org.seasar.doma.Entity"
+const val sqlAnnotationName = "org.seasar.doma.Sql"
+const val sqlExternalAnnotationName = "org.seasar.doma.experimental.Sql"

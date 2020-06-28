@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <component name="LanguageInjectionConfiguration">
+  <!-- java -->
+  <injection language="SQL" injector-id="java">
+    <display-name>Sql.value (org.seasar.doma)</display-name>
+    <place><![CDATA[psiMethod().withName("value").withParameters().definedInClass("org.seasar.doma.Sql")]]></place>
+  </injection>
   <injection language="SQL" injector-id="java">
     <display-name>Sql.value (org.seasar.doma.experimental)</display-name>
     <place><![CDATA[psiMethod().withName("value").withParameters().definedInClass("org.seasar.doma.experimental.Sql")]]></place>
   </injection>
+  
+  <!--  kotlin -->
   <injection language="SQL" injector-id="kotlin">
     <display-name>Sql.value (org.seasar.doma.experimental)</display-name>
     <place><![CDATA[psiMethod().withName("value").withParameters().definedInClass("org.seasar.doma.experimental.Sql")]]></place>
+  </injection>
+  <injection language="SQL" injector-id="kotlin">
+    <display-name>Sql.value (org.seasar.doma)</display-name>
+    <place><![CDATA[psiMethod().withName("value").withParameters().definedInClass("org.seasar.doma.Sql")]]></place>
   </injection>
 </component>
