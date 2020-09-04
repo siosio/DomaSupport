@@ -1,19 +1,19 @@
 package siosio.doma.inspection.dao
 
 import com.intellij.codeInsight.AnnotationUtil
-import com.intellij.codeInsight.daemon.impl.quickfix.*
-import com.intellij.psi.*
+import com.intellij.codeInsight.daemon.impl.quickfix.MethodReturnTypeFix
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiType
 import com.intellij.psi.util.PsiTreeUtil
-import org.jetbrains.kotlin.idea.debugger.sequence.psi.resolveType
-import org.jetbrains.kotlin.idea.references.resolveMainReferenceToDescriptors
 import org.jetbrains.kotlin.idea.util.findAnnotation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.nj2k.postProcessing.resolve
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import siosio.doma.entityAnnotationName
-import siosio.doma.extension.*
-import siosio.doma.psi.*
+import siosio.doma.extension.isEntity
+import siosio.doma.extension.isImmutableEntity
+import siosio.doma.psi.PsiDaoMethod
 
 // return type check(immutable entity)
 val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
