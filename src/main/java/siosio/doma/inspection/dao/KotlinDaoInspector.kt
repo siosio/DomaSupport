@@ -12,7 +12,7 @@ import siosio.doma.inspection.Rule
 import siosio.doma.inspection.dao.quickfix.CreateSqlFileQuickFixFactory
 import siosio.doma.psi.PsiDaoFunction
 import siosio.doma.sqlAnnotationName
-import siosio.doma.sqlExternalAnnotationName
+import siosio.doma.sqlExperimentalAnnotationName
 import java.util.ArrayList
 
 fun kotlinRule(rule: KotlinDaoInspectionRule.() -> Unit): KotlinDaoInspectionRule {
@@ -59,7 +59,7 @@ class KotlinSql(private val required: Boolean) : KotlinDaoRule {
         if ((!required && !daoFunction.useSqlFile())
             || daoFunction.getModule() == null
             || daoFunction.psiFunction.findAnnotation(FqName(sqlAnnotationName)) != null
-            || daoFunction.psiFunction.findAnnotation(FqName(sqlExternalAnnotationName)) != null
+            || daoFunction.psiFunction.findAnnotation(FqName(sqlExperimentalAnnotationName)) != null
         ) {
             return
         }
