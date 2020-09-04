@@ -23,13 +23,17 @@ val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
 
         messageArgs = arrayOf(parameterType.canonicalText)
         quickFix = {
-            MethodReturnTypeFix(daoMethod.psiMethod, PsiType.getTypeByName("org.seasar.doma.jdbc.Result<${parameterType.canonicalText}>", project, resolveScope), false)
+            MethodReturnTypeFix(
+                daoMethod.psiMethod,
+                PsiType.getTypeByName("org.seasar.doma.jdbc.Result<${parameterType.canonicalText}>", project, resolveScope),
+                false
+            )
         }
 
         // parameterがentity && immutableの場合だけチェックを行う
         if (parameterType.isEntity() && parameterType.isImmutableEntity()) {
             type.isAssignableFrom(PsiType.getTypeByName("org.seasar.doma.jdbc.Result", daoMethod.project, resolveScope))
-            && (daoMethod.returnTypeElement?.innermostComponentReferenceElement?.typeParameters?.let {
+                    && (daoMethod.returnTypeElement?.innermostComponentReferenceElement?.typeParameters?.let {
                 it.firstOrNull<PsiType?>()?.isAssignableFrom(parameterType)
             } == true)
         } else {
@@ -88,52 +92,56 @@ private val commonRule: DaoInspectionRule.() -> Unit = {
 
 
 val updateMethodRule =
-        rule {
-            apply(commonRule)
-        }
+    rule {
+        apply(commonRule)
+    }
 
 
 val insertMethodRule =
-        rule {
-            apply(commonRule)
-        }
+    rule {
+        apply(commonRule)
+    }
 
 //---------------------------------------------kotlin
 
-val kotlinUpdateMethodRule = 
-        kotlinRule { 
-            sql(false)
-        }
+val kotlinUpdateMethodRule =
+    kotlinRule {
+        sql(false)
+    }
 
 val kotlinInsertMethodRule =
-        kotlinRule {
-            sql(false)
+    kotlinRule {
+        sql(false)
 
-            parameterRule {
-                message = "inspection.dao.entity-param-not-found"
-                rule = { dao ->
-                    when {
-                        dao.useSqlFile() -> true
-                        else ->
-                            when (size) {
-                                1 -> {
-                                    val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)?.resolve()
-                                    when (param) {
-                                        is PsiClass -> AnnotationUtil.isAnnotated(param, listOf(entityAnnotationName), AnnotationUtil.CHECK_TYPE)
-                                        is KtClass -> {
-                                            param.findAnnotation(FqName(entityAnnotationName )) != null
-                                        }
-                                        else -> false
+        parameterRule {
+            message = "inspection.dao.entity-param-not-found"
+            rule = { dao ->
+                when {
+                    dao.useSqlFile() -> true
+                    else ->
+                        when (size) {
+                            1 -> {
+                                val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)?.resolve()
+                                when (param) {
+                                    is PsiClass -> AnnotationUtil.isAnnotated(
+                                        param,
+                                        listOf(entityAnnotationName),
+                                        AnnotationUtil.CHECK_TYPE
+                                    )
+                                    is KtClass -> {
+                                        param.findAnnotation(FqName(entityAnnotationName)) != null
                                     }
+                                    else -> false
                                 }
-                                else -> false
                             }
-                    }
+                            else -> false
+                        }
                 }
             }
         }
+    }
 
 val kotlinDeleteMethodRule =
-        kotlinRule {
-            sql(false)
-        }
+    kotlinRule {
+        sql(false)
+    }
