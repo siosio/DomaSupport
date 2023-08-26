@@ -59,7 +59,7 @@ class Sql(private val required: Boolean) : DaoRule {
         }
 
         if (daoMethod.getAnnotation(sqlAnnotationName) != null ||
-            daoMethod.getAnnotation(sqlExternalAnnotationName) != null) {
+            daoMethod.getAnnotation(sqlExperimentalAnnotationName) != null) {
             return
         }
         

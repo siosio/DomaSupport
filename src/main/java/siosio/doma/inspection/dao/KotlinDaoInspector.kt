@@ -12,7 +12,7 @@ import siosio.doma.inspection.Rule
 import siosio.doma.inspection.dao.quickfix.CreateSqlFileQuickFixFactory
 import siosio.doma.psi.PsiDaoFunction
 import siosio.doma.sqlAnnotationName
-import siosio.doma.sqlExternalAnnotationName
+import siosio.doma.sqlExperimentalAnnotationName
 import java.util.ArrayList
 
 fun kotlinRule(rule: KotlinDaoInspectionRule.() -> Unit): KotlinDaoInspectionRule {
@@ -41,7 +41,7 @@ class KotlinDaoInspectionRule : Rule<PsiDaoFunction> {
         val sql = KotlinSql(required)
         rules.add(sql)
     }
-    
+
     fun parameterRule(init: KotlinParameterRule.() -> Unit) {
         val parameterRule = KotlinParameterRule().apply(init)
         if (parameterRule.message == null) {
@@ -57,18 +57,19 @@ class KotlinDaoInspectionRule : Rule<PsiDaoFunction> {
 class KotlinSql(private val required: Boolean) : KotlinDaoRule {
     override fun inspect(problemsHolder: ProblemsHolder, daoFunction: PsiDaoFunction) {
         if ((!required && !daoFunction.useSqlFile())
-            || daoFunction.getModule() == null 
+            || daoFunction.getModule() == null
             || daoFunction.psiFunction.findAnnotation(FqName(sqlAnnotationName)) != null
-            || daoFunction.psiFunction.findAnnotation(FqName(sqlExternalAnnotationName)) != null) {
+            || daoFunction.psiFunction.findAnnotation(FqName(sqlExperimentalAnnotationName)) != null
+        ) {
             return
         }
         if (!daoFunction.containsSqlFile()) {
             problemsHolder.registerProblem(
-                    daoFunction.nameIdentifier!!,
-                    DomaBundle.message("inspection.dao.sql-not-found"),
-                    ProblemHighlightType.ERROR,
-                    CreateSqlFileQuickFixFactory.create(daoFunction)
-                    )
+                daoFunction.nameIdentifier!!,
+                DomaBundle.message("inspection.dao.sql-not-found"),
+                ProblemHighlightType.ERROR,
+                CreateSqlFileQuickFixFactory.create(daoFunction)
+            )
         }
     }
 }
@@ -90,7 +91,7 @@ class KotlinParameterRule : KotlinDaoRule {
                 else -> { el -> problemsHolder.registerProblem(el, DomaBundle.message(message!!), quickFix!!.invoke(el)) }
             }
             errorElements.invoke(psiDaoFunction)
-                    .forEach(register)
+                .forEach(register)
         }
     }
 }

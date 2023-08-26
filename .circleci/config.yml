@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/workspace
     docker:
-      - image: circleci/openjdk:8-jdk-browsers
+      - image: circleci/openjdk:17-buster
     steps:
       - checkout
       - restore_cache: 

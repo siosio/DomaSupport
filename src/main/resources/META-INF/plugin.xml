@@ -15,7 +15,9 @@
   <depends>com.intellij.modules.java</depends>
   <depends>com.intellij.modules.ultimate</depends>
   <depends>com.intellij.database</depends>
+  <depends>org.intellij.intelliLang</depends>
   <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
+  <idea-version since-build="231.0"/>
 
   <extensions defaultExtensionNs="com.intellij">
 
@@ -29,7 +31,7 @@
 
     <!-- spring対応 -->
     <lang.inspectionSuppressor language="JAVA" implementationClass="siosio.doma.spring.DaoAutowiringInspectionSuppressor" />
-    
+
   </extensions>
   
   <extensions defaultExtensionNs="org.intellij.intelliLang">

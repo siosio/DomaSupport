@@ -1,19 +1,19 @@
 package siosio.doma.inspection.dao
 
 import com.intellij.codeInsight.AnnotationUtil
-import com.intellij.codeInsight.daemon.impl.quickfix.*
-import com.intellij.psi.*
+import com.intellij.codeInsight.daemon.impl.quickfix.MethodReturnTypeFix
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiType
 import com.intellij.psi.util.PsiTreeUtil
-import org.jetbrains.kotlin.idea.debugger.sequence.psi.resolveType
-import org.jetbrains.kotlin.idea.references.resolveMainReferenceToDescriptors
 import org.jetbrains.kotlin.idea.util.findAnnotation
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.nj2k.postProcessing.resolve
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import siosio.doma.entityAnnotationName
-import siosio.doma.extension.*
-import siosio.doma.psi.*
+import siosio.doma.extension.isEntity
+import siosio.doma.extension.isImmutableEntity
+import siosio.doma.psi.PsiDaoMethod
 
 // return type check(immutable entity)
 val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
@@ -23,13 +23,17 @@ val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
 
         messageArgs = arrayOf(parameterType.canonicalText)
         quickFix = {
-            MethodReturnTypeFix(daoMethod.psiMethod, PsiType.getTypeByName("org.seasar.doma.jdbc.Result<${parameterType.canonicalText}>", project, resolveScope), false)
+            MethodReturnTypeFix(
+                daoMethod.psiMethod,
+                PsiType.getTypeByName("org.seasar.doma.jdbc.Result<${parameterType.canonicalText}>", project, resolveScope),
+                false
+            )
         }
 
         // parameterがentity && immutableの場合だけチェックを行う
         if (parameterType.isEntity() && parameterType.isImmutableEntity()) {
             type.isAssignableFrom(PsiType.getTypeByName("org.seasar.doma.jdbc.Result", daoMethod.project, resolveScope))
-            && (daoMethod.returnTypeElement?.innermostComponentReferenceElement?.typeParameters?.let {
+                    && (daoMethod.returnTypeElement?.innermostComponentReferenceElement?.typeParameters?.let {
                 it.firstOrNull<PsiType?>()?.isAssignableFrom(parameterType)
             } == true)
         } else {
@@ -88,52 +92,56 @@ private val commonRule: DaoInspectionRule.() -> Unit = {
 
 
 val updateMethodRule =
-        rule {
-            apply(commonRule)
-        }
+    rule {
+        apply(commonRule)
+    }
 
 
 val insertMethodRule =
-        rule {
-            apply(commonRule)
-        }
+    rule {
+        apply(commonRule)
+    }
 
 //---------------------------------------------kotlin
 
-val kotlinUpdateMethodRule = 
-        kotlinRule { 
-            sql(false)
-        }
+val kotlinUpdateMethodRule =
+    kotlinRule {
+        sql(false)
+    }
 
 val kotlinInsertMethodRule =
-        kotlinRule {
-            sql(false)
+    kotlinRule {
+        sql(false)
 
-            parameterRule {
-                message = "inspection.dao.entity-param-not-found"
-                rule = { dao ->
-                    when {
-                        dao.useSqlFile() -> true
-                        else ->
-                            when (size) {
-                                1 -> {
-                                    val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)?.resolve()
-                                    when (param) {
-                                        is PsiClass -> AnnotationUtil.isAnnotated(param, listOf(entityAnnotationName), AnnotationUtil.CHECK_TYPE)
-                                        is KtClass -> {
-                                            param.findAnnotation(FqName(entityAnnotationName )) != null
-                                        }
-                                        else -> false
+        parameterRule {
+            message = "inspection.dao.entity-param-not-found"
+            rule = { dao ->
+                when {
+                    dao.useSqlFile() -> true
+                    else ->
+                        when (size) {
+                            1 -> {
+                                val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)?.resolve()
+                                when (param) {
+                                    is PsiClass -> AnnotationUtil.isAnnotated(
+                                        param,
+                                        listOf(entityAnnotationName),
+                                        AnnotationUtil.CHECK_TYPE
+                                    )
+                                    is KtClass -> {
+                                        param.findAnnotation(FqName(entityAnnotationName)) != null
                                     }
+                                    else -> false
                                 }
-                                else -> false
                             }
-                    }
+                            else -> false
+                        }
                 }
             }
         }
+    }
 
 val kotlinDeleteMethodRule =
-        kotlinRule {
-            sql(false)
-        }
+    kotlinRule {
+        sql(false)
+    }
