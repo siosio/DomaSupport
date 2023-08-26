@@ -3,7 +3,7 @@ jobs:
   test:
     working_directory: ~/workspace
     docker:
-      - image: cimg/openjdk:17
+      - image: circleci/openjdk:17-buster
     steps:
       - checkout
       - restore_cache: 
