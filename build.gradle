@@ -1,6 +1,6 @@
 buildscript {
   ext {
-    kotlinVersion = "1.4.0"
+    kotlinVersion = "1.9.0"
   }
   repositories {
     mavenCentral()
@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-  id "org.jetbrains.intellij" version "0.4.21"
+  id "org.jetbrains.intellij" version "1.15.0"
 }
 
 version '1.0.7'
@@ -20,29 +20,14 @@ apply plugin: 'java'
 apply plugin: "kotlin"
 
 intellij {
-  pluginName 'DomaSupport'
-  version "IU-2020.1"
-  plugins = ['DatabaseTools', 'Kotlin', 'java']
+  version = "2023.1"
+  plugins = ['DatabaseTools', 'Kotlin', 'java', 'platform-langInjection']
   updateSinceUntilBuild = false
   intellij.type = 'IU'
 }
 
-patchPluginXml {
-  changeNotes """
-  <ul>
-    <li>1.0.3
-    <ul>
-      <li>org.seasar.doma.experimental.Sqlに指定した文字列をSQLとし自動認識するように対応</li>
-      <li>Kotlinプラグインが必須だった不具合を修正</li>
-      <li>annotation processorsが未設定時のエラーポップアップ機能を削除(Gradleを使ったビルドや実行がデフォルト設定になったので)</li>
-    </ul>
-  </ul>
-  """
-  sinceBuild "201"
-}
-
-sourceCompatibility = JavaVersion.VERSION_1_8
-targetCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
 
 tasks.withType(JavaCompile) {
   options.encoding = 'UTF-8'

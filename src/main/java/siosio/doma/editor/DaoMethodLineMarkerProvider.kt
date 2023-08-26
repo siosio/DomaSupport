@@ -5,19 +5,16 @@ import com.intellij.codeInsight.navigation.*
 import com.intellij.openapi.application.*
 import com.intellij.openapi.util.*
 import com.intellij.psi.*
-import com.intellij.psi.util.*
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.*
 import siosio.doma.*
-import siosio.doma.editor.DaoMethodLineMarkerProvider.Companion.SQL_FILE_ICON
 import siosio.doma.extension.*
 import siosio.doma.psi.*
 
 class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
-    
-    companion object {
-        private val SQL_FILE_ICON = IconLoader.getIcon("/icons/sql.png")
-    }
 
+    companion object {
+        private val SQL_FILE_ICON = IconLoader.getIcon("/icons/sql.svg", this::class.java.classLoader)
+    }
 
     override fun collectNavigationMarkers(element: PsiElement,
                                           result: MutableCollection<in RelatedItemLineMarkerInfo<*>>) {
@@ -41,7 +38,6 @@ class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
                             .createLineMarkerInfo(element.firstChild)
             )
         }
-        
     }
     
 }
