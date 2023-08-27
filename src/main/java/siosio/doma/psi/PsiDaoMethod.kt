@@ -1,16 +1,11 @@
 package siosio.doma.psi
 
-import com.intellij.codeInsight.AnnotationUtil
-import com.intellij.openapi.module.Module
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.psi.PsiAnnotation
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiMethod
-import com.intellij.psi.impl.source.PsiMethodImpl
-import siosio.doma.DaoType
-import siosio.doma.extension.findModule
-import siosio.doma.extension.findSqlFileFromRuntimeScope
-import siosio.doma.extension.useSqlFile
+import com.intellij.codeInsight.*
+import com.intellij.openapi.module.*
+import com.intellij.openapi.vfs.*
+import com.intellij.psi.*
+import siosio.doma.*
+import siosio.doma.extension.*
 
 /**
  * [PsiMethod]のDaoメソッド表現。
@@ -64,6 +59,10 @@ class PsiDaoMethod(
 
     override fun getSourceElement(): PsiElement? {
         return psiMethod.sourceElement
+    }
+
+    fun parameterCount(): Int {
+        return psiMethod.parameterList.parametersCount
     }
 
     override fun equals(other: Any?): Boolean {

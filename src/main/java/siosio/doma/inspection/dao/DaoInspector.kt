@@ -15,7 +15,7 @@ fun rule(rule: DaoInspectionRule.() -> Unit): DaoInspectionRule {
 }
 
 interface DaoRule {
-    fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod): Unit
+    fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod)
 }
 
 /**

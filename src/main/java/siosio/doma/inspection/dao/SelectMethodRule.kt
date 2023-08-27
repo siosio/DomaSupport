@@ -1,15 +1,11 @@
 package siosio.doma.inspection.dao
 
-import com.intellij.codeInsight.intention.QuickFixFactory
-import com.intellij.psi.util.PsiTypesUtil
-import org.jetbrains.kotlin.idea.intentions.SpecifyTypeExplicitlyIntention
-import org.jetbrains.kotlin.idea.refactoring.fqName.fqName
-import org.jetbrains.kotlin.js.descriptorUtils.getJetTypeFqName
-import org.jetbrains.kotlin.nj2k.postProcessing.type
-import org.jetbrains.kotlin.psi.KtParameter
-import siosio.doma.DomaBundle
-import kotlin.reflect.jvm.internal.impl.descriptors.TypeParameterUtilsKt
-import kotlin.reflect.jvm.internal.impl.types.typeUtil.TypeUtilsKt
+import com.intellij.codeInsight.intention.*
+import com.intellij.psi.util.*
+import org.jetbrains.kotlin.name.*
+import org.jetbrains.kotlin.nj2k.types.*
+import org.jetbrains.kotlin.psi.*
+import siosio.doma.*
 
 val selectMethodRule =
     rule {
@@ -56,9 +52,10 @@ val kotlinSelectMethodRule =
         }
     }
 
+private val SELECT_OPTIONS_FQNAME = FqName("org.seasar.doma.jdbc.SelectOptions")
 private fun List<KtParameter>.filterSelectOptions(): List<KtParameter> {
     return filter {
-        it.type()?.fqName.toString() == "org.seasar.doma.jdbc.SelectOptions"
+        it.typeFqName() == SELECT_OPTIONS_FQNAME
     }
 }
 
