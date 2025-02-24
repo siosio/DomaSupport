@@ -1,6 +1,8 @@
+import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+
 buildscript {
   ext {
-    kotlinVersion = "1.9.0"
+    kotlinVersion = "2.1.0"
   }
   repositories {
     mavenCentral()
@@ -11,7 +13,7 @@ buildscript {
 }
 
 plugins {
-  id "org.jetbrains.intellij" version "1.15.0"
+  id "org.jetbrains.intellij.platform" version "2.2.1"
 }
 
 version '1.0.7'
@@ -19,27 +21,32 @@ version '1.0.7'
 apply plugin: 'java'
 apply plugin: "kotlin"
 
-intellij {
-  version = "2023.1"
-  plugins = ['DatabaseTools', 'Kotlin', 'java', 'platform-langInjection']
-  updateSinceUntilBuild = false
-  intellij.type = 'IU'
-}
 
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
-tasks.withType(JavaCompile) {
-  options.encoding = 'UTF-8'
-}
-
 repositories {
   mavenCentral()
+  intellijPlatform {
+    defaultRepositories()
+  }
 }
 
 dependencies {
+  intellijPlatform {
+    intellijIdeaCommunity '2024.3'
+
+    bundledPlugin 'com.intellij.java'
+    bundledPlugin 'org.jetbrains.kotlin'
+//    bundledPlugin 'platform-langInjection'
+  }
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
-  testImplementation 'junit:junit:4.12'
+
+  intellijPlatform {
+    testFramework TestFrameworkType.Platform.INSTANCE
+    testFramework TestFrameworkType.Plugin.Java.INSTANCE
+  }
+  testImplementation 'junit:junit:4.13.1'
 
   testImplementation 'org.seasar.doma:doma:2.27.1'
   testAnnotationProcessor 'org.seasar.doma:doma:2.27.1'
