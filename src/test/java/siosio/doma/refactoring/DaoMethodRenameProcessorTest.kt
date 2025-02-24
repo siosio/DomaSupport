@@ -13,8 +13,8 @@ class DaoMethodRenameProcessorTest : DaoTestCase() {
         myFixture.renameElementAtCaret("insertUser")
         myFixture.checkResultByFile("DaoMethodRenameAfter.java", false)
 
-        assert(findSqlFile("User/insertUser.sql") != null) { "リネーム後のSQLファイルが存在すること" }
         assert(findSqlFile("User/insert.sql") == null) { "リネーム前のSQLファイルは存在しないこと" }
+        assert(findSqlFile("User/insertUser.sql") != null) { "リネーム後のSQLファイルが存在すること" }
     }
 
     fun test_SQLファイルなし_メソッド名のリネームは成功すること() {

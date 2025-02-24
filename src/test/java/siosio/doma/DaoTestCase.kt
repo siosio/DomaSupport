@@ -1,16 +1,14 @@
 package siosio.doma
 
-import com.intellij.openapi.module.ResourceFileUtil
-import com.intellij.openapi.projectRoots.impl.JavaAwareProjectJdkTableImpl
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.pom.java.LanguageLevel
-import com.intellij.psi.search.GlobalSearchScope
-import com.intellij.testFramework.IdeaTestUtil
-import com.intellij.testFramework.builders.JavaModuleFixtureBuilder
-import com.intellij.testFramework.fixtures.JavaCodeInsightFixtureTestCase
-import com.intellij.util.PathUtil
-import org.seasar.doma.Dao
-import java.io.File
+import com.intellij.openapi.module.*
+import com.intellij.openapi.vfs.*
+import com.intellij.pom.java.*
+import com.intellij.psi.search.*
+import com.intellij.testFramework.builders.*
+import com.intellij.testFramework.fixtures.*
+import com.intellij.util.*
+import org.seasar.doma.*
+import java.io.*
 
 abstract class DaoTestCase : JavaCodeInsightFixtureTestCase() {
 
