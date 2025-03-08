@@ -12,10 +12,6 @@ import siosio.doma.psi.*
 
 class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
 
-    companion object {
-        private val SQL_FILE_ICON = IconLoader.getIcon("/icons/sql.svg", this::class.java.classLoader)
-    }
-
     override fun collectNavigationMarkers(element: PsiElement,
                                           result: MutableCollection<in RelatedItemLineMarkerInfo<*>>) {
         
@@ -31,6 +27,7 @@ class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
         }?.let { 
             element.project.findFile(it)
         }?.let {
+            println(SQL_FILE_ICON)
             result.add(
                     NavigationGutterIconBuilder.create(SQL_FILE_ICON)
                             .setTargets(it)
@@ -39,6 +36,6 @@ class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
             )
         }
     }
-    
 }
 
+private val SQL_FILE_ICON = IconLoader.getIcon("database-solid.svg", DaoMethodLineMarkerProvider::class.java.classLoader)

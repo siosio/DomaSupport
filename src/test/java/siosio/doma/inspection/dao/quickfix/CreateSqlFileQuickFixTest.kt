@@ -5,6 +5,7 @@ import com.intellij.openapi.project.*
 import com.intellij.psi.*
 import com.intellij.psi.impl.file.*
 import siosio.doma.*
+import siosio.doma.inspection.dao.DaoInspectionTool
 
 class CreateSqlFileQuickFixTest : DaoTestCase() {
 
@@ -12,6 +13,7 @@ class CreateSqlFileQuickFixTest : DaoTestCase() {
 
     override fun setUp() {
         super.setUp()
+        myFixture.enableInspections(DaoInspectionTool())
         System.setProperty("DirectoryChooser.className", "siosio.doma.inspection.dao.quickfix.CreateSqlFileQuickFixTest\$DirectoryChooserMock")
     }
 

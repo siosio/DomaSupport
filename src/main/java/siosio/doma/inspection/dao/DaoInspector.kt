@@ -62,7 +62,7 @@ class Sql(private val required: Boolean) : DaoRule {
             daoMethod.getAnnotation(sqlExperimentalAnnotationName) != null) {
             return
         }
-        
+
         if (!daoMethod.containsSqlFile()) {
             problemsHolder.registerProblem(
                     daoMethod.nameIdentifier!!,
