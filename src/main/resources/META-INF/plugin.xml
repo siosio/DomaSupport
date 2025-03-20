@@ -15,7 +15,7 @@
   <depends>com.intellij.modules.java</depends>
   <depends>org.intellij.intelliLang</depends>
   <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
-  <idea-version since-build="231.0"/>
+  <idea-version since-build="2024.3"/>
 
   <extensions defaultExtensionNs="com.intellij">
 
