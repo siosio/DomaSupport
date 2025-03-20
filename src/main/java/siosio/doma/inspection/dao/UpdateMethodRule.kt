@@ -1,19 +1,16 @@
 package siosio.doma.inspection.dao
 
-import com.intellij.codeInsight.AnnotationUtil
-import com.intellij.codeInsight.daemon.impl.quickfix.MethodReturnTypeFix
-import com.intellij.psi.PsiClass
-import com.intellij.psi.PsiType
-import com.intellij.psi.util.PsiTreeUtil
-import org.jetbrains.kotlin.idea.util.findAnnotation
-import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.nj2k.postProcessing.resolve
-import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import siosio.doma.entityAnnotationName
-import siosio.doma.extension.isEntity
-import siosio.doma.extension.isImmutableEntity
-import siosio.doma.psi.PsiDaoMethod
+import com.intellij.codeInsight.*
+import com.intellij.codeInsight.daemon.impl.quickfix.*
+import com.intellij.psi.*
+import com.intellij.psi.util.*
+import org.jetbrains.kotlin.idea.references.*
+import org.jetbrains.kotlin.idea.util.*
+import org.jetbrains.kotlin.name.*
+import org.jetbrains.kotlin.psi.*
+import siosio.doma.*
+import siosio.doma.extension.*
+import siosio.doma.psi.*
 
 // return type check(immutable entity)
 val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
@@ -45,11 +42,11 @@ val updateMethodWithImmutableEntityReturnRule: ReturnRule.() -> Unit = {
 private val updateMethodWithMutableEntityReturnRule: ReturnRule.() -> Unit = {
     message = "inspection.dao.mutable-update-return-type"
     rule = block@{ daoMethod ->
-        quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT, false) }
+        quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiTypes.intType(), false) }
 
         val parameterType = getEntityParameterType(daoMethod) ?: return@block true
         if (parameterType.isEntity() && parameterType.isImmutableEntity().not()) {
-            type.isAssignableFrom(PsiType.INT)
+            type.isAssignableFrom(PsiTypes.intType())
         } else {
             // 引数がまともじゃない場合はとりあえずOKにする
             true
@@ -80,9 +77,9 @@ private val commonRule: DaoInspectionRule.() -> Unit = {
     returnRule {
         message = "inspection.dao.mutable-update-return-type"
         rule = block@{ daoMethod ->
-            quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT, false) }
+            quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiTypes.intType(), false) }
             if (daoMethod.useSqlFile() && getEntityParameterType(daoMethod) == null) {
-                type.isAssignableFrom(PsiType.INT)
+                type.isAssignableFrom(PsiTypes.intType())
             } else {
                 true
             }
@@ -121,7 +118,7 @@ val kotlinInsertMethodRule =
                     else ->
                         when (size) {
                             1 -> {
-                                val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)?.resolve()
+                                val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)?.mainReference?.resolve()
                                 when (param) {
                                     is PsiClass -> AnnotationUtil.isAnnotated(
                                         param,

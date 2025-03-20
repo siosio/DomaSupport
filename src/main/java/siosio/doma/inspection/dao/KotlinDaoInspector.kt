@@ -79,12 +79,12 @@ class KotlinSql(private val required: Boolean) : KotlinDaoRule {
  */
 class KotlinParameterRule : KotlinDaoRule {
     var message: String? = null
-    var errorElement: (PsiDaoFunction) -> List<PsiElement> = { psiDaoFunction -> psiDaoFunction.valueParameters }
+    private var errorElement: (PsiDaoFunction) -> List<PsiElement> = { psiDaoFunction -> psiDaoFunction.valueParameters }
     var errorElements: (PsiDaoFunction) -> List<PsiElement> = { psiDaoFunction -> errorElement.invoke(psiDaoFunction) }
     var rule: List<KtParameter>.(PsiDaoFunction) -> Boolean = { _ -> true }
     var quickFix: ((PsiElement) -> LocalQuickFix)? = null
     override fun inspect(problemsHolder: ProblemsHolder, psiDaoFunction: PsiDaoFunction) {
-        val params = psiDaoFunction.getValueParameters()
+        val params = psiDaoFunction.valueParameters
         if (!params.rule(psiDaoFunction)) {
             val register: (PsiElement) -> Unit = when (quickFix) {
                 null -> { el -> problemsHolder.registerProblem(el, DomaBundle.message(message!!)) }

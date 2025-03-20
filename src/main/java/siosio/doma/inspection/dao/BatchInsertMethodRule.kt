@@ -56,13 +56,13 @@ val batchInsertMethodRule =
             returnRule {
                 message = "inspection.dao.batch-insert.mutable-insert-return-type"
                 rule = block@{ daoMethod ->
-                    quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiType.INT.createArrayType(), false) }
-                    if (daoMethod.parameters.size == 1) {
+                    quickFix = { MethodReturnTypeFix(daoMethod.psiMethod, PsiTypes.intType().createArrayType(), false) }
+                    if (daoMethod.parameterCount() == 1) {
                         // 最初のパラメータの型パラメータを取得してチェックする
                         val typeParameter = getFirstParametersTypeParameter(daoMethod) ?: return@block true
 
                         if (typeParameter.isImmutableEntity().not()) {
-                            type.isAssignableFrom(PsiType.INT.createArrayType())
+                            type.isAssignableFrom(PsiTypes.intType().createArrayType())
                         } else {
                             true
                         }
@@ -76,7 +76,7 @@ val batchInsertMethodRule =
             returnRule {
                 message = "inspection.dao.batch-insert.immutable-insert-return-type"
                 rule = block@{ daoMethod ->
-                    if (daoMethod.parameters.size == 1) {
+                    if (daoMethod.parameterCount() == 1) {
                         // 最初のパラメータの型パラメータを取得してチェックする
                         val typeParameter = getFirstParametersTypeParameter(daoMethod) ?: return@block true
 

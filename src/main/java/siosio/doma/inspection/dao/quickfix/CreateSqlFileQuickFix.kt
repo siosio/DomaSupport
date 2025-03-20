@@ -1,21 +1,17 @@
 package siosio.doma.inspection.dao.quickfix
 
 import com.intellij.codeInspection.*
-import com.intellij.ide.util.*
 import com.intellij.openapi.application.*
 import com.intellij.openapi.command.*
 import com.intellij.openapi.fileEditor.*
 import com.intellij.openapi.module.*
 import com.intellij.openapi.project.*
-import com.intellij.openapi.roots.*
 import com.intellij.openapi.util.text.*
 import com.intellij.openapi.vfs.*
 import com.intellij.psi.*
 import com.intellij.util.*
 import siosio.doma.*
-import siosio.doma.extension.*
 import java.io.*
-import java.util.*
 
 /**
  * SQLファイルを作成するクィックフィックス実装。

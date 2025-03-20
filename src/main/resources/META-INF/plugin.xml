@@ -4,7 +4,7 @@
   <vendor email="siosio12@gmail.com" url="https://github.com/siosio/DomaSupport">siosio</vendor>
 
   <description><![CDATA[
-  Support for <a href='http://doma.readthedocs.org/ja/latest/'>Doma framework</a>.
+  Support for <a href='https://doma.readthedocs.org/ja/latest/'>Doma framework</a>.
   <br/><br/>
   <a href='https://github.com/siosio/DomaSupport/blob/master/README.md'>features details</a>
   ]]></description>
@@ -13,11 +13,9 @@
 <!--  <idea-version since-build="173.0" />-->
 
   <depends>com.intellij.modules.java</depends>
-  <depends>com.intellij.modules.ultimate</depends>
-  <depends>com.intellij.database</depends>
   <depends>org.intellij.intelliLang</depends>
   <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
-  <idea-version since-build="231.0"/>
+  <idea-version since-build="2024.3"/>
 
   <extensions defaultExtensionNs="com.intellij">
 
@@ -27,7 +25,7 @@
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoMethodRenameProcessor" order="first" />
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoClassNameRenameProcessor" order="first" />
 
-    <completion.contributor language="SQL" implementationClass="siosio.doma.sql.ParameterCompletionContributor" order="first" />
+<!--    <completion.contributor language="SQL" implementationClass="siosio.doma.sql.ParameterCompletionContributor" order="first" />-->
 
     <!-- spring対応 -->
     <lang.inspectionSuppressor language="JAVA" implementationClass="siosio.doma.spring.DaoAutowiringInspectionSuppressor" />

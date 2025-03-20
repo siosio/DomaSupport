@@ -15,7 +15,7 @@ fun rule(rule: DaoInspectionRule.() -> Unit): DaoInspectionRule {
 }
 
 interface DaoRule {
-    fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod): Unit
+    fun inspect(problemsHolder: ProblemsHolder, daoMethod: PsiDaoMethod)
 }
 
 /**
@@ -62,7 +62,7 @@ class Sql(private val required: Boolean) : DaoRule {
             daoMethod.getAnnotation(sqlExperimentalAnnotationName) != null) {
             return
         }
-        
+
         if (!daoMethod.containsSqlFile()) {
             problemsHolder.registerProblem(
                     daoMethod.nameIdentifier!!,
