@@ -2,6 +2,8 @@ package siosio.doma.inspection.dao
 
 import com.intellij.codeInsight.intention.*
 import com.intellij.psi.util.*
+import org.jetbrains.kotlin.idea.base.utils.fqname.*
+import org.jetbrains.kotlin.idea.structuralsearch.*
 import org.jetbrains.kotlin.name.*
 import org.jetbrains.kotlin.nj2k.types.*
 import org.jetbrains.kotlin.psi.*
@@ -55,7 +57,7 @@ val kotlinSelectMethodRule =
 private val SELECT_OPTIONS_FQNAME = FqName("org.seasar.doma.jdbc.SelectOptions")
 private fun List<KtParameter>.filterSelectOptions(): List<KtParameter> {
     return filter {
-        it.typeFqName() == SELECT_OPTIONS_FQNAME
+        it.resolveDeclType()?.fqName == SELECT_OPTIONS_FQNAME
     }
 }
 
