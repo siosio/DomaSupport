@@ -34,7 +34,7 @@ repositories {
 
 dependencies {
   intellijPlatform {
-    intellijIdeaCommunity '2024.3'
+    intellijIdeaCommunity '2024.3.5'
 
     bundledPlugin 'com.intellij.java'
     bundledPlugin 'org.jetbrains.kotlin'
