@@ -5,10 +5,7 @@ import com.intellij.codeInsight.navigation.*
 import com.intellij.openapi.application.*
 import com.intellij.openapi.util.*
 import com.intellij.psi.*
-import org.jetbrains.kotlin.asJava.*
-import org.jetbrains.kotlin.idea.refactoring.*
 import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import siosio.doma.*
 import siosio.doma.extension.*
 import siosio.doma.psi.*
