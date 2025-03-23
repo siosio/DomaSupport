@@ -5,16 +5,20 @@ import com.intellij.codeInsight.navigation.*
 import com.intellij.openapi.application.*
 import com.intellij.openapi.util.*
 import com.intellij.psi.*
+import org.jetbrains.kotlin.asJava.*
+import org.jetbrains.kotlin.idea.refactoring.*
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import siosio.doma.*
 import siosio.doma.extension.*
 import siosio.doma.psi.*
 
 class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
 
-    override fun collectNavigationMarkers(element: PsiElement,
-                                          result: MutableCollection<in RelatedItemLineMarkerInfo<*>>) {
-        
+    override fun collectNavigationMarkers(
+        element: PsiElement,
+        result: MutableCollection<in RelatedItemLineMarkerInfo<*>>
+    ) {
         // テストモードは以下の処理は実行しない
         if (ApplicationManager.getApplication().isUnitTestMode) {
             return
@@ -26,14 +30,19 @@ class DaoMethodLineMarkerProvider : RelatedItemLineMarkerProvider() {
             else -> null
         }?.let { 
             element.project.findFile(it)
-        }?.let {
-            println(SQL_FILE_ICON)
-            result.add(
+        }?.let { sqlFile ->
+            when (element) {
+                is PsiMethod -> checkNotNull(element.nameIdentifier)
+                is KtNamedFunction -> checkNotNull(element.nameIdentifier)
+                else -> null
+            }?.let {
+                result.add(
                     NavigationGutterIconBuilder.create(SQL_FILE_ICON)
-                            .setTargets(it)
-                            .setTooltipText(DomaBundle.message("editor.goto-sql-file"))
-                            .createLineMarkerInfo(element.firstChild)
-            )
+                        .setTargets(sqlFile)
+                        .setTooltipText(DomaBundle.message("editor.goto-sql-file"))
+                        .createLineMarkerInfo(it)
+                )
+            }
         }
     }
 }
