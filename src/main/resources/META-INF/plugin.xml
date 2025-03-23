@@ -9,18 +9,15 @@
   <a href='https://github.com/siosio/DomaSupport/blob/master/README.md'>features details</a>
   ]]></description>
 
-  <!-- please see http://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
-<!--  <idea-version since-build="173.0" />-->
-
   <depends>com.intellij.modules.java</depends>
   <depends>org.intellij.intelliLang</depends>
-  <depends optional="true" config-file="kotlin.xml">org.jetbrains.kotlin</depends>
-  <idea-version since-build="2024.3"/>
+  <depends optional="true" config-file="kotlin-support.xml">org.jetbrains.kotlin</depends>
 
   <extensions defaultExtensionNs="com.intellij">
 
     <inspectionToolProvider implementation="siosio.doma.inspection.dao.DaoInspectionToolProvider" />
-    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
+    <codeInsight.lineMarkerProvider language="JAVA" implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider"
+                                    order="first"/>
 
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoMethodRenameProcessor" order="first" />
     <renamePsiElementProcessor implementation="siosio.doma.refactoring.DaoClassNameRenameProcessor" order="first" />
@@ -31,13 +28,10 @@
     <lang.inspectionSuppressor language="JAVA" implementationClass="siosio.doma.spring.DaoAutowiringInspectionSuppressor" />
 
   </extensions>
-  
+
   <extensions defaultExtensionNs="org.intellij.intelliLang">
     <injectionConfig config="META-INF/domaInjection.xml"/>
   </extensions>
-
-  <application-components>
-  </application-components>
 
   <actions>
     <action class="siosio.doma.editor.GotoSqlFile" id="Doma.GotoSqlFile" use-shortcut-of="GotoRelated" text="Go to SQL" />
