@@ -32,6 +32,11 @@ repositories {
   }
 }
 
+patchPluginXml {
+  sinceBuild = "242.*"
+  untilBuild = "251.*"
+}
+
 dependencies {
   intellijPlatform {
     intellijIdeaCommunity '2024.3.5'

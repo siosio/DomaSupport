@@ -1,6 +1,9 @@
 <idea-plugin>
+  <extensions defaultExtensionNs="org.jetbrains.kotlin">
+    <supportsKotlinPluginMode supportsK2="false" />
+  </extensions>
   <extensions defaultExtensionNs="com.intellij">
     <codeInsight.lineMarkerProvider language="kotlin"
-        implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" order="first" />
+        implementationClass="siosio.doma.editor.DaoMethodLineMarkerProvider" />
   </extensions>
 </idea-plugin>
