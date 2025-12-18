@@ -25,19 +25,19 @@ fun PsiElement.isInTest(): Boolean =
         .isInTestSourceContent(this.containingFile.virtualFile)
 
 /**
- * このパラメータがEntityかどうか (Java)
+ * このパラメータがEntityかどうか
  */
 fun PsiParameter.isEntity(): Boolean =
     this.type.isEntity()
 
 /**
- * このパラメータがImmutableEntityかどうか (Java)
+ * このパラメータがImmutableEntityかどうか
  */
 fun PsiParameter.isImmutableEntity(): Boolean =
     this.type.isImmutableEntity()
 
 /**
- * このTypeがEntityかどうか (Java)
+ * このTypeがEntityかどうか
  */
 fun PsiType.isEntity(): Boolean =
     PsiTypesUtil.getPsiClass(this)?.let {
@@ -45,7 +45,7 @@ fun PsiType.isEntity(): Boolean =
     } == true
 
 /**
- * このTypeがImmutableEntityかどうか (Java)
+ * このTypeがImmutableEntityかどうか
  */
 fun PsiType.isImmutableEntity(): Boolean {
     val annotation = AnnotationUtil.findAnnotation(
