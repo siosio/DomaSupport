@@ -4,8 +4,10 @@ import com.intellij.codeInspection.LocalQuickFix
 import com.intellij.codeInspection.ProblemHighlightType
 import com.intellij.codeInspection.ProblemsHolder
 import com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.idea.util.findAnnotation
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.name.FqName
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import siosio.doma.DomaBundle
 import siosio.doma.inspection.Rule
@@ -21,8 +23,7 @@ fun kotlinRule(rule: KotlinDaoInspectionRule.() -> Unit): KotlinDaoInspectionRul
     return daoInspectionRule
 }
 
-interface KotlinDaoRule : Rule<PsiDaoFunction> {
-}
+interface KotlinDaoRule : Rule<PsiDaoFunction>
 
 /**
  * DAOクラスのインスペクションルール
@@ -56,10 +57,11 @@ class KotlinDaoInspectionRule : Rule<PsiDaoFunction> {
  */
 class KotlinSql(private val required: Boolean) : KotlinDaoRule {
     override fun inspect(problemsHolder: ProblemsHolder, daoFunction: PsiDaoFunction) {
-        if ((!required && !daoFunction.useSqlFile())
-            || daoFunction.getModule() == null
-            || daoFunction.psiFunction.findAnnotation(FqName(sqlAnnotationName)) != null
-            || daoFunction.psiFunction.findAnnotation(FqName(sqlExperimentalAnnotationName)) != null
+        if (
+            (!required && !daoFunction.useSqlFile()) ||
+            daoFunction.getModule() == null ||
+            daoFunction.hasKotlinAnnotation(sqlAnnotationName) ||
+            daoFunction.hasKotlinAnnotation(sqlExperimentalAnnotationName)
         ) {
             return
         }
@@ -79,19 +81,52 @@ class KotlinSql(private val required: Boolean) : KotlinDaoRule {
  */
 class KotlinParameterRule : KotlinDaoRule {
     var message: String? = null
-    private var errorElement: (PsiDaoFunction) -> List<PsiElement> = { psiDaoFunction -> psiDaoFunction.valueParameters }
-    var errorElements: (PsiDaoFunction) -> List<PsiElement> = { psiDaoFunction -> errorElement.invoke(psiDaoFunction) }
+    private var errorElement: (PsiDaoFunction) -> List<PsiElement> =
+        { psiDaoFunction -> psiDaoFunction.valueParameters }
+
+    var errorElements: (PsiDaoFunction) -> List<PsiElement> =
+        { psiDaoFunction -> errorElement.invoke(psiDaoFunction) }
+
     var rule: List<KtParameter>.(PsiDaoFunction) -> Boolean = { _ -> true }
+
     var quickFix: ((PsiElement) -> LocalQuickFix)? = null
+
     override fun inspect(problemsHolder: ProblemsHolder, psiDaoFunction: PsiDaoFunction) {
         val params = psiDaoFunction.valueParameters
         if (!params.rule(psiDaoFunction)) {
-            val register: (PsiElement) -> Unit = when (quickFix) {
-                null -> { el -> problemsHolder.registerProblem(el, DomaBundle.message(message!!)) }
-                else -> { el -> problemsHolder.registerProblem(el, DomaBundle.message(message!!), quickFix!!.invoke(el)) }
-            }
-            errorElements.invoke(psiDaoFunction)
-                .forEach(register)
+            val register: (PsiElement) -> Unit =
+                when (quickFix) {
+                    null -> { el ->
+                        problemsHolder.registerProblem(
+                            el,
+                            DomaBundle.message(message!!)
+                        )
+                    }
+                    else -> { el ->
+                        problemsHolder.registerProblem(
+                            el,
+                            DomaBundle.message(message!!),
+                            quickFix!!.invoke(el)
+                        )
+                    }
+                }
+            errorElements.invoke(psiDaoFunction).forEach(register)
+        }
+    }
+}
+
+/**
+ * PsiDaoFunction に対して、Kotlin 関数として指定アノテーションが付いているかを判定
+ * （K2 Analysis API ベース）
+ */
+private fun PsiDaoFunction.hasKotlinAnnotation(annotationFqName: String): Boolean {
+    val ktFunction = psiFunction as? KtNamedFunction ?: return false
+    val fqName = FqName(annotationFqName)
+
+    return analyze(ktFunction) {
+        val symbol = ktFunction.symbol as? KaNamedFunctionSymbol ?: return@analyze false
+        symbol.annotations.any { anno ->
+            anno.classId?.asSingleFqName() == fqName
         }
     }
 }

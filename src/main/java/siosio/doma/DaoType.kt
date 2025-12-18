@@ -1,10 +1,10 @@
 package siosio.doma
 
-import com.intellij.codeInsight.*
-import com.intellij.psi.*
-import org.jetbrains.kotlin.idea.util.findAnnotation
+import com.intellij.codeInsight.AnnotationUtil
+import com.intellij.psi.PsiMethod
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.name.FqName
-import org.jetbrains.kotlin.psi.KtAnnotation
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import siosio.doma.inspection.dao.*
 
@@ -43,9 +43,14 @@ enum class DaoType(
             }
         }
 
-        fun valueOf(function: KtNamedFunction): DaoType? {
-            return values().firstOrNull {
-                function.findAnnotation(FqName(it.annotationName)) != null
+        fun valueOf(function: KtNamedFunction): DaoType? = analyze(function) {
+            val symbol = function.symbol as? KaNamedFunctionSymbol ?: return null
+
+            return values().firstOrNull { daoType ->
+                val annotationFqName = FqName(daoType.annotationName)
+                symbol.annotations.any { anno ->
+                    anno.classId?.asSingleFqName() == annotationFqName
+                }
             }
         }
     }

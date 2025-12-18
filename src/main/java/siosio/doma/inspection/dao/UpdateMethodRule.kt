@@ -8,6 +8,8 @@ import org.jetbrains.kotlin.idea.references.*
 import org.jetbrains.kotlin.idea.util.*
 import org.jetbrains.kotlin.name.*
 import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import siosio.doma.*
 import siosio.doma.extension.*
 import siosio.doma.psi.*
@@ -118,7 +120,9 @@ val kotlinInsertMethodRule =
                     else ->
                         when (size) {
                             1 -> {
-                                val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)?.mainReference?.resolve()
+                                val param = PsiTreeUtil.findChildOfType(first(), KtNameReferenceExpression::class.java)
+                                    ?.mainReference
+                                    ?.resolve()
                                 when (param) {
                                     is PsiClass -> AnnotationUtil.isAnnotated(
                                         param,
@@ -126,7 +130,7 @@ val kotlinInsertMethodRule =
                                         AnnotationUtil.CHECK_TYPE
                                     )
                                     is KtClass -> {
-                                        param.findAnnotation(FqName(entityAnnotationName)) != null
+                                        param.hasEntityAnnotation(FqName(entityAnnotationName))
                                     }
                                     else -> false
                                 }
@@ -142,3 +146,11 @@ val kotlinDeleteMethodRule =
     kotlinRule {
         sql(false)
     }
+
+private fun KtClass.hasEntityAnnotation(fqName: FqName): Boolean = analyze(this) {
+    val symbol = this@hasEntityAnnotation.symbol as? KaClassSymbol ?: return@analyze false
+    symbol.annotations.any { anno ->
+        anno.classId?.asSingleFqName() == fqName
+    }
+}
+
